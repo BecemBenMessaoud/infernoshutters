@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
+  GuideAccordionItem,
   GuideArticle,
   GuideList,
   GuideParagraph,
@@ -8,13 +10,34 @@ import {
 } from '../components/resources/ResourcesGuide'
 
 export function ResourcesPage() {
+  const [openItems, setOpenItems] = useState<Set<number>>(new Set())
+
+  const toggleItem = (index: number) => {
+    setOpenItems((current) => {
+      const next = new Set(current)
+      if (next.has(index)) {
+        next.delete(index)
+      } else {
+        next.add(index)
+      }
+      return next
+    })
+  }
+
   return (
     <main>
       <ResourcesHero />
 
       <section className="bg-white py-12 lg:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="space-y-3">
+          <GuideAccordionItem
+            title="Seasonal Maintenance Guide for your shutters:"
+            isOpen={openItems.has(0)}
+            onToggle={() => toggleItem(0)}
+          >
           <GuideArticle
+            hideHeader
             title="Seasonal Maintenance Guide for your shutters:"
             intro="Regular maintenance keeps your Inferno fire-resistant roll shutters operating smoothly, extends their life, and helps preserve the proprietary intumescent coating that activates in high heat. Follow these simple steps:"
             footer="Proper care ensures your Inferno shutters remain ready to protect against embers, flames, and wind - and helps maintain your warranty. For location-specific advice (especially coastal or high-wildfire zones), contact your Inferno dealer or our support team."
@@ -89,8 +112,15 @@ export function ResourcesPage() {
               />
             </GuideSection>
           </GuideArticle>
+          </GuideAccordionItem>
 
+          <GuideAccordionItem
+            title="Wildfire Preparedness: How to Protect Your Home"
+            isOpen={openItems.has(1)}
+            onToggle={() => toggleItem(1)}
+          >
           <GuideArticle
+            hideHeader
             title="Wildfire Preparedness: How to Protect Your Home"
             intro={'Wildfires are unpredictable, but your home doesn\'t have to be. A comprehensive wildfire preparedness plan combines defensible space (clearing vegetation around your home) with home hardening (making the structure itself more ignition-resistant).\n\nNo single measure guarantees survival, but addressing these two areas together dramatically improves your home\'s chances. Inferno fire-resistant roll shutters are a critical part of hardening the most vulnerable openings - windows and doors - while the rest of your property and building envelope must also be protected.'}
             footer={'Protect what matters most. Inferno roll shutters give you peace of mind - but true wildfire resilience comes from a complete plan.\n\nReady to harden your home? Contact Inferno today for a personalized wildfire protection assessment and quote.'}
@@ -193,6 +223,8 @@ export function ResourcesPage() {
               />
             </GuideSection>
           </GuideArticle>
+          </GuideAccordionItem>
+          </div>
         </div>
       </section>
 

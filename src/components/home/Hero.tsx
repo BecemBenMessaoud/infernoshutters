@@ -22,7 +22,7 @@ export function Hero() {
   const [current, setCurrent] = useState(0)
 
   return (
-    <section id="home" className="relative min-h-[520px] overflow-hidden sm:min-h-[580px] lg:min-h-[640px]">
+    <section id="home" className="relative h-[520px] overflow-hidden sm:h-[580px] lg:h-[640px]">
       {HERO_IMAGES.map((image, index) => (
         <img
           key={image.src}
@@ -44,7 +44,7 @@ export function Hero() {
         />
       ))}
 
-      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-40 sm:px-6 sm:pb-44 lg:px-8 lg:pb-48">
+      <div className="absolute inset-x-0 bottom-40 z-10 mx-auto max-w-7xl px-4 sm:bottom-44 sm:px-6 lg:bottom-48 lg:px-8">
         <div className="max-w-xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-inferno-400">
             Protecting What Matters Most.

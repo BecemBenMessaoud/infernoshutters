@@ -1,5 +1,41 @@
 import type { ReactNode } from 'react'
-import { Home } from 'lucide-react'
+import { ChevronDown, Home } from 'lucide-react'
+
+type GuideAccordionItemProps = {
+  title: string
+  isOpen: boolean
+  onToggle: () => void
+  children: ReactNode
+}
+
+export function GuideAccordionItem({
+  title,
+  isOpen,
+  onToggle,
+  children,
+}: GuideAccordionItemProps) {
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="flex w-full min-h-11 items-center justify-between gap-4 bg-navy-900 px-5 py-4 text-left transition hover:bg-navy-800"
+      >
+        <span className="min-w-0 flex-1 text-sm font-semibold text-white sm:text-base">
+          {title}
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-white transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {isOpen ? <div className="bg-[#e6eef5]">{children}</div> : null}
+    </div>
+  )
+}
 
 type GuideArticleProps = {
   title: string
@@ -7,6 +43,7 @@ type GuideArticleProps = {
   children: ReactNode
   footer?: string
   footerVariant?: 'blue' | 'navy'
+  hideHeader?: boolean
 }
 
 export function GuideArticle({
@@ -15,17 +52,20 @@ export function GuideArticle({
   children,
   footer,
   footerVariant = 'blue',
+  hideHeader = false,
 }: GuideArticleProps) {
   return (
-    <article className="mb-10 overflow-hidden rounded-t-2xl shadow-md last:mb-0">
-      <div className="flex items-start gap-3 rounded-t-2xl bg-navy-900 px-5 py-4 sm:items-center sm:px-6">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-inferno-500 text-white">
-          <Home className="h-4 w-4" strokeWidth={2.5} />
-        </span>
-        <h2 className="min-w-0 flex-1 text-sm font-bold uppercase leading-snug text-white sm:text-lg">
-          {title}
-        </h2>
-      </div>
+    <article className={hideHeader ? '' : 'mb-10 overflow-hidden rounded-t-2xl shadow-md last:mb-0'}>
+      {hideHeader ? null : (
+        <div className="flex items-start gap-3 rounded-t-2xl bg-navy-900 px-5 py-4 sm:items-center sm:px-6">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-inferno-500 text-white">
+            <Home className="h-4 w-4" strokeWidth={2.5} />
+          </span>
+          <h2 className="min-w-0 flex-1 text-sm font-bold uppercase leading-snug text-white sm:text-lg">
+            {title}
+          </h2>
+        </div>
+      )}
 
       <p className="whitespace-pre-line bg-[#eef6fc] px-5 py-4 text-sm leading-relaxed text-navy-900 sm:px-6 sm:text-base">
         {intro}

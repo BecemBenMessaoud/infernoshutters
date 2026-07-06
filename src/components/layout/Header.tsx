@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, X } from 'lucide-react'
+import { ChevronDown, Menu as MenuIcon, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { NAV_LINKS, PRODUCT_MENU_ITEMS } from '../../data/site'
 
@@ -165,12 +165,12 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 lg:hidden"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-gray-200 text-gray-700 lg:hidden"
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen((open) => !open)}
         >
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : 'Menu'}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
         </button>
       </div>
 

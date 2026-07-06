@@ -48,9 +48,9 @@ export function InstallationProofSection() {
                   className={`${PROOF_IMAGE_SIZE} overflow-hidden rounded-xl`}
                 />
                 <ServiceImagePlaceholder
-                  src="/images/installer-at-work.png"
-                  alt="Installer at work"
-                  label="Installer at Work"
+                  src="/images/installer.png"
+                  alt="Inferno installer mounting rolling shutters"
+                  label="Installer"
                   className={`${PROOF_IMAGE_SIZE} overflow-hidden rounded-xl`}
                 />
               </div>

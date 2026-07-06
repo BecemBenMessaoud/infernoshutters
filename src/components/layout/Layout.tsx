@@ -13,9 +13,7 @@ export function Layout() {
         <TopBar />
         <Header />
       </div>
-      <div className="overflow-x-hidden">
-        <Outlet />
-      </div>
+      <Outlet />
       <Footer withOverlapSpacing={withFooterOverlap} />
     </>
   )

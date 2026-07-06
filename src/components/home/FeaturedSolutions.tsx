@@ -39,13 +39,11 @@ export function FeaturedSolutions() {
               key={`${solution.title}-${index}`}
               className="flex h-full flex-col items-center rounded-2xl bg-white px-6 py-8 text-center shadow-lg"
             >
-              <div className="mb-6 flex h-32 w-full shrink-0 items-center justify-center">
+              <div className="mb-6 flex h-40 w-full shrink-0 items-center justify-center">
                 <img
                   src={solution.icon}
                   alt=""
-                  className={`object-contain ${
-                    index < 3 ? 'max-h-28 max-w-[132px]' : 'max-h-20 max-w-[88px]'
-                  }`}
+                  className="max-h-36 max-w-[180px] object-contain"
                 />
               </div>
               <h3 className="mb-3 flex min-h-[2.75rem] w-full items-start justify-center text-base font-bold leading-snug text-inferno-500">

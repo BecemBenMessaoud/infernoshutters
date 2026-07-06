@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { DocumentTitle } from './components/layout/DocumentTitle'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { Layout } from './components/layout/Layout'
 import { AboutPage } from './pages/AboutPage'
@@ -16,6 +17,7 @@ import { ServicesPage } from './pages/ServicesPage'
 function App() {
   return (
     <BrowserRouter>
+      <DocumentTitle />
       <ScrollToTop />
       <Routes>
         <Route path="/products/:slug" element={<ProductDetailPage />} />
