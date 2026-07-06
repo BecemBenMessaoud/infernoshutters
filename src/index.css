@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-navy-900: #001a3d;
+  --color-navy-800: #0a2540;
+  --color-navy-700: #0a1d4c;
+  --color-inferno-400: #fb923c;
+  --color-inferno-500: #f97316;
+  --color-inferno-600: #ea580c;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth antialiased overflow-x-hidden;
+  }
+
+  body {
+    @apply m-0 min-h-svh overflow-x-hidden bg-white font-sans text-gray-900;
+  }
+}
+
+@keyframes partner-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.partner-scroll-track {
+  animation: partner-scroll 35s linear infinite;
+  width: max-content;
+}
