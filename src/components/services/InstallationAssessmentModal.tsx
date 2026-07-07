@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 
-const SERVICE_TYPE_OPTIONS = [
-  'Residential',
-  'Commercial',
-  'Industrial',
-  'Garage',
+const INSTALLATION_TYPE_OPTIONS = [
+  'Self Install',
+  'Have Own Contractor',
+  'Need a Dealer',
 ] as const
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -19,7 +18,7 @@ type FormState = {
   fullName: string
   address: string
   email: string
-  serviceType: string
+  installationType: string
 }
 
 type FormErrors = Partial<Record<keyof FormState, string>>
@@ -28,7 +27,7 @@ const INITIAL_FORM: FormState = {
   fullName: '',
   address: '',
   email: '',
-  serviceType: '',
+  installationType: '',
 }
 
 export function InstallationAssessmentModal({
@@ -80,8 +79,8 @@ export function InstallationAssessmentModal({
       nextErrors.email = 'Enter a valid email address.'
     }
 
-    if (!form.serviceType) {
-      nextErrors.serviceType = 'Please select a service type.'
+    if (!form.installationType) {
+      nextErrors.installationType = 'Please select an installation type.'
     }
 
     return nextErrors
@@ -131,7 +130,7 @@ export function InstallationAssessmentModal({
           id="installation-assessment-title"
           className="pr-8 text-xl font-bold text-navy-900 sm:text-2xl"
         >
-          Book Installation Assessment
+          Site Assessment
         </h2>
         <p className="mt-2 text-sm text-gray-600">
           Tell us about your project and our team will follow up to schedule your assessment.
@@ -199,30 +198,30 @@ export function InstallationAssessmentModal({
           </div>
 
           <div>
-            <label htmlFor="assessment-service-type" className="mb-2 block text-sm font-medium text-gray-700">
-              Service Type
+            <label htmlFor="assessment-installation-type" className="mb-2 block text-sm font-medium text-gray-700">
+              Installation Type
             </label>
             <select
-              id="assessment-service-type"
-              value={form.serviceType}
-              onChange={(event) => updateField('serviceType', event.target.value)}
+              id="assessment-installation-type"
+              value={form.installationType}
+              onChange={(event) => updateField('installationType', event.target.value)}
               className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-1 ${
-                errors.serviceType
+                errors.installationType
                   ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                   : 'border-gray-200 focus:border-inferno-500 focus:ring-inferno-500'
               }`}
             >
               <option value="" disabled>
-                Select service type
+                Select installation type
               </option>
-              {SERVICE_TYPE_OPTIONS.map((option) => (
+              {INSTALLATION_TYPE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
               ))}
             </select>
-            {errors.serviceType ? (
-              <p className="mt-1 text-xs text-red-600">{errors.serviceType}</p>
+            {errors.installationType ? (
+              <p className="mt-1 text-xs text-red-600">{errors.installationType}</p>
             ) : null}
           </div>
 

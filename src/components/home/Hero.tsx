@@ -22,7 +22,7 @@ export function Hero() {
   const [current, setCurrent] = useState(0)
 
   return (
-    <section id="home" className="relative h-[520px] overflow-hidden sm:h-[580px] lg:h-[640px]">
+    <section id="home" className="relative h-[580px] overflow-hidden sm:h-[600px] lg:h-[640px]">
       {HERO_IMAGES.map((image, index) => (
         <img
           key={image.src}
@@ -44,33 +44,33 @@ export function Hero() {
         />
       ))}
 
-      <div className="absolute inset-x-0 bottom-40 z-10 mx-auto max-w-7xl px-4 sm:bottom-44 sm:px-6 lg:bottom-48 lg:px-8">
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+
+      <div className="absolute inset-x-0 top-24 z-10 mx-auto max-w-7xl px-4 sm:top-auto sm:bottom-44 sm:px-6 lg:bottom-48 lg:px-8">
         <div className="max-w-xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-inferno-400">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-inferno-400 sm:mb-3 sm:text-sm">
             Protecting What Matters Most.
           </p>
-          <h1 className="text-2xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+          <h1 className="text-balance text-[1.35rem] font-bold leading-snug text-white sm:text-4xl sm:leading-tight lg:text-5xl">
             Home Defense Meets Wildfire Science.
           </h1>
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-
       <a
         href={`tel:${PHONE.replace(/\D/g, '')}`}
-        className="absolute bottom-28 left-4 right-4 z-20 flex items-center justify-center gap-3 rounded-lg bg-inferno-500 px-4 py-3 text-white shadow-xl transition hover:bg-inferno-600 sm:bottom-24 sm:left-auto sm:right-8 sm:justify-start sm:px-5 sm:py-4 lg:bottom-28"
+        className="absolute bottom-16 left-4 right-4 z-20 flex items-center justify-center gap-3 rounded-lg bg-inferno-500 px-4 py-3 text-white shadow-xl transition hover:bg-inferno-600 sm:bottom-24 sm:left-auto sm:right-8 sm:justify-start sm:px-5 sm:py-4 lg:bottom-28"
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20">
           <Phone className="h-5 w-5" />
         </div>
-        <div>
+        <div className="min-w-0 text-left">
           <p className="text-xs font-bold uppercase tracking-wide">Call Us Now!</p>
-          <p className="text-lg font-bold">{PHONE}</p>
+          <p className="text-base font-bold sm:text-lg">{PHONE}</p>
         </div>
       </a>
 
-      <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
+      <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
         {HERO_IMAGES.map((_, index) => (
           <button
             key={index}

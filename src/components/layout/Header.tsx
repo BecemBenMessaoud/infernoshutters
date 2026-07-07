@@ -88,13 +88,13 @@ export function Header() {
   const closeMobileMenu = () => setMobileMenuOpen(false)
 
   return (
-    <header className="border-b border-gray-100 bg-white shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link to="/" className="shrink-0" onClick={closeMobileMenu}>
+    <header className="w-full border-b border-gray-100 bg-white shadow-sm">
+      <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-3 lg:px-8">
+        <Link to="/" className="min-w-0 shrink" onClick={closeMobileMenu}>
           <img
             src="/images/Logo Inferno.png"
             alt="Inferno-Roll Shutters"
-            className="h-11 w-auto max-w-[10rem] object-contain sm:h-12 sm:max-w-none lg:h-14"
+            className="h-10 w-auto max-w-[9.5rem] object-contain object-left sm:h-12 sm:max-w-none lg:h-14"
           />
         </Link>
 
@@ -165,7 +165,7 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-gray-200 text-gray-700 lg:hidden"
+          className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md border border-gray-200 text-gray-700 lg:hidden"
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen((open) => !open)}
@@ -182,7 +182,7 @@ export function Header() {
             aria-label="Close menu overlay"
             onClick={closeMobileMenu}
           />
-          <nav className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col overflow-y-auto bg-white p-6 shadow-xl">
+          <nav className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col overflow-y-auto bg-white p-6 shadow-xl">
             <div className="mb-6 flex items-center justify-between">
               <span className="text-lg font-bold text-navy-900">Menu</span>
               <button

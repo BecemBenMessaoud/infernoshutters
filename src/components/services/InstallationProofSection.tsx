@@ -68,7 +68,7 @@ export function InstallationProofSection() {
                 onClick={() => setIsAssessmentModalOpen(true)}
                 className="inline-block min-h-11 rounded-md bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 sm:px-10"
               >
-                Book Installation Assessment
+                Site Assessment
               </button>
             </div>
           </div>

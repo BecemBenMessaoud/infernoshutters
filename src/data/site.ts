@@ -19,17 +19,12 @@ export const CONTACT_FAQ_ITEMS = [
       'Yes, we do. In order to comply with the minimum "Wall Test" configuration generally required by the fire code, we easily passed the radiation and flame tests done by an accredited fire-lab according to ASTM Standards.',
   },
   {
-    question: 'Do your shutters have a specific timed fire rating?',
-    answer:
-      'No, not specifically, as of yet. However, we far surpassed the ASTM radiation minimum 10-minute test by 300% to reach 30 minutes with no noticeable additional degradation over the extra 20 minutes. As a result, and with additional testing imminent, we expect to achieve a 45- or 60-minute rating in the very near future. The important issue is that the shutter temperature on the side facing the glass and window never achieved more than 310 degrees from a radiation exposure of 1850 degrees from 3.5 feet away from the front of the shutter over that 30-minute period. 30 minutes is generally accepted as being more time than a fire will hang around a house in its search for virgin fuel. ',
-  },
-  {
     question: 'What sort of color alternatives do you offer?',
     answer:
       ' We offer a limited number of standard finish colors: white, beige, ivory, bronze, grey, silver metallic, as shown on our website (ref page product page) but we can customize any color you might choose for an additional price. Some darker colors such as black and dark bronze may increase the price slightly so let us know your preferences.  Please provide us with a color specification from Sherwin Williams at Lowes or Behr Paints at Home Depot to discuss. A paint sample swatch or a paint name and number are most useful.',
   },
   {
-    question: '4. Can I install Inferno shutters myself, and do I need a permit?',
+    question: 'Can I install Inferno shutters myself, and do I need a permit?',
     answer:
       'You can install Inferno shutters yourself, but we rarely recommend it unless you are experienced with mechanical and electrical work. Installations must comply with all local and national fire and electrical codes, and most require a permit - especially because of the electrical connections and egress (escape) window requirements for bedrooms, basements, and habitable attics.\n\nWhile some simple installations can be straightforward, others involving wiring, safety sensors, and controls are best handled by a qualified contractor. We have trained dealers in many areas whose professional work is guaranteed and fully covered under our warranty.\n\nImportant: If a permit is required in your area and you skip it, your Inferno warranty will be voided. We strongly recommend checking with your local building department first.',
   },

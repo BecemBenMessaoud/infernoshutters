@@ -1,12 +1,5 @@
 import type { ProductModelData } from '../components/products/ProductModelCard'
 
-export const CURTAIN_SERIES_HERO = {
-  src: '/images/products/curtain-series-options.png',
-  alt: 'Curtain Series Options',
-  width: 935,
-  height: 422,
-} as const
-
 export const CURTAIN_SERIES_ARTICLES: ProductModelData[] = [
   {
     model: 'I 4000',

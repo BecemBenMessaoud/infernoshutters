@@ -83,15 +83,6 @@ export function ProductsOverviewPage() {
 
       <section className="bg-white pb-14 lg:pb-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-6 flex justify-center sm:justify-end">
-            <button
-              type="button"
-              className="min-h-11 rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-navy-900 transition hover:border-inferno-500 hover:text-inferno-500"
-            >
-              Compare Two Products
-            </button>
-          </div>
-
           <p className="mb-2 text-center text-xs text-gray-500 sm:hidden">
             Swipe horizontally to compare products.
           </p>

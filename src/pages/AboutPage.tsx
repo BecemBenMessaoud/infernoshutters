@@ -8,12 +8,6 @@ export function AboutPage() {
       <section className="bg-navy-900 py-14 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-8 w-1 bg-inferno-500" />
-              <p className="text-xs font-semibold uppercase tracking-widest text-inferno-400 sm:text-sm sm:tracking-[0.2em]">
-                Built to, Lemany Wildfire Shook
-              </p>
-            </div>
             <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
               About Inferno | Certified Roll Shutter Experts
             </h1>
