@@ -140,16 +140,10 @@ export function ProductsOverviewPage() {
       </section>
 
       <section className="bg-navy-900 py-12 lg:py-16">
-        <div className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-4 px-4 sm:px-6 md:flex-row md:gap-6">
+        <div className="mx-auto flex max-w-3xl justify-center px-4 sm:px-6">
           <Link
             to="/quote"
-            className="w-full rounded-lg bg-white px-10 py-3.5 text-center text-sm font-bold text-navy-900 transition hover:bg-gray-100 sm:w-auto"
-          >
-            Request a Quote
-          </Link>
-          <Link
-            to="/quote"
-            className="w-full rounded-lg bg-inferno-500 px-10 py-3.5 text-center text-sm font-bold text-white transition hover:bg-inferno-600 sm:w-auto"
+            className="rounded-lg bg-inferno-500 px-10 py-3.5 text-center text-sm font-bold text-white transition hover:bg-inferno-600"
           >
             Request a Quote
           </Link>

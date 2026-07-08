@@ -1,19 +1,10 @@
 import { useState } from 'react'
-import { Briefcase, FileText } from 'lucide-react'
-import {
-  COMMERCIAL_CARDS,
-  COMMERCIAL_PROPERTY_FEATURES,
-} from '../../data/services'
+import { COMMERCIAL_CARDS } from '../../data/services'
 import { RepairServiceCallModal } from './RepairServiceCallModal'
 
 const COMMERCIAL_TONES = {
   blue: 'bg-[#4a6278]',
   brown: 'bg-[#8a7355]',
-} as const
-
-const PROPERTY_ICONS = {
-  file: FileText,
-  briefcase: Briefcase,
 } as const
 
 function CommercialCard({
@@ -77,43 +68,15 @@ export function CommercialSolutionsSection() {
               tone={contractorCard.tone}
             />
 
-            <article className="flex h-full flex-col rounded-lg bg-navy-800 p-5 text-white">
-              <h3 className="text-lg font-bold">Property Management Solutions</h3>
-              <p className="mt-2 text-sm text-white/80">
-                Programs built for portfolios that need consistent service and reporting.
-              </p>
+            <div aria-hidden className="min-h-0" />
 
-              <div className="mt-5 flex flex-1 flex-col justify-center space-y-3">
-                {COMMERCIAL_PROPERTY_FEATURES.map((feature) => {
-                  const Icon = PROPERTY_ICONS[feature.icon]
-
-                  return (
-                    <div
-                      key={feature.title}
-                      className="flex gap-3 rounded-lg bg-white p-4 text-navy-900"
-                    >
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-inferno-500 text-white">
-                        <Icon className="h-4 w-4" strokeWidth={2.25} />
-                      </span>
-                      <div>
-                        <h4 className="text-sm font-bold">{feature.title}</h4>
-                        <p className="mt-1 text-xs leading-relaxed text-gray-600 sm:text-sm">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </article>
-
-            <div className="md:col-span-2 lg:col-start-2 lg:row-start-2">
+            <div className="md:col-start-2 lg:col-start-2 lg:row-start-2">
               <button
                 type="button"
                 onClick={() => setIsCommercialModalOpen(true)}
                 className="min-h-11 w-full rounded-md bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 sm:px-10"
               >
-                Talk to Commercial Team
+                Talk to Wholesale Team
               </button>
             </div>
 
