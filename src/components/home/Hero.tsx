@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Phone } from 'lucide-react'
 import { PHONE } from '../../data/site'
 
-const HERO_IMAGES = [
-  {
+const HERO_IMAGES = [  {
     src: '/images/inferno-roll.png',
     alt: 'Inferno-Roll shutters protecting a home from wildfire',
   },
@@ -18,8 +17,18 @@ const HERO_IMAGES = [
   },
 ] as const
 
+const SLIDE_INTERVAL_MS = 5000
+
 export function Hero() {
   const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setCurrent((prev) => (prev + 1) % HERO_IMAGES.length)
+    }, SLIDE_INTERVAL_MS)
+
+    return () => window.clearInterval(timer)
+  }, [])
 
   return (
     <section id="home" className="relative h-[580px] overflow-hidden sm:h-[600px] lg:h-[640px]">
