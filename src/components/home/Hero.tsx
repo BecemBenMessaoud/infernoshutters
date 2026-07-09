@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Phone } from 'lucide-react'
 import { PHONE } from '../../data/site'
+import { QuoteRequestModal } from '../quote/QuoteRequestModal'
 
 const HERO_IMAGES = [  {
     src: '/images/inferno-roll.png',
@@ -21,6 +22,7 @@ const SLIDE_INTERVAL_MS = 5000
 
 export function Hero() {
   const [current, setCurrent] = useState(0)
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -66,18 +68,24 @@ export function Hero() {
         </div>
       </div>
 
-      <a
-        href={`tel:${PHONE.replace(/\D/g, '')}`}
-        className="absolute bottom-16 left-4 right-4 z-20 flex items-center justify-center gap-3 rounded-lg bg-inferno-500 px-4 py-3 text-white shadow-xl transition hover:bg-inferno-600 sm:bottom-24 sm:left-auto sm:right-8 sm:justify-start sm:px-5 sm:py-4 lg:bottom-28"
+      <button
+        type="button"
+        onClick={() => setIsQuoteModalOpen(true)}
+        className="absolute bottom-16 left-4 right-4 z-20 flex min-h-[4.5rem] items-center justify-center gap-4 rounded-xl bg-inferno-500 px-6 py-4 text-white shadow-xl transition hover:bg-inferno-600 sm:bottom-24 sm:left-auto sm:right-8 sm:min-h-[5rem] sm:min-w-[20rem] sm:justify-start sm:px-8 sm:py-5 lg:bottom-28 lg:min-w-[22rem]"
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/20">
-          <Phone className="h-5 w-5" />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 sm:h-14 sm:w-14">
+          <Phone className="h-6 w-6 sm:h-7 sm:w-7" />
         </div>
         <div className="min-w-0 text-left">
-          <p className="text-xs font-bold uppercase tracking-wide">Call Us Now!</p>
-          <p className="text-base font-bold sm:text-lg">{PHONE}</p>
+          <p className="text-sm font-bold uppercase tracking-wide sm:text-base">Call Us Now!</p>
+          <p className="text-lg font-bold sm:text-xl">{PHONE}</p>
         </div>
-      </a>
+      </button>
+
+      <QuoteRequestModal
+        isOpen={isQuoteModalOpen}
+        onClose={() => setIsQuoteModalOpen(false)}
+      />
 
       <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
         {HERO_IMAGES.map((_, index) => (

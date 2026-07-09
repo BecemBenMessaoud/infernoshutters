@@ -108,39 +108,87 @@ export function Reservation() {
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="text"
+                name="name"
                 placeholder="Name"
                 required
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
               />
               <input
-                type="email"
-                placeholder="Email"
+                type="text"
+                name="zipCode"
+                placeholder="Zip Code"
                 required
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
               />
               <input
-                type="text"
-                placeholder="Address"
+                type="email"
+                name="email"
+                placeholder="Email"
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
               />
               <input
                 type="tel"
+                name="phone"
                 placeholder="Phone"
+                required
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
               />
               <select
+                name="type"
+                required
                 className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
                 defaultValue=""
               >
                 <option value="" disabled>
-                  Product Interest
+                  Type
                 </option>
-                <option value="residential">Residential Wildfire Hardening</option>
-                <option value="hoa">HOA / Multi-Family</option>
-                <option value="commercial">Commercial Solutions</option>
+                <option value="commercial">Commercial</option>
+                <option value="residential">Residential</option>
+              </select>
+              <select
+                name="installationType"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Installation Type
+                </option>
+                <option value="self-install">Self Install</option>
+                <option value="own-contractor">Have Own Contractor</option>
+                <option value="need-dealer">Need a Dealer</option>
+              </select>
+              <select
+                name="productInterest"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Product interested in?
+                </option>
+                <option value="rolling-shutter">Rolling Shutter</option>
+                <option value="retractable-screens">Retractable Screens</option>
+                <option value="security-screens">Security Screens</option>
+                <option value="combination">Combination</option>
+              </select>
+              <select
+                name="referralSource"
+                required
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  How Did you hear about us
+                </option>
+                <option value="google-search">Google Search Result</option>
+                <option value="youtube">Youtube</option>
+                <option value="facebook-ads">Facebook Ads</option>
+                <option value="referral">Referral</option>
+                <option value="previous-client">Previous Client</option>
+                <option value="online-ad">Online Ad</option>
                 <option value="other">Other</option>
               </select>
               <textarea
+                name="message"
                 placeholder="Message"
                 rows={4}
                 className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
