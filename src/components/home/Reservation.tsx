@@ -8,6 +8,9 @@ import {
   Wrench,
 } from 'lucide-react'
 
+const RESERVE_NOW_URL =
+  'https://connect.intuit.com/portal/app/CommerceNetwork/view/scs-v1-d34d119939b54de3adbaeaf41cf8dbf50b9f7be4320f42188783224ae1debcce6e0a64e5a52d4008a4ef67bc73612842?locale=EN_US&cta=saveandcopylink'
+
 const STEPS = [
   {
     icon: Ruler,
@@ -76,12 +79,14 @@ export function Reservation() {
             </div>
 
             <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                className="w-full min-h-11 max-w-xs rounded-lg bg-inferno-500 px-10 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 sm:w-auto"
+              <a
+                href={RESERVE_NOW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full min-h-11 max-w-xs items-center justify-center rounded-lg bg-inferno-500 px-10 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 sm:w-auto"
               >
                 Reserve Now
-              </button>
+              </a>
             </div>
 
             <div className="mt-8 flex items-start gap-2">

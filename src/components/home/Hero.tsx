@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Phone } from 'lucide-react'
 import { PHONE } from '../../data/site'
 import { QuoteRequestModal } from '../quote/QuoteRequestModal'
@@ -19,10 +19,24 @@ const HERO_IMAGES = [  {
 ] as const
 
 const SLIDE_INTERVAL_MS = 5000
+const SWIPE_THRESHOLD_PX = 50
+const MOBILE_MEDIA_QUERY = '(max-width: 639px)'
 
 export function Hero() {
   const [current, setCurrent] = useState(0)
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches)
+
+    updateIsMobile()
+    mediaQuery.addEventListener('change', updateIsMobile)
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile)
+  }, [])
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -32,8 +46,52 @@ export function Hero() {
     return () => window.clearInterval(timer)
   }, [])
 
+  const goToNextSlide = () => {
+    setCurrent((prev) => (prev + 1) % HERO_IMAGES.length)
+  }
+
+  const goToPreviousSlide = () => {
+    setCurrent((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)
+  }
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
+    if (!isMobile) {
+      return
+    }
+
+    const touch = event.touches[0]
+    touchStart.current = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLElement>) => {
+    if (!isMobile || !touchStart.current) {
+      return
+    }
+
+    const touch = event.changedTouches[0]
+    const deltaX = touch.clientX - touchStart.current.x
+    const deltaY = touch.clientY - touchStart.current.y
+    touchStart.current = null
+
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX || Math.abs(deltaX) < Math.abs(deltaY)) {
+      return
+    }
+
+    if (deltaX < 0) {
+      goToNextSlide()
+      return
+    }
+
+    goToPreviousSlide()
+  }
+
   return (
-    <section id="home" className="relative h-[580px] overflow-hidden sm:h-[600px] lg:h-[640px]">
+    <section
+      id="home"
+      className="relative h-[580px] overflow-hidden sm:h-[600px] lg:h-[640px]"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {HERO_IMAGES.map((image, index) => (
         <img
           key={image.src}
