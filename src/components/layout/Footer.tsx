@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { PHONE, POWERED_BY } from '../../data/site'
+import { SOCIAL_LINKS } from '../../data/social'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
 type FooterProps = {
@@ -9,6 +10,13 @@ type FooterProps = {
 
 const FOOTER_LINKS_LEFT = ['Contact', 'Service areas', 'Testimonials'] as const
 const FOOTER_LINKS_RIGHT = ['Hours', 'Quick links'] as const
+
+const SOCIAL_ICONS = {
+  Facebook: FacebookIcon,
+  X: TwitterIcon,
+  LinkedIn: LinkedinIcon,
+  Instagram: InstagramIcon,
+} as const
 
 export function Footer({ withOverlapSpacing = false }: FooterProps) {
   return (
@@ -95,18 +103,21 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
             <h4 className="mt-6 text-sm font-bold text-navy-900">Follow Us:</h4>
             <div className="mt-3 flex gap-3">
-              <a href="#" aria-label="Facebook" className="text-gray-600 transition hover:text-inferno-500">
-                <FacebookIcon className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Twitter" className="text-gray-600 transition hover:text-inferno-500">
-                <TwitterIcon className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="LinkedIn" className="text-gray-600 transition hover:text-inferno-500">
-                <LinkedinIcon className="h-4 w-4" />
-              </a>
-              <a href="#" aria-label="Instagram" className="text-gray-600 transition hover:text-inferno-500">
-                <InstagramIcon className="h-4 w-4" />
-              </a>
+              {SOCIAL_LINKS.map(({ href, label }) => {
+                const Icon = SOCIAL_ICONS[label]
+                return (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 transition hover:text-inferno-500"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                )
+              })}
             </div>
           </div>
         </div>

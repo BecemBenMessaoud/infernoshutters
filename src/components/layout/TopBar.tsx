@@ -1,29 +1,14 @@
 import { Mail, MapPin } from 'lucide-react'
 import { EMAIL, POWERED_BY } from '../../data/site'
+import { SOCIAL_LINKS } from '../../data/social'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
-const SOCIAL_LINKS = [
-  {
-    href: 'https://www.facebook.com/profile.php?id=61572242558667',
-    label: 'Facebook',
-    Icon: FacebookIcon,
-  },
-  {
-    href: 'https://x.com/Infernoshutters?s=11',
-    label: 'X',
-    Icon: TwitterIcon,
-  },
-  {
-    href: 'https://www.linkedin.com/company/infernorollshutters/?viewAsMember=true',
-    label: 'LinkedIn',
-    Icon: LinkedinIcon,
-  },
-  {
-    href: 'https://www.instagram.com/infernorollshutters/?hl=en',
-    label: 'Instagram',
-    Icon: InstagramIcon,
-  },
-] as const
+const SOCIAL_ICONS = {
+  Facebook: FacebookIcon,
+  X: TwitterIcon,
+  LinkedIn: LinkedinIcon,
+  Instagram: InstagramIcon,
+} as const
 
 const BADGE_CLIP_PATH = 'polygon(0 0, calc(100% - 28px) 0, 100% 100%, 0 100%)'
 
@@ -47,19 +32,21 @@ export function TopBar() {
           <Mail className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" strokeWidth={2} />
         </a>
 
-        {SOCIAL_LINKS.map(({ href, label, Icon }) => (
+        {SOCIAL_LINKS.map(({ href, label }) => {
+          const Icon = SOCIAL_ICONS[label]
+          return (
           <a
             key={label}
             href={href}
             aria-label={label}
-            {...(href.startsWith('http')
-              ? { target: '_blank', rel: 'noopener noreferrer' }
-              : {})}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex h-7 w-7 shrink-0 items-center justify-center transition-colors hover:text-inferno-400 sm:h-9 sm:w-9"
           >
             <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </a>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
