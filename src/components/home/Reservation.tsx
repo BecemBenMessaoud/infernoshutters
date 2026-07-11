@@ -97,8 +97,7 @@ export function Reservation() {
                 </p>
                 <p>230 MCDONALDS AVE</p>
                 <p>RICHMOND, CA 94801</p>
-                <p className="mt-2">57 Ocean Pines Lane,</p>
-                <p>Pebble Beach, CA 93953</p>
+                <p className="mt-2">Pebble Beach, CA 93953</p>
                 <p className="mt-2">
                   <span className="font-bold text-inferno-500">
                     Corporate mailing office:

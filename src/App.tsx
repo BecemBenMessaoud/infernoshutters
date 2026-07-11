@@ -3,6 +3,7 @@ import { DocumentTitle } from './components/layout/DocumentTitle'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { Layout } from './components/layout/Layout'
 import { AboutPage } from './pages/AboutPage'
+import { BecomeADealerPage } from './pages/BecomeADealerPage'
 import { ContactPage } from './pages/ContactPage'
 import { FaqPage } from './pages/FaqPage'
 import { HomePage } from './pages/HomePage'
@@ -24,6 +25,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/becomeadealer" element={<BecomeADealerPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/resources" element={<ResourcesPage />} />

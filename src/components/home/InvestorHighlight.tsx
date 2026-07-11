@@ -27,7 +27,7 @@ export function InvestorHighlight() {
             type="button"
             className="mt-8 rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
           >
-            Learn more About us
+            Coming Soon !!!
           </button>
         </div>
       </div>

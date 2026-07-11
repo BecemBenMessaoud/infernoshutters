@@ -7,6 +7,7 @@ const SITE_NAME = 'Inferno-Roll'
 const PAGE_TITLES: Record<string, string> = {
   '/': `${SITE_NAME} | Home Defense Meets Wildfire Science`,
   '/about': `About | ${SITE_NAME}`,
+  '/becomeadealer': `Become a Dealer | ${SITE_NAME}`,
   '/contact': `Contact | ${SITE_NAME}`,
   '/faq': `FAQ | ${SITE_NAME}`,
   '/resources': `Resources (Blog / Guides) | ${SITE_NAME}`,

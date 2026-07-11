@@ -10,10 +10,10 @@ export const QUOTE_INSTALLATION_TYPE_OPTIONS = [
 ] as const
 
 export const QUOTE_PRODUCT_INTEREST_OPTIONS = [
-  { value: 'rolling-shutter', label: 'Rolling Shutter' },
-  { value: 'retractable-screens', label: 'Retractable Screens' },
-  { value: 'security-screens', label: 'Security Screens' },
-  { value: 'combination', label: 'Combination' },
+  { value: 'fire-resistant-shutter', label: 'Fire-Resistant Shutter' },
+  { value: 'standard-security-shutter', label: 'Standard Security Shutter' },
+  { value: 'hurricane-storm-shutter', label: 'Hurricane & Storm Shutter' },
+  { value: 'heavy-duty-shutter', label: 'Heavy-Duty Shutter' },
 ] as const
 
 export const QUOTE_REFERRAL_SOURCE_OPTIONS = [

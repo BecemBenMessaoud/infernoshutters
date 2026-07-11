@@ -1,6 +1,5 @@
 import { Mail, MapPin } from 'lucide-react'
-import { EMAIL, POWERED_BY } from '../../data/site'
-import { SOCIAL_LINKS } from '../../data/social'
+import { EMAIL, POWERED_BY, SOCIAL_LINKS } from '../../data/site'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
 const SOCIAL_ICONS = {

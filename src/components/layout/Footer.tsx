@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight } from 'lucide-react'
-import { PHONE, POWERED_BY } from '../../data/site'
-import { SOCIAL_LINKS } from '../../data/social'
+import { PHONE, POWERED_BY, SOCIAL_LINKS } from '../../data/site'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
 type FooterProps = {
