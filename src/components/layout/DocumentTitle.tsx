@@ -14,6 +14,9 @@ const PAGE_TITLES: Record<string, string> = {
   '/service': `Services | ${SITE_NAME}`,
   '/products/overview': `Products Overview | ${SITE_NAME}`,
   '/products/details': `Product Details | ${SITE_NAME}`,
+  '/investor-info': `Investor Info | ${SITE_NAME}`,
+  '/privacy': `Privacy Policy | ${SITE_NAME}`,
+  '/terms': `Terms & Conditions | ${SITE_NAME}`,
   '/quote': `Request a Quote | ${SITE_NAME}`,
   '/quote/received': `Quote Received | ${SITE_NAME}`,
 }

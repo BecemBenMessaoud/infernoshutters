@@ -3,6 +3,7 @@ export const NAV_LINKS = [
   { label: 'Products', href: '/#products' },
   { label: 'Become a Dealer', href: '/becomeadealer' },
   { label: 'Services', href: '/service' },
+  { label: 'Investor info', href: '/investor-info' },
   { label: 'About', href: '/about' },
   { label: 'Resources (Blog / Guides)', href: '/resources' },
   { label: 'FAQ', href: '/faq' },

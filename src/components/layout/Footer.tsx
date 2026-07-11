@@ -122,12 +122,12 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
         </div>
 
         <div className="mt-10 flex justify-end gap-4 border-t border-gray-300 pt-6 text-xs text-gray-500">
-          <a href="#" className="transition hover:text-inferno-500">
+          <Link to="/privacy" className="transition hover:text-inferno-500">
             Privacy Policy
-          </a>
-          <a href="#" className="transition hover:text-inferno-500">
+          </Link>
+          <Link to="/terms" className="transition hover:text-inferno-500">
             Terms & Conditions
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

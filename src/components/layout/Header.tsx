@@ -69,6 +69,10 @@ export function Header() {
       return location.pathname.startsWith('/service')
     }
 
+    if (href === '/investor-info') {
+      return location.pathname.startsWith('/investor-info')
+    }
+
     return location.pathname === href
   }
 

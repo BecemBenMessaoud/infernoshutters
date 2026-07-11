@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const PARTNER_LOGOS = [
   { src: '/images/partners/pentagon.png', alt: 'Pentagon Security Shutters' },
   { src: '/images/partners/gaposa.png', alt: 'GAPOSA Motors and Control Systems' },
@@ -23,12 +25,12 @@ export function InvestorHighlight() {
             Inferno shutters is expanding. Discover investment opportunities in
             fire storm and security home protection .
           </p>
-          <button
-            type="button"
-            className="mt-8 rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+          <Link
+            to="/investor-info"
+            className="mt-8 inline-block rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
           >
-            Coming Soon !!!
-          </button>
+            Learn More
+          </Link>
         </div>
       </div>
 
