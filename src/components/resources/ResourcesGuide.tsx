@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { ChevronDown, Home } from 'lucide-react'
+import { ChevronDown, Home, BookOpen } from 'lucide-react'
 
 type GuideAccordionItemProps = {
   title: string
@@ -197,16 +197,18 @@ export function NumberedHighlight({
 
 export function ResourcesHero() {
   return (
-    <section className="w-full leading-none">
-      <img
-        src="/images/resources-hero.png"
-        alt="Resources — Blog & Guides. Expert guides to help you maintain your shutters and protect your home against wildfires — from our team to yours."
-        width={1024}
-        height={304}
-        fetchPriority="high"
-        decoding="async"
-        className="block aspect-[1024/304] h-auto w-full object-cover object-center"
-      />
+    <section className="bg-navy-900 py-12 lg:py-16">
+      <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 px-4 py-1.5 text-sm text-white">
+          <BookOpen className="h-4 w-4" />
+          <span>Resources</span>
+        </div>
+        <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">Resources</h1>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">
+          Expert guides to help you maintain your shutters and protect your home against wildfires — from
+          our team to yours.
+        </p>
+      </div>
     </section>
   )
 }
