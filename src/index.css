@@ -2,6 +2,7 @@
 
 @theme {
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
   --color-navy-900: #001a3d;
   --color-navy-800: #0a2540;
   --color-navy-700: #0a1d4c;

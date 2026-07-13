@@ -1,4 +1,4 @@
-import { Handshake } from 'lucide-react'
+import { BecomeADealerHero } from '../components/dealer/BecomeADealerHero'
 
 const inputClass =
   'w-full border border-transparent bg-[#f3f3f3] px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-gray-900'
@@ -63,23 +63,15 @@ function SectionLegend({ children }: { children: React.ReactNode }) {
 export function BecomeADealerPage() {
   return (
     <main>
-      <section className="bg-navy-900 pb-16 pt-12 lg:pb-20 lg:pt-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 px-4 py-1.5 text-sm text-white">
-            <Handshake className="h-4 w-4" />
-            <span>Become a Dealer</span>
-          </div>
+      <BecomeADealerHero />
 
-          <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-            Partner with Inferno
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">
-            Interested in carrying Inferno roll shutters? Tell us about your business and our team
-            will reach out to discuss dealer opportunities.
-          </p>
-
+      <section id="dealer-application-form" className="bg-navy-900 py-12 lg:py-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 text-center text-2xl font-bold text-white sm:mb-10 sm:text-3xl">
+            Start Your Application
+          </h2>
           <form
-            className="mt-10 rounded-2xl bg-white p-6 text-left shadow-xl sm:p-8 lg:p-10"
+            className="rounded-2xl bg-white p-6 text-left shadow-xl sm:p-8 lg:p-10"
             onSubmit={(event) => event.preventDefault()}
           >
             <div className="space-y-1">
