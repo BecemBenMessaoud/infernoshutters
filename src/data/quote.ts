@@ -1,3 +1,5 @@
+export const FORMSPREE_QUOTE_ENDPOINT = 'https://formspree.io/f/mwvgqbbk'
+
 export const QUOTE_TYPE_OPTIONS = [
   { value: 'commercial', label: 'Commercial' },
   { value: 'residential', label: 'Residential' },

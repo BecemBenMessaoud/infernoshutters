@@ -32,10 +32,17 @@ function FieldLabel({
 
 type QuoteRequestFormProps = {
   idPrefix?: string
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void>
+  isSubmitting?: boolean
+  submitError?: string | null
 }
 
-export function QuoteRequestForm({ idPrefix = 'quote', onSubmit }: QuoteRequestFormProps) {
+export function QuoteRequestForm({
+  idPrefix = 'quote',
+  onSubmit,
+  isSubmitting = false,
+  submitError = null,
+}: QuoteRequestFormProps) {
   return (
     <>
       <div className="mb-8 text-center">
@@ -202,6 +209,12 @@ export function QuoteRequestForm({ idPrefix = 'quote', onSubmit }: QuoteRequestF
           </div>
         </div>
 
+        {submitError ? (
+          <p className="mt-6 text-sm font-medium text-red-600" role="alert">
+            {submitError}
+          </p>
+        ) : null}
+
         <div className="mt-8 flex flex-col gap-4 border-t border-gray-100 pt-6 md:flex-row md:items-center md:justify-between">
           <Link
             to="/privacy"
@@ -222,9 +235,10 @@ export function QuoteRequestForm({ idPrefix = 'quote', onSubmit }: QuoteRequestF
 
             <button
               type="submit"
-              className="shrink-0 rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+              disabled={isSubmitting}
+              className="shrink-0 rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Submit Request
+              {isSubmitting ? 'Submitting…' : 'Submit Request'}
             </button>
           </div>
         </div>

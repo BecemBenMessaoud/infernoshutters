@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ChevronDown, Newspaper } from 'lucide-react'
 import { BLOG_ARTICLE } from '../data/blog'
 import { BlogContentBlocks } from '../components/blog/BlogContentBlocks'
+import { HeroAccentBar } from '../components/ui/HeroAccentBar'
 
 export function BlogPage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set())
@@ -20,8 +21,8 @@ export function BlogPage() {
 
   return (
     <main>
-      <section className="bg-navy-900 py-12 lg:py-16">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+      <section className="bg-navy-900 pt-12 lg:pt-16">
+        <div className="mx-auto max-w-4xl px-4 pb-8 text-center sm:px-6 sm:pb-10 lg:px-8">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 px-4 py-1.5 text-sm text-white">
             <Newspaper className="h-4 w-4" />
             <span>Blog</span>
@@ -31,6 +32,7 @@ export function BlogPage() {
             Insights on wildfire protection, home security, and rolling shutter solutions.
           </p>
         </div>
+        <HeroAccentBar />
       </section>
 
       <section className="bg-white py-12 lg:py-16">

@@ -10,7 +10,7 @@ export function BecomeADealerHero() {
         height={1600}
         fetchPriority="high"
         decoding="async"
-        className="absolute inset-0 h-full w-full object-cover object-[42%_38%] sm:object-[48%_42%] lg:object-[52%_center]"
+        className="absolute inset-0 h-full w-full object-cover object-[42%_38%] sm:object-[48%_42%] lg:object-[32%_40%] xl:object-[28%_40%]"
       />
 
       <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10 sm:from-black/70 sm:via-black/40 sm:to-transparent" />
