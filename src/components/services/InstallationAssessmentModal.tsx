@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
 import { X } from 'lucide-react'
+import {
+  FORMSPREE_CUSTOM_ASSESSMENT_ENDPOINT,
+  FORMSPREE_SITE_ASSESSMENT_ENDPOINT,
+} from '../../data/quote'
 
 const INSTALLATION_TYPE_OPTIONS = [
   'Self Install',
@@ -9,10 +14,32 @@ const INSTALLATION_TYPE_OPTIONS = [
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+type AssessmentModalVariant = 'site' | 'custom'
+
 type InstallationAssessmentModalProps = {
   isOpen: boolean
   onClose: () => void
+  variant?: AssessmentModalVariant
 }
+
+const VARIANT_COPY = {
+  site: {
+    title: 'Site Assessment',
+    description:
+      'Tell us about your project and our team will follow up to schedule your assessment.',
+    success: 'Thank you. Your installation assessment request has been received.',
+    idPrefix: 'site-assessment',
+    endpoint: FORMSPREE_SITE_ASSESSMENT_ENDPOINT,
+  },
+  custom: {
+    title: 'Request Custom Assessment',
+    description:
+      'Tell us about your custom fabrication or retrofit project and our team will follow up.',
+    success: 'Thank you. Your custom assessment request has been received.',
+    idPrefix: 'custom-assessment',
+    endpoint: FORMSPREE_CUSTOM_ASSESSMENT_ENDPOINT,
+  },
+} as const
 
 type FormState = {
   fullName: string
@@ -33,10 +60,14 @@ const INITIAL_FORM: FormState = {
 export function InstallationAssessmentModal({
   isOpen,
   onClose,
+  variant = 'site',
 }: InstallationAssessmentModalProps) {
+  const copy = VARIANT_COPY[variant]
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -59,6 +90,8 @@ export function InstallationAssessmentModal({
     setForm(INITIAL_FORM)
     setErrors({})
     setSubmitted(false)
+    setIsSubmitting(false)
+    setSubmitError(null)
     onClose()
   }
 
@@ -86,17 +119,51 @@ export function InstallationAssessmentModal({
     return nextErrors
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    if (isSubmitting) {
+      return
+    }
+
     const nextErrors = validate()
     setErrors(nextErrors)
+    setSubmitError(null)
 
     if (Object.keys(nextErrors).length > 0) {
       setSubmitted(false)
       return
     }
 
-    setSubmitted(true)
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch(copy.endpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: form.fullName.trim(),
+          address: form.address.trim(),
+          email: form.email.trim(),
+          installationType: form.installationType,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      setForm(INITIAL_FORM)
+      setSubmitted(true)
+    } catch {
+      setSubmitError('Something went wrong. Please try again or call us.')
+      setSubmitted(false)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const updateField = (field: keyof FormState, value: string) => {
@@ -115,7 +182,7 @@ export function InstallationAssessmentModal({
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-labelledby="installation-assessment-title"
+        aria-labelledby={`${copy.idPrefix}-title`}
       >
         <button
           type="button"
@@ -127,22 +194,23 @@ export function InstallationAssessmentModal({
         </button>
 
         <h2
-          id="installation-assessment-title"
+          id={`${copy.idPrefix}-title`}
           className="pr-8 text-xl font-bold text-navy-900 sm:text-2xl"
         >
-          Site Assessment
+          {copy.title}
         </h2>
-        <p className="mt-2 text-sm text-gray-600">
-          Tell us about your project and our team will follow up to schedule your assessment.
-        </p>
+        <p className="mt-2 text-sm text-gray-600">{copy.description}</p>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
           <div>
-            <label htmlFor="assessment-full-name" className="mb-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor={`${copy.idPrefix}-full-name`}
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
               Full Name
             </label>
             <input
-              id="assessment-full-name"
+              id={`${copy.idPrefix}-full-name`}
               type="text"
               value={form.fullName}
               onChange={(event) => updateField('fullName', event.target.value)}
@@ -158,11 +226,14 @@ export function InstallationAssessmentModal({
           </div>
 
           <div>
-            <label htmlFor="assessment-address" className="mb-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor={`${copy.idPrefix}-address`}
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
               Address
             </label>
             <input
-              id="assessment-address"
+              id={`${copy.idPrefix}-address`}
               type="text"
               value={form.address}
               onChange={(event) => updateField('address', event.target.value)}
@@ -178,11 +249,14 @@ export function InstallationAssessmentModal({
           </div>
 
           <div>
-            <label htmlFor="assessment-email" className="mb-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor={`${copy.idPrefix}-email`}
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
-              id="assessment-email"
+              id={`${copy.idPrefix}-email`}
               type="email"
               value={form.email}
               onChange={(event) => updateField('email', event.target.value)}
@@ -198,11 +272,14 @@ export function InstallationAssessmentModal({
           </div>
 
           <div>
-            <label htmlFor="assessment-installation-type" className="mb-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor={`${copy.idPrefix}-installation-type`}
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
               Installation Type
             </label>
             <select
-              id="assessment-installation-type"
+              id={`${copy.idPrefix}-installation-type`}
               value={form.installationType}
               onChange={(event) => updateField('installationType', event.target.value)}
               className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:ring-1 ${
@@ -225,17 +302,22 @@ export function InstallationAssessmentModal({
             ) : null}
           </div>
 
-          {submitted ? (
-            <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800">
-              Thank you. Your installation assessment request has been received.
+          {submitError ? (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+              {submitError}
             </p>
+          ) : null}
+
+          {submitted ? (
+            <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800">{copy.success}</p>
           ) : null}
 
           <button
             type="submit"
-            className="w-full rounded-md bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+            disabled={isSubmitting}
+            className="w-full rounded-md bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Submit Request
+            {isSubmitting ? 'Submitting…' : 'Submit Request'}
           </button>
         </form>
       </div>

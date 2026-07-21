@@ -1,5 +1,8 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight } from 'lucide-react'
+import { FORMSPREE_NEWSLETTER_ENDPOINT } from '../../data/quote'
 import { PHONE, POWERED_BY, SOCIAL_LINKS } from '../../data/site'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
@@ -18,6 +21,46 @@ const SOCIAL_ICONS = {
 } as const
 
 export function Footer({ withOverlapSpacing = false }: FooterProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch(FORMSPREE_NEWSLETTER_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      form.reset()
+      setIsSubmitted(true)
+    } catch {
+      setSubmitError('Something went wrong. Please try again.')
+      setIsSubmitted(false)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <footer
       className={`relative z-10 bg-[#f3f2ee] ${
@@ -85,20 +128,34 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
           <div>
             <h4 className="text-sm font-bold text-navy-900">Newsletter</h4>
             <p className="mt-2 text-sm text-gray-600">Get updates about our latest news!</p>
-            <form className="mt-4 flex" onSubmit={(event) => event.preventDefault()}>
+            <form className="mt-4 flex" onSubmit={handleNewsletterSubmit}>
               <input
                 type="email"
+                name="email"
+                required
                 placeholder="you@example.com"
-                className="flex-1 rounded-l-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-inferno-500"
+                disabled={isSubmitting}
+                className="flex-1 rounded-l-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-inferno-500 disabled:opacity-70"
               />
               <button
                 type="submit"
-                className="flex items-center justify-center rounded-r-lg bg-inferno-500 px-3 text-white transition hover:bg-inferno-600"
+                disabled={isSubmitting}
+                className="flex items-center justify-center rounded-r-lg bg-inferno-500 px-3 text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
                 aria-label="Subscribe"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
+            {submitError ? (
+              <p className="mt-2 text-xs font-medium text-red-600" role="alert">
+                {submitError}
+              </p>
+            ) : null}
+            {isSubmitted ? (
+              <p className="mt-2 text-xs font-medium text-green-700">
+                Thanks for subscribing!
+              </p>
+            ) : null}
 
             <h4 className="mt-6 text-sm font-bold text-navy-900">Follow Us:</h4>
             <div className="mt-3 flex gap-3">

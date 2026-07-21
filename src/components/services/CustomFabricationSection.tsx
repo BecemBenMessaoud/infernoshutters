@@ -91,6 +91,7 @@ export function CustomFabricationSection({ embedded = false }: CustomFabrication
       <InstallationAssessmentModal
         isOpen={isAssessmentModalOpen}
         onClose={() => setIsAssessmentModalOpen(false)}
+        variant="custom"
       />
     </>
   )

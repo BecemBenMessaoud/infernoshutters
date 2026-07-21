@@ -1,4 +1,7 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { BecomeADealerHero } from '../components/dealer/BecomeADealerHero'
+import { FORMSPREE_DEALER_ENDPOINT } from '../data/quote'
 
 const inputClass =
   'w-full border border-transparent bg-[#f3f3f3] px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-gray-900'
@@ -61,6 +64,45 @@ function SectionLegend({ children }: { children: React.ReactNode }) {
 }
 
 export function BecomeADealerPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch(FORMSPREE_DEALER_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      form.reset()
+      setIsSubmitted(true)
+    } catch {
+      setSubmitError('Something went wrong. Please try again or call us.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <main>
       <BecomeADealerHero />
@@ -70,9 +112,25 @@ export function BecomeADealerPage() {
           <h2 className="mb-8 text-center text-2xl font-bold text-white sm:mb-10 sm:text-3xl">
             Start Your Application
           </h2>
+
+          {isSubmitted ? (
+            <div className="rounded-2xl bg-white p-6 text-center shadow-xl sm:p-8 lg:p-10">
+              <h3 className="text-2xl font-bold text-navy-900">Application Received</h3>
+              <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-gray-600 sm:text-base">
+                Thank you! Our team will review your dealer application and contact you soon.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsSubmitted(false)}
+                className="mt-8 rounded-lg bg-inferno-500 px-10 py-3.5 text-sm font-bold text-white transition hover:bg-inferno-600"
+              >
+                Submit Another Application
+              </button>
+            </div>
+          ) : (
           <form
             className="rounded-2xl bg-white p-6 text-left shadow-xl sm:p-8 lg:p-10"
-            onSubmit={(event) => event.preventDefault()}
+            onSubmit={handleSubmit}
           >
             <div className="space-y-1">
               <FormRow label="Name" htmlFor="dealer-name" required>
@@ -288,13 +346,21 @@ export function BecomeADealerPage() {
               </p>
             </div>
 
+            {submitError ? (
+              <p className="mt-6 text-sm font-medium text-red-600" role="alert">
+                {submitError}
+              </p>
+            ) : null}
+
             <button
               type="submit"
-              className="mt-8 w-full rounded-lg bg-inferno-500 py-3.5 text-sm font-bold text-white transition hover:bg-inferno-600 sm:w-auto sm:px-10"
+              disabled={isSubmitting}
+              className="mt-8 w-full rounded-lg bg-inferno-500 py-3.5 text-sm font-bold text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:px-10"
             >
-              Submit
+              {isSubmitting ? 'Submitting…' : 'Submit'}
             </button>
           </form>
+          )}
         </div>
       </section>
     </main>

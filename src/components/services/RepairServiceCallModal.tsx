@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
 import { X } from 'lucide-react'
+import {
+  FORMSPREE_SERVICE_CALL_ENDPOINT,
+  FORMSPREE_WHOLESALE_ENDPOINT,
+} from '../../data/quote'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -35,10 +40,10 @@ const VARIANT_COPY = {
     idPrefix: 'repair',
   },
   commercial: {
-    title: 'Talk to Commercial Team',
+    title: 'Talk to Wholesale Team',
     description:
-      'Share your details and our commercial team will contact you to discuss your project.',
-    success: 'Thank you. Your commercial team request has been received.',
+      'Share your details and our wholesale team will contact you to discuss your project.',
+    success: 'Thank you. Your wholesale team request has been received.',
     idPrefix: 'commercial',
   },
 } as const
@@ -52,6 +57,8 @@ export function RepairServiceCallModal({
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -74,6 +81,8 @@ export function RepairServiceCallModal({
     setForm(INITIAL_FORM)
     setErrors({})
     setSubmitted(false)
+    setIsSubmitting(false)
+    setSubmitError(null)
     onClose()
   }
 
@@ -101,17 +110,56 @@ export function RepairServiceCallModal({
     return nextErrors
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    if (isSubmitting) {
+      return
+    }
+
     const nextErrors = validate()
     setErrors(nextErrors)
+    setSubmitError(null)
 
     if (Object.keys(nextErrors).length > 0) {
       setSubmitted(false)
       return
     }
 
-    setSubmitted(true)
+    setIsSubmitting(true)
+
+    try {
+      const endpoint =
+        variant === 'commercial'
+          ? FORMSPREE_WHOLESALE_ENDPOINT
+          : FORMSPREE_SERVICE_CALL_ENDPOINT
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: form.fullName.trim(),
+          address: form.address.trim(),
+          email: form.email.trim(),
+          phoneNumber: form.phoneNumber.trim(),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      setForm(INITIAL_FORM)
+      setSubmitted(true)
+    } catch {
+      setSubmitError('Something went wrong. Please try again or call us.')
+      setSubmitted(false)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const updateField = (field: keyof FormState, value: string) => {
@@ -242,15 +290,22 @@ export function RepairServiceCallModal({
             ) : null}
           </div>
 
+          {submitError ? (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+              {submitError}
+            </p>
+          ) : null}
+
           {submitted ? (
             <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800">{copy.success}</p>
           ) : null}
 
           <button
             type="submit"
-            className="w-full rounded-md bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+            disabled={isSubmitting}
+            className="w-full rounded-md bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Submit Request
+            {isSubmitting ? 'Submitting…' : 'Submit Request'}
           </button>
         </form>
       </div>

@@ -1,4 +1,12 @@
 export const FORMSPREE_QUOTE_ENDPOINT = 'https://formspree.io/f/mwvgqbbk'
+export const FORMSPREE_RESERVATION_ENDPOINT = 'https://formspree.io/f/xwvgqrqe'
+export const FORMSPREE_DEALER_ENDPOINT = 'https://formspree.io/f/xwvgqyjj'
+export const FORMSPREE_SITE_ASSESSMENT_ENDPOINT = 'https://formspree.io/f/xdaqdbrk'
+export const FORMSPREE_SERVICE_CALL_ENDPOINT = 'https://formspree.io/f/mzdnvolv'
+export const FORMSPREE_WHOLESALE_ENDPOINT = 'https://formspree.io/f/mgogzdjp'
+export const FORMSPREE_CONTACT_ENDPOINT = 'https://formspree.io/f/mrenljww'
+export const FORMSPREE_CUSTOM_ASSESSMENT_ENDPOINT = 'https://formspree.io/f/maqrbvrq'
+export const FORMSPREE_NEWSLETTER_ENDPOINT = 'https://formspree.io/f/xzdnvonv'
 
 export const QUOTE_TYPE_OPTIONS = [
   { value: 'commercial', label: 'Commercial' },

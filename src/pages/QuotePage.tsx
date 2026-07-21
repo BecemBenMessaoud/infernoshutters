@@ -1,13 +1,47 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { QuoteRequestForm } from '../components/quote/QuoteRequestForm'
+import { FORMSPREE_QUOTE_ENDPOINT } from '../data/quote'
 
 export function QuotePage() {
   const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    navigate('/quote/received')
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch(FORMSPREE_QUOTE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      navigate('/quote/received')
+    } catch {
+      setSubmitError('Something went wrong. Please try again or call us.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -37,7 +71,12 @@ export function QuotePage() {
       <section className="flex min-h-[28rem] items-center justify-center bg-navy-900 px-4 py-16 sm:px-6 lg:min-h-[32rem] lg:px-8 lg:py-24">
         <div className="w-full max-w-4xl">
           <div className="mx-auto rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-            <QuoteRequestForm idPrefix="quote-page" onSubmit={handleSubmit} />
+            <QuoteRequestForm
+              idPrefix="quote-page"
+              onSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+              submitError={submitError}
+            />
           </div>
         </div>
       </section>

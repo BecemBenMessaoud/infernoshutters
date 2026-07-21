@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import {
   Banknote,
   ClipboardList,
@@ -7,6 +9,8 @@ import {
   Tag,
   Wrench,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { FORMSPREE_RESERVATION_ENDPOINT } from '../../data/quote'
 
 const RESERVE_NOW_URL =
   'https://connect.intuit.com/portal/app/CommerceNetwork/view/scs-v1-d34d119939b54de3adbaeaf41cf8dbf50b9f7be4320f42188783224ae1debcce6e0a64e5a52d4008a4ef67bc73612842?locale=EN_US&cta=saveandcopylink'
@@ -44,7 +48,48 @@ const STEPS = [
   },
 ]
 
+const inputClassName =
+  'w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500'
+
 export function Reservation() {
+  const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (isSubmitting) {
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const response = await fetch(FORMSPREE_RESERVATION_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Form submission failed')
+      }
+
+      navigate('/quote/received')
+    } catch {
+      setSubmitError('Something went wrong. Please try again or call us.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section id="contact" className="bg-white py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -109,38 +154,38 @@ export function Reservation() {
           </div>
 
           <div className="rounded-xl bg-gray-100 p-6 shadow-inner sm:p-8">
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
                 placeholder="Name"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={inputClassName}
               />
               <input
                 type="text"
                 name="zipCode"
                 placeholder="Zip Code"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={inputClassName}
               />
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={inputClassName}
               />
               <input
                 type="tel"
                 name="phone"
                 placeholder="Phone"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={inputClassName}
               />
               <select
                 name="type"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={`${inputClassName} text-gray-600`}
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -151,7 +196,7 @@ export function Reservation() {
               </select>
               <select
                 name="installationType"
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={`${inputClassName} text-gray-600`}
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -163,7 +208,7 @@ export function Reservation() {
               </select>
               <select
                 name="productInterest"
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={`${inputClassName} text-gray-600`}
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -177,7 +222,7 @@ export function Reservation() {
               <select
                 name="referralSource"
                 required
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-600 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={`${inputClassName} text-gray-600`}
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -195,13 +240,21 @@ export function Reservation() {
                 name="message"
                 placeholder="Message"
                 rows={4}
-                className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500"
+                className={`${inputClassName} resize-none`}
               />
+
+              {submitError ? (
+                <p className="text-sm font-medium text-red-600" role="alert">
+                  {submitError}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="w-full rounded-lg bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+                disabled={isSubmitting}
+                className="w-full rounded-lg bg-inferno-500 py-3 text-sm font-bold text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Submit
+                {isSubmitting ? 'Submitting…' : 'Submit'}
               </button>
             </form>
           </div>
