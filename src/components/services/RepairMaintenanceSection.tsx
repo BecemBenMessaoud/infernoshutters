@@ -33,7 +33,11 @@ export function RepairMaintenanceSection() {
                 <div className="flex w-full items-center justify-center">
                   <img
                     src={card.iconSrc}
-                    alt=""
+                    alt={`${card.title} service icon`}
+                    width={64}
+                    height={64}
+                    loading="lazy"
+                    decoding="async"
                     className="h-14 w-14 object-contain sm:h-16 sm:w-16"
                   />
                 </div>

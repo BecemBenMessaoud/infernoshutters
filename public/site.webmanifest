@@ -1,0 +1,16 @@
+{
+  "name": "Inferno-Roll Shutters",
+  "short_name": "Inferno-Roll",
+  "description": "Fire-resistant, hurricane-rated, and security roll shutters for wildfire and storm protection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1d3d",
+  "theme_color": "#0b1d3d",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

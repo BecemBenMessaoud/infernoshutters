@@ -10,8 +10,17 @@ type FooterProps = {
   withOverlapSpacing?: boolean
 }
 
-const FOOTER_LINKS_LEFT = ['Contact', 'Service areas', 'Testimonials'] as const
-const FOOTER_LINKS_RIGHT = ['Hours', 'Quick links'] as const
+const FOOTER_LINKS_LEFT = [
+  { label: 'Contact', href: '/contact' },
+  { label: 'Service Areas', href: '/about' },
+  { label: 'Products', href: '/products/overview' },
+] as const
+
+const FOOTER_LINKS_RIGHT = [
+  { label: 'Services', href: '/service' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Request a Quote', href: '/quote' },
+] as const
 
 const SOCIAL_ICONS = {
   Facebook: FacebookIcon,
@@ -72,7 +81,9 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
           <div>
             <img
               src="/images/Logo Inferno.png"
-              alt="Inferno-Roll"
+              alt="Inferno-Roll Shutters logo"
+              width={160}
+              height={64}
               className="h-16 w-auto object-contain"
             />
             <p className="mt-2 text-sm text-gray-600">Powered by {POWERED_BY}</p>
@@ -87,16 +98,16 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
           <div>
             <ul className="space-y-3">
-              {FOOTER_LINKS_LEFT.map((label) => (
-                <li key={label}>
-                  <a
-                    href="#"
+              {FOOTER_LINKS_LEFT.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
                     className="flex items-center gap-1 text-sm text-gray-700 transition hover:text-inferno-500"
                   >
                     <ChevronRight className="h-3.5 w-3.5 text-inferno-500" />
                     <ChevronRight className="-ml-2.5 h-3.5 w-3.5 text-inferno-500" />
-                    <span>{label}</span>
-                  </a>
+                    <span>{item.label}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -110,16 +121,16 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
           <div>
             <ul className="space-y-3">
-              {FOOTER_LINKS_RIGHT.map((label) => (
-                <li key={label}>
-                  <a
-                    href="#"
+              {FOOTER_LINKS_RIGHT.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
                     className="flex items-center gap-1 text-sm text-gray-700 transition hover:text-inferno-500"
                   >
                     <ChevronRight className="h-3.5 w-3.5 text-inferno-500" />
                     <ChevronRight className="-ml-2.5 h-3.5 w-3.5 text-inferno-500" />
-                    <span>{label}</span>
-                  </a>
+                    <span>{item.label}</span>
+                  </Link>
                 </li>
               ))}
             </ul>

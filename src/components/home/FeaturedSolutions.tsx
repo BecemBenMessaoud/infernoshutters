@@ -42,7 +42,11 @@ export function FeaturedSolutions() {
               <div className="mb-6 flex h-40 w-full shrink-0 items-center justify-center">
                 <img
                   src={solution.icon}
-                  alt=""
+                  alt={`${solution.title} icon`}
+                  width={180}
+                  height={144}
+                  loading="lazy"
+                  decoding="async"
                   className="max-h-36 max-w-[180px] object-contain"
                 />
               </div>

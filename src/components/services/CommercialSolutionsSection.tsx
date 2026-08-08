@@ -25,7 +25,7 @@ function CommercialCard({
       className={`flex h-full flex-col items-center justify-center rounded-lg px-4 py-5 text-center text-white sm:px-5 ${COMMERCIAL_TONES[tone]} ${className}`}
     >
       <div className="flex w-full items-center justify-center">
-        <img src={iconSrc} alt="" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
+        <img src={iconSrc} alt={`${title} icon`} width={56} height={56} loading="lazy" decoding="async" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
       </div>
       <h3 className="mt-3 text-base font-bold sm:text-lg">{title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-white/90">{description}</p>

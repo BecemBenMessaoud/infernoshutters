@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { DocumentTitle } from './components/layout/DocumentTitle'
+import { SeoHead } from './components/seo/SeoHead'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { Layout } from './components/layout/Layout'
 import { AboutPage } from './pages/AboutPage'
@@ -18,15 +18,16 @@ import { QuoteReceivedPage } from './pages/QuoteReceivedPage'
 import { ResourcesPage } from './pages/ResourcesPage'
 import { ServicesPage } from './pages/ServicesPage'
 import { TermsConditionsPage } from './pages/TermsConditionsPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
   return (
     <BrowserRouter>
-      <DocumentTitle />
+      <SeoHead />
       <ScrollToTop />
       <Routes>
-        <Route path="/products/:slug" element={<ProductDetailPage />} />
         <Route element={<Layout />}>
+          <Route path="/products/:slug" element={<ProductDetailPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/becomeadealer" element={<BecomeADealerPage />} />
@@ -42,6 +43,7 @@ function App() {
           <Route path="/terms" element={<TermsConditionsPage />} />
           <Route path="/quote" element={<QuotePage />} />
           <Route path="/quote/received" element={<QuoteReceivedPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

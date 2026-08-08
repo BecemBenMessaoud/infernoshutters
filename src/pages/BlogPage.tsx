@@ -51,29 +51,32 @@ export function BlogPage() {
                 const isOpen = openSections.has(section.id)
 
                 return (
-                  <div key={section.id}>
-                    <button
-                      type="button"
-                      onClick={() => toggleSection(section.id)}
-                      aria-expanded={isOpen}
-                      className="flex w-full min-h-11 items-center justify-between gap-4 bg-navy-900 px-5 py-4 text-left transition hover:bg-navy-800"
-                    >
-                      <span className="min-w-0 flex-1 text-sm font-semibold text-white sm:text-base">
-                        {section.title}
-                      </span>
-                      <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-white transition-transform ${
-                          isOpen ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </button>
+                  <section key={section.id}>
+                    <h3 className="m-0 text-base font-semibold sm:text-lg">
+                      <button
+                        type="button"
+                        onClick={() => toggleSection(section.id)}
+                        aria-expanded={isOpen}
+                        className="flex w-full min-h-11 items-center justify-between gap-4 bg-navy-900 px-5 py-4 text-left transition hover:bg-navy-800"
+                      >
+                        <span className="min-w-0 flex-1 text-sm font-semibold text-white sm:text-base">
+                          {section.title}
+                        </span>
+                        <ChevronDown
+                          className={`h-5 w-5 shrink-0 text-white transition-transform ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
+                          aria-hidden
+                        />
+                      </button>
+                    </h3>
 
                     {isOpen ? (
                       <div className="bg-[#e6eef5] px-5 py-5">
                         <BlogContentBlocks blocks={section.blocks} />
                       </div>
                     ) : null}
-                  </div>
+                  </section>
                 )
               })}
             </div>

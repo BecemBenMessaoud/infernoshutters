@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FeaturedSolutions } from '../components/home/FeaturedSolutions'
 import { Hero } from '../components/home/Hero'
 import { InfernoDefenseLayers } from '../components/home/InfernoDefenseLayers'
 import { InvestorHighlight } from '../components/home/InvestorHighlight'
@@ -19,6 +20,7 @@ export function HomePage() {
       <WildfireZones selected={selectedFeature} onSelect={setSelectedFeature} />
       <WhyChoose />
       <InfernoDefenseLayers />
+      <FeaturedSolutions />
       <Reservation />
       <InvestorHighlight />
     </main>

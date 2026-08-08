@@ -79,7 +79,11 @@ export function WildfireZones({ selected, onSelect }: WildfireZonesProps) {
                   <div className="flex h-16 w-16 shrink-0 items-center justify-center">
                     <img
                       src={feature.icon}
-                      alt=""
+                      alt={`${feature.title} protection icon`}
+                      width={56}
+                      height={56}
+                      loading="lazy"
+                      decoding="async"
                       className="h-14 w-14 object-contain"
                     />
                   </div>

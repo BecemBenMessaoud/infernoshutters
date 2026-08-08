@@ -30,22 +30,25 @@ export function FaqPage() {
               const isOpen = openItems.has(index)
 
               return (
-                <div key={item.question}>
-                  <button
-                    type="button"
-                    onClick={() => toggleItem(index)}
-                    aria-expanded={isOpen}
-                    className="flex w-full min-h-11 items-center justify-between gap-4 bg-navy-900 px-5 py-4 text-left transition hover:bg-navy-800"
-                  >
-                    <span className="min-w-0 flex-1 text-sm font-semibold text-white sm:text-base">
-                      {item.question}
-                    </span>
-                    <ChevronDown
-                      className={`h-5 w-5 shrink-0 text-white transition-transform ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
+                <article key={item.question}>
+                  <h2 className="m-0 text-base font-semibold sm:text-lg">
+                    <button
+                      type="button"
+                      onClick={() => toggleItem(index)}
+                      aria-expanded={isOpen}
+                      className="flex w-full min-h-11 items-center justify-between gap-4 bg-navy-900 px-5 py-4 text-left transition hover:bg-navy-800"
+                    >
+                      <span className="min-w-0 flex-1 text-sm font-semibold text-white sm:text-base">
+                        {item.question}
+                      </span>
+                      <ChevronDown
+                        className={`h-5 w-5 shrink-0 text-white transition-transform ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                        aria-hidden
+                      />
+                    </button>
+                  </h2>
 
                   {isOpen ? (
                     <div className="bg-[#e6eef5] px-5 py-4">
@@ -54,7 +57,7 @@ export function FaqPage() {
                       </p>
                     </div>
                   ) : null}
-                </div>
+                </article>
               )
             })}
           </div>

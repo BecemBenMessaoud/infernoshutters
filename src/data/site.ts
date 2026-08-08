@@ -15,6 +15,16 @@ export const PHONE = '(888) 999-8809'
 export const EMAIL = 'info@infernoshutters.com'
 export const POWERED_BY = 'Sun & Security'
 
+export const BUSINESS_ADDRESS = {
+  streetAddress: '57 Ocean Pines Lane',
+  addressLocality: 'Pebble Beach',
+  addressRegion: 'CA',
+  postalCode: '93953',
+  addressCountry: 'US',
+} as const
+
+export const LEGAL_ENTITY_NAME = 'Sun and Security LLC'
+
 export const SOCIAL_LINKS = [
   {
     href: 'https://www.facebook.com/profile.php?id=61572242558667',
