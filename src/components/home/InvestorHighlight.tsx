@@ -49,7 +49,11 @@ export function InvestorHighlight() {
                   >
                     <img
                       src={logo.src}
-                      alt={logo.alt}
+                      alt={`${logo.alt} partner logo`}
+                      width={160}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
                       className="max-h-14 w-auto max-w-[140px] object-contain sm:max-h-16 sm:max-w-[160px]"
                     />
                   </div>

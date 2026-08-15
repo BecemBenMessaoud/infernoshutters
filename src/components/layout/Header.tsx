@@ -65,6 +65,10 @@ export function Header() {
       return false
     }
 
+    if (href === '/products/overview') {
+      return location.pathname.startsWith('/products')
+    }
+
     if (href === '/service') {
       return location.pathname.startsWith('/service')
     }
@@ -102,11 +106,14 @@ export function Header() {
           <img
             src="/images/Logo Inferno.png"
             alt="Inferno-Roll Shutters"
+            width={180}
+            height={56}
+            decoding="async"
             className="h-10 w-auto max-w-[9.5rem] object-contain object-left sm:h-12 sm:max-w-none lg:h-14"
           />
         </Link>
 
-        <nav className="hidden flex-1 items-center justify-end gap-4 lg:flex lg:gap-5 xl:gap-6">
+        <nav aria-label="Main navigation" className="hidden flex-1 items-center justify-end gap-4 lg:flex lg:gap-5 xl:gap-6">
           {NAV_LINKS.map((link) =>
             isDropdownNavLabel(link.label) ? (() => {
               const dropdownLabel = link.label
@@ -190,7 +197,7 @@ export function Header() {
             aria-label="Close menu overlay"
             onClick={closeMobileMenu}
           />
-          <nav className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col overflow-y-auto bg-white p-6 shadow-xl">
+          <nav aria-label="Mobile navigation" className="absolute right-0 top-0 flex h-full w-[min(100%,20rem)] flex-col overflow-y-auto bg-white p-6 shadow-xl">
             <div className="mb-6 flex items-center justify-between">
               <span className="text-lg font-bold text-navy-900">Menu</span>
               <button

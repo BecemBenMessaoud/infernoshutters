@@ -1,203 +1,398 @@
 import { useState } from 'react'
+
 import type { FormEvent } from 'react'
+
 import { Link } from 'react-router-dom'
+
 import { ArrowRight, ChevronRight } from 'lucide-react'
+
 import { FORMSPREE_NEWSLETTER_ENDPOINT } from '../../data/quote'
-import { PHONE, POWERED_BY, SOCIAL_LINKS } from '../../data/site'
+
+import {
+
+  FOOTER_LINKS_PRIMARY,
+
+  FOOTER_LINKS_SECONDARY,
+
+  FOOTER_LINKS_TERTIARY,
+
+  PHONE,
+
+  POWERED_BY,
+
+  SOCIAL_LINKS,
+
+} from '../../data/site'
+
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from '../ui/SocialIcons'
 
+
+
 type FooterProps = {
+
   withOverlapSpacing?: boolean
+
 }
 
-const FOOTER_LINKS_LEFT = [
-  { label: 'Contact', href: '/contact' },
-  { label: 'Service Areas', href: '/about' },
-  { label: 'Products', href: '/products/overview' },
-] as const
 
-const FOOTER_LINKS_RIGHT = [
-  { label: 'Services', href: '/service' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Request a Quote', href: '/quote' },
-] as const
 
 const SOCIAL_ICONS = {
+
   Facebook: FacebookIcon,
+
   X: TwitterIcon,
+
   LinkedIn: LinkedinIcon,
+
   Instagram: InstagramIcon,
+
 } as const
 
-export function Footer({ withOverlapSpacing = false }: FooterProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
 
-    if (isSubmitting) {
-      return
-    }
+function FooterLinkList({
 
-    setIsSubmitting(true)
-    setSubmitError(null)
+  links,
 
-    const form = event.currentTarget
-    const formData = new FormData(form)
+}: {
 
-    try {
-      const response = await fetch(FORMSPREE_NEWSLETTER_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
+  links: readonly { label: string; href: string }[]
 
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
-      form.reset()
-      setIsSubmitted(true)
-    } catch {
-      setSubmitError('Something went wrong. Please try again.')
-      setIsSubmitted(false)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+}) {
 
   return (
-    <footer
-      className={`relative z-10 bg-[#f3f2ee] ${
-        withOverlapSpacing ? 'pt-20 lg:pt-24' : 'pt-12'
-      }`}
-    >
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <img
-              src="/images/Logo Inferno.png"
-              alt="Inferno-Roll Shutters logo"
-              width={160}
-              height={64}
-              className="h-16 w-auto object-contain"
-            />
-            <p className="mt-2 text-sm text-gray-600">Powered by {POWERED_BY}</p>
-            <p className="mt-6 text-sm font-semibold text-navy-900">Phone Number:</p>
-            <a
-              href={`tel:${PHONE.replace(/\D/g, '')}`}
-              className="mt-1 inline-block text-sm text-gray-700 underline transition hover:text-inferno-500"
-            >
-              {PHONE}
-            </a>
-          </div>
 
-          <div>
-            <ul className="space-y-3">
-              {FOOTER_LINKS_LEFT.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className="flex items-center gap-1 text-sm text-gray-700 transition hover:text-inferno-500"
-                  >
-                    <ChevronRight className="h-3.5 w-3.5 text-inferno-500" />
-                    <ChevronRight className="-ml-2.5 h-3.5 w-3.5 text-inferno-500" />
-                    <span>{item.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/contact"
-              className="mt-4 inline-block text-sm text-gray-700 underline transition hover:text-inferno-500"
-            >
-              Contact Us
-            </Link>
-          </div>
+    <ul className="space-y-3">
 
-          <div>
-            <ul className="space-y-3">
-              {FOOTER_LINKS_RIGHT.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    to={item.href}
-                    className="flex items-center gap-1 text-sm text-gray-700 transition hover:text-inferno-500"
-                  >
-                    <ChevronRight className="h-3.5 w-3.5 text-inferno-500" />
-                    <ChevronRight className="-ml-2.5 h-3.5 w-3.5 text-inferno-500" />
-                    <span>{item.label}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+      {links.map((item) => (
 
-          <div>
-            <h4 className="text-sm font-bold text-navy-900">Newsletter</h4>
-            <p className="mt-2 text-sm text-gray-600">Get updates about our latest news!</p>
-            <form className="mt-4 flex" onSubmit={handleNewsletterSubmit}>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="you@example.com"
-                disabled={isSubmitting}
-                className="flex-1 rounded-l-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-inferno-500 disabled:opacity-70"
-              />
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex items-center justify-center rounded-r-lg bg-inferno-500 px-3 text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
-                aria-label="Subscribe"
-              >
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </form>
-            {submitError ? (
-              <p className="mt-2 text-xs font-medium text-red-600" role="alert">
-                {submitError}
-              </p>
-            ) : null}
-            {isSubmitted ? (
-              <p className="mt-2 text-xs font-medium text-green-700">
-                Thanks for subscribing!
-              </p>
-            ) : null}
+        <li key={item.href}>
 
-            <h4 className="mt-6 text-sm font-bold text-navy-900">Follow Us:</h4>
-            <div className="mt-3 flex gap-3">
-              {SOCIAL_LINKS.map(({ href, label }) => {
-                const Icon = SOCIAL_ICONS[label]
-                return (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 transition hover:text-inferno-500"
-                  >
-                    <Icon className="h-4 w-4" />
-                  </a>
-                )
-              })}
-            </div>
-          </div>
-        </div>
+          <Link
 
-        <div className="mt-10 flex justify-end gap-4 border-t border-gray-300 pt-6 text-xs text-gray-500">
-          <Link to="/privacy" className="transition hover:text-inferno-500">
-            Privacy Policy
+            to={item.href}
+
+            className="flex items-center gap-1 text-sm text-gray-700 transition hover:text-inferno-500"
+
+          >
+
+            <ChevronRight className="h-3.5 w-3.5 text-inferno-500" />
+
+            <ChevronRight className="-ml-2.5 h-3.5 w-3.5 text-inferno-500" />
+
+            <span>{item.label}</span>
+
           </Link>
-          <Link to="/terms" className="transition hover:text-inferno-500">
-            Terms & Conditions
-          </Link>
-        </div>
-      </div>
-    </footer>
+
+        </li>
+
+      ))}
+
+    </ul>
+
   )
+
 }
+
+
+
+export function Footer({ withOverlapSpacing = false }: FooterProps) {
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+
+    event.preventDefault()
+
+
+
+    if (isSubmitting) {
+
+      return
+
+    }
+
+
+
+    setIsSubmitting(true)
+
+    setSubmitError(null)
+
+
+
+    const form = event.currentTarget
+
+    const formData = new FormData(form)
+
+
+
+    try {
+
+      const response = await fetch(FORMSPREE_NEWSLETTER_ENDPOINT, {
+
+        method: 'POST',
+
+        body: formData,
+
+        headers: {
+
+          Accept: 'application/json',
+
+        },
+
+      })
+
+
+
+      if (!response.ok) {
+
+        throw new Error('Form submission failed')
+
+      }
+
+
+
+      form.reset()
+
+      setIsSubmitted(true)
+
+    } catch {
+
+      setSubmitError('Something went wrong. Please try again.')
+
+      setIsSubmitted(false)
+
+    } finally {
+
+      setIsSubmitting(false)
+
+    }
+
+  }
+
+
+
+  return (
+
+    <footer
+
+      className={`relative z-10 bg-[#f3f2ee] ${
+
+        withOverlapSpacing ? 'pt-20 lg:pt-24' : 'pt-12'
+
+      }`}
+
+    >
+
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+
+          <div className="sm:col-span-2 lg:col-span-1">
+
+            <img
+
+              src="/images/Logo Inferno.png"
+
+              alt="Inferno-Roll Shutters logo"
+
+              width={160}
+
+              height={64}
+
+              loading="lazy"
+
+              decoding="async"
+
+              className="h-16 w-auto object-contain"
+
+            />
+
+            <p className="mt-2 text-sm text-gray-600">Powered by {POWERED_BY}</p>
+
+            <p className="mt-6 text-sm font-semibold text-navy-900">Phone Number:</p>
+
+            <a
+
+              href={`tel:${PHONE.replace(/\D/g, '')}`}
+
+              className="mt-1 inline-block text-sm text-gray-700 underline transition hover:text-inferno-500"
+
+            >
+
+              {PHONE}
+
+            </a>
+
+          </div>
+
+
+
+          <div>
+
+            <h2 className="mb-3 text-sm font-bold text-navy-900">Products &amp; Services</h2>
+
+            <FooterLinkList links={FOOTER_LINKS_PRIMARY} />
+
+          </div>
+
+
+
+          <div>
+
+            <h2 className="mb-3 text-sm font-bold text-navy-900">Resources</h2>
+
+            <FooterLinkList links={FOOTER_LINKS_SECONDARY} />
+
+          </div>
+
+
+
+          <div>
+
+            <h2 className="mb-3 text-sm font-bold text-navy-900">Company</h2>
+
+            <FooterLinkList links={FOOTER_LINKS_TERTIARY} />
+
+          </div>
+
+
+
+          <div>
+
+            <h2 className="text-sm font-bold text-navy-900">Newsletter</h2>
+
+            <p className="mt-2 text-sm text-gray-600">Get updates about our latest news!</p>
+
+            <form className="mt-4 flex" onSubmit={handleNewsletterSubmit}>
+
+              <input
+
+                type="email"
+
+                name="email"
+
+                required
+
+                placeholder="you@example.com"
+
+                disabled={isSubmitting}
+
+                aria-label="Email address for newsletter"
+
+                className="flex-1 rounded-l-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-inferno-500 disabled:opacity-70"
+
+              />
+
+              <button
+
+                type="submit"
+
+                disabled={isSubmitting}
+
+                className="flex items-center justify-center rounded-r-lg bg-inferno-500 px-3 text-white transition hover:bg-inferno-600 disabled:cursor-not-allowed disabled:opacity-70"
+
+                aria-label="Subscribe to newsletter"
+
+              >
+
+                <ArrowRight className="h-4 w-4" />
+
+              </button>
+
+            </form>
+
+            {submitError ? (
+
+              <p className="mt-2 text-xs font-medium text-red-600" role="alert">
+
+                {submitError}
+
+              </p>
+
+            ) : null}
+
+            {isSubmitted ? (
+
+              <p className="mt-2 text-xs font-medium text-green-700">
+
+                Thanks for subscribing!
+
+              </p>
+
+            ) : null}
+
+
+
+            <h2 className="mt-6 text-sm font-bold text-navy-900">Follow Us:</h2>
+
+            <div className="mt-3 flex gap-3">
+
+              {SOCIAL_LINKS.map(({ href, label }) => {
+
+                const Icon = SOCIAL_ICONS[label]
+
+                return (
+
+                  <a
+
+                    key={label}
+
+                    href={href}
+
+                    aria-label={`Follow Inferno-Roll on ${label}`}
+
+                    target="_blank"
+
+                    rel="noopener noreferrer"
+
+                    className="text-gray-600 transition hover:text-inferno-500"
+
+                  >
+
+                    <Icon className="h-4 w-4" />
+
+                  </a>
+
+                )
+
+              })}
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <div className="mt-10 flex flex-wrap justify-end gap-4 border-t border-gray-300 pt-6 text-xs text-gray-500">
+
+          <Link to="/privacy" className="transition hover:text-inferno-500">
+
+            Privacy Policy
+
+          </Link>
+
+          <Link to="/terms" className="transition hover:text-inferno-500">
+
+            Terms &amp; Conditions
+
+          </Link>
+
+        </div>
+
+      </div>
+
+    </footer>
+
+  )
+
+}
+

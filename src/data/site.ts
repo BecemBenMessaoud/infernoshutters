@@ -1,6 +1,6 @@
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'Products', href: '/#products' },
+  { label: 'Products', href: '/products/overview' },
   { label: 'Become a Dealer', href: '/becomeadealer' },
   { label: 'Services', href: '/service' },
   { label: 'Investor info', href: '/investor-info' },
@@ -9,6 +9,28 @@ export const NAV_LINKS = [
   { label: 'Blog', href: '/blog' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
+] as const
+
+export const FOOTER_LINKS_PRIMARY = [
+  { label: 'Products Overview', href: '/products/overview' },
+  { label: 'Product Specifications', href: '/products/details' },
+  { label: 'Fire-Resistant Shutters', href: '/products/fire-resistant' },
+  { label: 'Services', href: '/service' },
+  { label: 'About Us', href: '/about' },
+] as const
+
+export const FOOTER_LINKS_SECONDARY = [
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Resources', href: '/resources' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Become a Dealer', href: '/becomeadealer' },
+  { label: 'Request a Quote', href: '/quote' },
+] as const
+
+export const FOOTER_LINKS_TERTIARY = [
+  { label: 'Contact', href: '/contact' },
+  { label: 'Investor Info', href: '/investor-info' },
+  { label: 'Service Areas', href: '/about' },
 ] as const
 
 export const PHONE = '(888) 999-8809'

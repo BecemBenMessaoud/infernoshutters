@@ -3,14 +3,18 @@ import {
   PRODUCT_COMPARISON_ROWS,
   PRODUCT_OVERVIEW_CARDS,
 } from '../data/products'
+import { OptimizedImage } from '../components/ui/OptimizedImage'
 
 export function ProductsOverviewPage() {
   return (
     <main>
       <section className="relative min-h-[420px] overflow-hidden sm:min-h-[480px] lg:min-h-[540px]">
-        <img
+        <OptimizedImage
           src="/images/products-hero.png"
-          alt="Modern home with Inferno roll shutters"
+          alt="Modern home with Inferno-Roll fire-resistant roll shutters installed on windows and doors"
+          width={1920}
+          height={1080}
+          priority
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-black/20" />
@@ -43,12 +47,12 @@ export function ProductsOverviewPage() {
                 className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md"
               >
                 <div className="h-44 overflow-hidden bg-[#ececec] sm:h-48">
-                  <img
+                  <OptimizedImage
                     src={product.image}
-                    alt={product.title}
+                    alt={`${product.title} — Inferno-Roll roll shutter system`}
+                    width={640}
+                    height={360}
                     className="h-full w-full object-cover object-center"
-                    loading="lazy"
-                    decoding="async"
                   />
                 </div>
 
@@ -60,9 +64,11 @@ export function ProductsOverviewPage() {
 
                   <div className="mt-5 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="rounded-lg bg-white px-1 py-1">
-                      <img
+                      <OptimizedImage
                         src={product.illustration}
-                        alt={`${product.title} illustration`}
+                        alt={`${product.title} slat profile illustration`}
+                        width={150}
+                        height={36}
                         className="h-8 w-auto max-w-full object-contain sm:h-9 sm:max-w-[150px]"
                       />
                     </div>

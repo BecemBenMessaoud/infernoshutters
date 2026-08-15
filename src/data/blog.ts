@@ -10,6 +10,8 @@ export type BlogSection = {
 
 export const BLOG_ARTICLE = {
   title: 'Why Every Home in a Wildfire Zone Needs More Than Defensible Space',
+  publishedDate: '2026-01-15',
+  modifiedDate: '2026-08-01',
   intro: [
     {
       type: 'paragraph',

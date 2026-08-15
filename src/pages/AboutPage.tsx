@@ -72,7 +72,11 @@ export function AboutPage() {
               <div className="text-center">
                 <img
                   src="/images/statesFinal.png"
-                  alt="US Coverage Map"
+                  alt="Map showing Inferno-Roll roll shutter service coverage across the United States"
+                  width={640}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   className="mx-auto mb-4 w-full max-w-md object-contain sm:max-w-lg lg:max-h-80 lg:max-w-xl"
                 />
                 <div className="flex items-center justify-center gap-2 text-sm font-medium text-gray-600">

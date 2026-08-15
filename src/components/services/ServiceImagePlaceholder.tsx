@@ -19,6 +19,8 @@ export function ServiceImagePlaceholder({
         <img
           src={src}
           alt={alt || label}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover object-center"
         />
       </div>

@@ -1,3 +1,4 @@
+import { BLOG_ARTICLE } from '../../data/blog'
 import { CONTACT_FAQ_ITEMS, EMAIL, PHONE, SOCIAL_LINKS, BUSINESS_ADDRESS, LEGAL_ENTITY_NAME } from '../../data/site'
 import { PRODUCT_DETAIL_CONTENT } from '../../data/product-details'
 import { PRODUCT_OVERVIEW_CARDS, PRODUCT_IMAGES, type ProductDetailSlug } from '../../data/products'
@@ -39,6 +40,7 @@ function webPage(pathname: string, seo: PageSeoConfig): JsonLd {
     isPartOf: { '@id': `${SITE_URL}/#website` },
     about: { '@id': `${SITE_URL}/#organization` },
     inLanguage: 'en-US',
+    ...(seo.aiSummary ? { abstract: seo.aiSummary } : {}),
   }
 }
 
@@ -88,6 +90,11 @@ export function localBusinessSchema(): JsonLd {
       postalCode: BUSINESS_ADDRESS.postalCode,
       addressCountry: BUSINESS_ADDRESS.addressCountry,
     },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 36.5665,
+      longitude: -121.9486,
+    },
     areaServed: {
       '@type': 'Country',
       name: 'United States',
@@ -107,6 +114,14 @@ export function websiteSchema(): JsonLd {
     description: COMPANY.description,
     publisher: { '@id': `${SITE_URL}/#organization` },
     inLanguage: 'en-US',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_URL}/faq?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   }
 }
 
@@ -171,6 +186,22 @@ export function productSchema(slug: ProductDetailSlug): JsonLd | null {
   }
 }
 
+export function productListSchema(): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Inferno-Roll Shutter Products',
+    description: 'Complete catalog of fire-resistant, hurricane, security, and heavy-duty roll shutter systems.',
+    numberOfItems: PRODUCT_OVERVIEW_CARDS.length,
+    itemListElement: PRODUCT_OVERVIEW_CARDS.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: product.title,
+      url: absoluteUrl(product.detailHref),
+    })),
+  }
+}
+
 export function articleSchema(): JsonLd {
   return {
     '@context': 'https://schema.org',
@@ -184,6 +215,8 @@ export function articleSchema(): JsonLd {
     url: absoluteUrl('/blog'),
     image: DEFAULT_OG_IMAGE,
     inLanguage: 'en-US',
+    datePublished: BLOG_ARTICLE.publishedDate,
+    dateModified: BLOG_ARTICLE.modifiedDate,
   }
 }
 
@@ -206,6 +239,10 @@ export function buildStructuredData(pathname: string, seo: PageSeoConfig): JsonL
 
   if (pathname === '/blog') {
     schemas.push(articleSchema())
+  }
+
+  if (pathname === '/products/overview') {
+    schemas.push(productListSchema())
   }
 
   const productMatch = pathname.match(/^\/products\/([^/]+)$/)

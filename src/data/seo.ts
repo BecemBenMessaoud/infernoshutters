@@ -6,6 +6,7 @@ export const SITE_NAME_SHORT = 'Inferno-Roll'
 export const SITE_TAGLINE = 'Home Defense Meets Wildfire Science'
 export const SITE_URL =
   import.meta.env.VITE_SITE_URL?.replace(/\/$/, '') ?? 'https://www.infernoshutters.com'
+export const TWITTER_HANDLE = '@Infernoshutters'
 
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/inferno-roll.png`
 export const LOGO_URL = `${SITE_URL}/images/Logo%20Inferno.png`
@@ -170,7 +171,8 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
     title: `Privacy Policy | ${SITE_NAME_SHORT}`,
     description:
       'Inferno-Roll privacy policy — how we collect, use, and protect your personal information when you visit our website or request a quote.',
-    noindex: false,
+    aiSummary:
+      'Legal privacy policy describing data collection, cookies, and personal information handling for Inferno-Roll website visitors and quote requests.',
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Privacy Policy', path: '/privacy' },
@@ -180,6 +182,8 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
     title: `Terms & Conditions | ${SITE_NAME_SHORT}`,
     description:
       'Terms and conditions governing use of the Inferno-Roll website, product purchases, warranties, and service agreements.',
+    aiSummary:
+      'Legal terms and conditions for using the Inferno-Roll website, purchasing products, and service agreements.',
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Terms & Conditions', path: '/terms' },

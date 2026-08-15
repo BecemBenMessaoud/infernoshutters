@@ -12,13 +12,13 @@ import {
   Wind,
   type LucideIcon,
 } from 'lucide-react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, Link, useParams } from 'react-router-dom'
 import { ProductDetailLayout } from '../components/products/ProductDetailLayout'
 import { ProductFeatureHero } from '../components/products/ProductFeatureHero'
 import { ProductModelCard } from '../components/products/ProductModelCard'
 import { PRODUCT_DETAIL_CONTENT } from '../data/product-details'
 import type { ProductFeatureIconId } from '../data/product-details'
-import { PRODUCT_IMAGES, type ProductDetailSlug } from '../data/products'
+import { PRODUCT_IMAGES, PRODUCT_OVERVIEW_CARDS, type ProductDetailSlug } from '../data/products'
 
 const FEATURE_ICON_MAP: Record<ProductFeatureIconId, LucideIcon> = {
   home: Home,
@@ -49,6 +49,7 @@ export function ProductDetailPage() {
   }
 
   const content = PRODUCT_DETAIL_CONTENT[slug]
+  const relatedProducts = PRODUCT_OVERVIEW_CARDS.filter((product) => product.id !== slug)
   const usesSheetLayout = slug === 'standard-security' || slug === 'hurricane-storm' || slug === 'heavy-duty' || slug === 'fire-resistant'
   const features = content.features.map((feature) => ({
     icon: FEATURE_ICON_MAP[feature.icon],
@@ -110,6 +111,32 @@ export function ProductDetailPage() {
           )
         })}
       </div>
+
+      <aside className="mt-16 border-t border-white/10 pt-12">
+        <h2 className="text-center text-xl font-bold text-white sm:text-2xl">
+          Explore Other Roll Shutter Systems
+        </h2>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+          {relatedProducts.map((product) => (
+            <li key={product.id}>
+              <Link
+                to={product.detailHref}
+                className="block rounded-xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-white transition hover:border-inferno-500 hover:bg-white/10"
+              >
+                {product.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-8 text-center">
+          <Link
+            to="/quote"
+            className="inline-block rounded-lg bg-inferno-500 px-8 py-3 text-sm font-bold text-white transition hover:bg-inferno-600"
+          >
+            Request a Quote
+          </Link>
+        </div>
+      </aside>
     </ProductDetailLayout>
   )
 }
