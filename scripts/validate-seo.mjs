@@ -97,7 +97,15 @@ for (const schema of requiredSchemas) {
 }
 
 // 7. Verify favicon and manifest exist
-for (const file of ['public/favicon.svg', 'public/site.webmanifest', 'public/robots.txt', 'public/sitemap.xml']) {
+for (const file of [
+  'public/favicon.svg',
+  'public/favicon.png',
+  'public/favicon.ico',
+  'public/apple-touch-icon.png',
+  'public/site.webmanifest',
+  'public/robots.txt',
+  'public/sitemap.xml',
+]) {
   try {
     read(join(root, file))
   } catch {
