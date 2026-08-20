@@ -178,15 +178,15 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
       { name: 'Privacy Policy', path: '/privacy' },
     ],
   },
-  '/terms': {
-    title: `Terms & Conditions | ${SITE_NAME_SHORT}`,
+  '/terms-and-conditions': {
+    title: 'Terms & Conditions | Inferno Shutters',
     description:
-      'Terms and conditions governing use of the Inferno-Roll website, product purchases, warranties, and service agreements.',
+      'Review the Terms & Conditions governing the use of the Inferno Shutters website, product information, professional quotes, installation services, and customer inquiries.',
     aiSummary:
-      'Legal terms and conditions for using the Inferno-Roll website, purchasing products, and service agreements.',
+      'Terms and conditions for the Inferno Shutters website covering roller shutter products, professional quote requests, installation assessment requests, pricing, orders, warranty, and customer inquiries.',
     breadcrumbs: [
       { name: 'Home', path: '/' },
-      { name: 'Terms & Conditions', path: '/terms' },
+      { name: 'Terms & Conditions', path: '/terms-and-conditions' },
     ],
   },
   '/quote': {
@@ -300,7 +300,7 @@ export const SITEMAP_PATHS = [
   '/products/details',
   ...PRODUCT_OVERVIEW_CARDS.map((p) => p.detailHref),
   '/privacy',
-  '/terms',
+  '/terms-and-conditions',
   '/quote',
 ] as const
 

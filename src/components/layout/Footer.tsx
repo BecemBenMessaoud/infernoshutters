@@ -380,7 +380,7 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
           </Link>
 
-          <Link to="/terms" className="transition hover:text-inferno-500">
+          <Link to="/terms-and-conditions" className="transition hover:text-inferno-500">
 
             Terms &amp; Conditions
 

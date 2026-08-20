@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SeoHead } from './components/seo/SeoHead'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { Layout } from './components/layout/Layout'
@@ -40,7 +40,8 @@ function App() {
           <Route path="/products/overview" element={<ProductsOverviewPage />} />
           <Route path="/products/details" element={<ProductsDetailsPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
+          <Route path="/terms" element={<Navigate to="/terms-and-conditions" replace />} />
           <Route path="/quote" element={<QuotePage />} />
           <Route path="/quote/received" element={<QuoteReceivedPage />} />
           <Route path="*" element={<NotFoundPage />} />

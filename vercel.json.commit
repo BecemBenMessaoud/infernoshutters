@@ -1,6 +1,5 @@
 {
   "redirects": [
-    { "source": "/favicon.ico", "destination": "/favicon.svg", "permanent": true },
     { "source": "/services", "destination": "/service", "permanent": true },
     { "source": "/products", "destination": "/products/overview", "permanent": true },
     { "source": "/become-a-dealer", "destination": "/becomeadealer", "permanent": true },
@@ -20,10 +19,22 @@
       ]
     },
     {
-      "source": "/favicon.svg",
+      "source": "/favicon.ico",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" },
-        { "key": "Content-Type", "value": "image/svg+xml" }
+        { "key": "Content-Type", "value": "image/x-icon" }
+      ]
+    },
+    {
+      "source": "/favicon(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/apple-touch-icon.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
       ]
     },
     {

@@ -23,7 +23,7 @@ const PATHS = [
   { loc: '/products/heavy-duty', changefreq: 'monthly', priority: '0.8' },
   { loc: '/products/fire-resistant', changefreq: 'monthly', priority: '0.9' },
   { loc: '/privacy', changefreq: 'yearly', priority: '0.3' },
-  { loc: '/terms', changefreq: 'yearly', priority: '0.3' },
+  { loc: '/terms-and-conditions', changefreq: 'yearly', priority: '0.3' },
   { loc: '/quote', changefreq: 'monthly', priority: '0.8' },
 ]
 

@@ -7,7 +7,7 @@ type LegalDocumentBodyProps = {
 
 export function LegalDocumentBody({ html }: LegalDocumentBodyProps) {
   return (
-    <div
+    <article
       className={`${legalProseClassName} rounded-2xl bg-[#f8f7f4] p-6 shadow-sm sm:p-8 lg:p-10`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
