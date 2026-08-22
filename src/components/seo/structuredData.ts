@@ -1,9 +1,8 @@
-import { BLOG_ARTICLE } from '../../data/blog'
+import { getBlogArticle } from '../../data/blog'
 import { CONTACT_FAQ_ITEMS, EMAIL, PHONE, SOCIAL_LINKS, BUSINESS_ADDRESS, LEGAL_ENTITY_NAME } from '../../data/site'
 import { PRODUCT_DETAIL_CONTENT } from '../../data/product-details'
 import { PRODUCT_OVERVIEW_CARDS, PRODUCT_IMAGES, type ProductDetailSlug } from '../../data/products'
 import {
-  BLOG_ARTICLE_TITLE,
   COMPANY,
   DEFAULT_OG_IMAGE,
   LOGO_URL,
@@ -202,21 +201,27 @@ export function productListSchema(): JsonLd {
   }
 }
 
-export function articleSchema(): JsonLd {
+function blogArticleSchema(pathname: string, seo: PageSeoConfig): JsonLd | null {
+  const blogMatch = pathname.match(/^\/blog\/([^/]+)$/)
+  if (!blogMatch) return null
+
+  const article = getBlogArticle(blogMatch[1])
+  if (!article) return null
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: BLOG_ARTICLE_TITLE,
-    description:
-      'Why defensible space alone is not enough — and how roll shutters protect the weakest points of every home in wildfire zones.',
+    headline: article.title,
+    description: article.seoDescription,
     author: { '@id': `${SITE_URL}/#organization` },
     publisher: { '@id': `${SITE_URL}/#organization` },
-    mainEntityOfPage: absoluteUrl('/blog'),
-    url: absoluteUrl('/blog'),
+    mainEntityOfPage: absoluteUrl(pathname),
+    url: absoluteUrl(pathname),
     image: DEFAULT_OG_IMAGE,
     inLanguage: 'en-US',
-    datePublished: BLOG_ARTICLE.publishedDate,
-    dateModified: BLOG_ARTICLE.modifiedDate,
+    datePublished: article.publishedDate,
+    dateModified: article.modifiedDate,
+    ...(seo.aiSummary ? { abstract: seo.aiSummary } : {}),
   }
 }
 
@@ -237,8 +242,9 @@ export function buildStructuredData(pathname: string, seo: PageSeoConfig): JsonL
     schemas.push(servicePageSchema())
   }
 
-  if (pathname === '/blog') {
-    schemas.push(articleSchema())
+  const blogArticleLd = blogArticleSchema(pathname, seo)
+  if (blogArticleLd) {
+    schemas.push(blogArticleLd)
   }
 
   if (pathname === '/products/overview') {

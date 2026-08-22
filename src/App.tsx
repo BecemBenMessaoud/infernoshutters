@@ -3,7 +3,8 @@ import { SeoHead } from './components/seo/SeoHead'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { Layout } from './components/layout/Layout'
 import { AboutPage } from './pages/AboutPage'
-import { BlogPage } from './pages/BlogPage'
+import { BlogIndexPage } from './pages/BlogIndexPage'
+import { BlogArticlePage } from './pages/BlogArticlePage'
 import { BecomeADealerPage } from './pages/BecomeADealerPage'
 import { ContactPage } from './pages/ContactPage'
 import { FaqPage } from './pages/FaqPage'
@@ -33,7 +34,8 @@ function App() {
           <Route path="/becomeadealer" element={<BecomeADealerPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/faq" element={<FaqPage />} />
-          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog" element={<BlogIndexPage />} />
+          <Route path="/blog/:slug" element={<BlogArticlePage />} />
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/investor-info" element={<InvestorInfoPage />} />
           <Route path="/service" element={<ServicesPage />} />

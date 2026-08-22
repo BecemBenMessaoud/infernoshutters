@@ -1,5 +1,5 @@
 import { PRODUCT_OVERVIEW_CARDS } from './products'
-import { BLOG_ARTICLE } from './blog'
+import { BLOG_ARTICLES, getBlogArticle } from './blog'
 
 export const SITE_NAME = 'Inferno-Roll Shutters'
 export const SITE_NAME_SHORT = 'Inferno-Roll'
@@ -94,13 +94,12 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
     ],
   },
   '/blog': {
-    title: `${BLOG_ARTICLE.title} | ${SITE_NAME_SHORT} Blog`,
+    title: `Blog | ${SITE_NAME_SHORT} Shutters`,
     description:
-      'Expert insights on wildfire home hardening, defensible space limits, and why roll shutters are essential for protecting windows and doors in fire-prone areas.',
-    keywords: `${BASE_KEYWORDS}, wildfire blog, home hardening tips, defensible space`,
-    ogType: 'article',
+      'The Inferno-Roll blog: fire-tested roll shutters that protect your windows and doors from wildfire embers, storms, and break-ins. Home defense meets wildfire science.',
+    keywords: `${BASE_KEYWORDS}, wildfire blog, home hardening tips, defensible space, ember protection`,
     aiSummary:
-      'Editorial content on wildfire risk, the limits of defensible space alone, and how roll shutters protect critical building openings.',
+      'Blog index covering wildfire science, home hardening, insurance, and fire-tested roll shutter protection for windows and doors.',
     breadcrumbs: [
       { name: 'Home', path: '/' },
       { name: 'Blog', path: '/blog' },
@@ -273,6 +272,25 @@ export function getPageSeo(pathname: string): PageSeoConfig {
     }
   }
 
+  const blogMatch = pathname.match(/^\/blog\/([^/]+)$/)
+  if (blogMatch) {
+    const article = getBlogArticle(blogMatch[1])
+    if (article) {
+      return {
+        title: `${article.title} | ${SITE_NAME_SHORT} Blog`,
+        description: article.seoDescription,
+        keywords: `${BASE_KEYWORDS}, wildfire blog, ${article.category.toLowerCase()}`,
+        ogType: 'article',
+        aiSummary: article.aiSummary,
+        breadcrumbs: [
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' },
+          { name: article.title, path: `/blog/${article.slug}` },
+        ],
+      }
+    }
+  }
+
   return {
     title: `Page Not Found | ${SITE_NAME_SHORT}`,
     description: `The page you requested could not be found. Browse ${SITE_NAME_SHORT} roll shutter products, services, and wildfire protection resources.`,
@@ -293,6 +311,7 @@ export const SITEMAP_PATHS = [
   '/contact',
   '/faq',
   '/blog',
+  ...BLOG_ARTICLES.map((article) => `/blog/${article.slug}`),
   '/resources',
   '/investor-info',
   '/service',
@@ -304,4 +323,4 @@ export const SITEMAP_PATHS = [
   '/quote',
 ] as const
 
-export const BLOG_ARTICLE_TITLE = BLOG_ARTICLE.title
+export const BLOG_ARTICLE_TITLE = BLOG_ARTICLES[0]?.title ?? 'Inferno-Roll Blog'
