@@ -46,4 +46,9 @@ export const CURTAIN_SERIES_ARTICLES: ProductModelData[] = [
     subtitle: 'SINGLE WALL EXTRUDED ALUMINUM LARGE PERFORATIONS',
     sheetImage: '/images/products/models/heavy-duty-i5620.png',
   },
+  {
+    model: 'SAS RC3 SS',
+    subtitle: 'STAINLESS STEEL WITH ULTRA HARD DENSITY FOAM FILLING',
+    sheetImage: '/images/products/models/sas-rc3-ss.png',
+  },
 ]
