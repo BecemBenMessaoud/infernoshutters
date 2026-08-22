@@ -1,0 +1,67 @@
+# Inferno-Roll Shutters — Extended AI & SEO Reference
+
+Site: https://www.infernoshutters.com
+Brand names: Inferno-Roll, Inferno-Roll Shutters, Inferno Shutters
+Tagline: Home Defense Meets Wildfire Science
+
+## Company summary
+
+Inferno-Roll manufactures roll shutter systems for wildfire ember protection, hurricane and storm defense, and physical security. Systems are suitable for residential windows, doors, and commercial storefront openings across the United States. The company emphasizes fire-tested performance, home hardening in wildfire zones, and multi-purpose protection (fire, storm, intrusion).
+
+## Product categories
+
+1. Fire-Resistant Shutter — ember and radiant heat protection; wildfire home hardening.
+2. Hurricane / Storm Shutter — high-wind, impact, and debris protection for coastal and storm-prone areas.
+3. Standard Security Shutter — everyday security, insulation, and noise reduction.
+4. Heavy-Duty Security Shutter — reinforced construction for maximum forced-entry deterrence.
+
+## Slat model specifications (Product Details page)
+
+The /products/details page lists technical slat specification sheets including:
+- I 4000, I 4400, I 5000, I 5400 — roll-formed aluminum slats
+- I 4500, I 5500 — double-wall extruded aluminum
+- I 5600, I 5610, I 5620 — single-wall extruded aluminum (including perforated variants)
+- SAS RC3 SS — stainless steel slat with ultra hard density foam filling for RC3 high-security applications
+
+## Key FAQ topics
+
+- Wildfire protection and ember intrusion at windows and doors
+- Shutter pricing and quote process
+- Installation permits and professional installation
+- Warranties and maintenance
+- Motorized vs manual operation
+- Insurance and home hardening considerations
+
+## All indexable routes
+
+/
+/about
+/becomeadealer
+/contact
+/faq
+/blog
+/blog/why-windows-and-doors-fail-first-in-a-wildfire
+/blog/wildfire-insurance-home-hardening
+/blog/why-every-home-in-a-wildfire-zone-needs-more-than-defensible-space
+/resources
+/investor-info
+/service
+/products/overview
+/products/details
+/products/standard-security
+/products/hurricane-storm
+/products/heavy-duty
+/products/fire-resistant
+/privacy
+/terms-and-conditions
+/quote
+
+## Legal & policies
+
+- Terms: https://www.infernoshutters.com/terms-and-conditions
+- Privacy: https://www.infernoshutters.com/privacy
+
+## Contact
+
+Phone: +1-888-999-8809
+Email: info@infernoshutters.com

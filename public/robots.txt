@@ -22,3 +22,5 @@ Allow: /
 Disallow: /quote/received
 
 Sitemap: https://www.infernoshutters.com/sitemap.xml
+
+# AI / LLM site guide: https://www.infernoshutters.com/llms.txt

@@ -1,5 +1,6 @@
 import { getBlogArticle } from '../../data/blog'
 import { CONTACT_FAQ_ITEMS, EMAIL, PHONE, SOCIAL_LINKS, BUSINESS_ADDRESS, LEGAL_ENTITY_NAME } from '../../data/site'
+import { CURTAIN_SERIES_ARTICLES } from '../../data/curtain-series'
 import { PRODUCT_DETAIL_CONTENT } from '../../data/product-details'
 import { PRODUCT_OVERVIEW_CARDS, PRODUCT_IMAGES, type ProductDetailSlug } from '../../data/products'
 import {
@@ -113,14 +114,6 @@ export function websiteSchema(): JsonLd {
     description: COMPANY.description,
     publisher: { '@id': `${SITE_URL}/#organization` },
     inLanguage: 'en-US',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/faq?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
   }
 }
 
@@ -201,6 +194,24 @@ export function productListSchema(): JsonLd {
   }
 }
 
+export function slatSeriesListSchema(): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Inferno-Roll Slat Model Specifications',
+    description:
+      'Technical specification sheets for Inferno-Roll slat models including aluminum I-series profiles and SAS RC3 SS stainless steel.',
+    numberOfItems: CURTAIN_SERIES_ARTICLES.length,
+    itemListElement: CURTAIN_SERIES_ARTICLES.map((model, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: model.model,
+      description: model.subtitle,
+      ...(model.sheetImage ? { image: absoluteUrl(model.sheetImage) } : {}),
+    })),
+  }
+}
+
 function blogArticleSchema(pathname: string, seo: PageSeoConfig): JsonLd | null {
   const blogMatch = pathname.match(/^\/blog\/([^/]+)$/)
   if (!blogMatch) return null
@@ -249,6 +260,10 @@ export function buildStructuredData(pathname: string, seo: PageSeoConfig): JsonL
 
   if (pathname === '/products/overview') {
     schemas.push(productListSchema())
+  }
+
+  if (pathname === '/products/details') {
+    schemas.push(slatSeriesListSchema())
   }
 
   const productMatch = pathname.match(/^\/products\/([^/]+)$/)
