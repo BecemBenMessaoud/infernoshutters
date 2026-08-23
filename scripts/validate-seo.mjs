@@ -139,7 +139,20 @@ if (!structuredData.includes('slatSeriesListSchema')) {
   errors.push('structuredData.ts missing slatSeriesListSchema for /products/details')
 }
 
-// 8. Verify favicon and manifest exist
+// 8. Verify OG images exist
+for (const file of [
+  'public/images/og/home.jpg',
+  'public/images/og/fire-resistant.jpg',
+  'public/images/og/hurricane-storm.jpg',
+  'public/images/og/blog-wildfire-windows.jpg',
+  'public/images/og/services.jpg',
+]) {
+  if (!existsSync(join(root, file))) {
+    errors.push(`Missing ${file}`)
+  }
+}
+
+// 9. Verify favicon and manifest exist
 for (const file of [
   'public/favicon.svg',
   'public/site.webmanifest',
@@ -152,7 +165,7 @@ for (const file of [
   }
 }
 
-// 9. Prerender output checks (when prerender completed)
+// 10. Prerender output checks (when prerender completed)
 const prerenderComplete = existsSync(join(distDir, '.prerender-complete'))
 if (existsSync(distDir) && prerenderComplete) {
   const sampleRoutes = ['/', '/faq', '/products/fire-resistant', '/blog', '/terms-and-conditions']

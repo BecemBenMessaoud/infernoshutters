@@ -25,7 +25,8 @@ Run `npm run validate-seo` after every build. The build pipeline runs this autom
 - [ ] Publish 1–2 blog articles per month (wildfire, storm, security topics)
 - [ ] Expand FAQ with long-tail questions
 - [ ] Add internal links from blog → products → quote
-- [ ] Create unique OG images for top product and blog pages
+- [x] Unique OG images (1200×630) for Home, Fire-resistant, Hurricane, Blog featured, Services
+- [ ] Create unique OG images for remaining top product and blog pages
 
 ## Phase 4 — Authority (ongoing)
 

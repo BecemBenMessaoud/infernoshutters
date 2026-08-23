@@ -8,7 +8,14 @@ export const SITE_URL =
   import.meta.env.VITE_SITE_URL?.replace(/\/$/, '') ?? 'https://www.infernoshutters.com'
 export const TWITTER_HANDLE = '@Infernoshutters'
 
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/inferno-roll.png`
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og/home.jpg`
+export const OG_IMAGES = {
+  home: `${SITE_URL}/images/og/home.jpg`,
+  fireResistant: `${SITE_URL}/images/og/fire-resistant.jpg`,
+  hurricaneStorm: `${SITE_URL}/images/og/hurricane-storm.jpg`,
+  blogFeatured: `${SITE_URL}/images/og/blog-wildfire-windows.jpg`,
+  services: `${SITE_URL}/images/og/services.jpg`,
+} as const
 export const LOGO_URL = `${SITE_URL}/images/Logo%20Inferno.png`
 
 export const COMPANY = {
@@ -41,6 +48,7 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
     description:
       'Inferno-Roll manufactures fire-resistant, hurricane-rated, and security roll shutters for wildfire zones and storm-prone homes. ASTM-tested protection for windows and doors.',
     keywords: `${BASE_KEYWORDS}, CAL FIRE home hardening, defensible space, ember protection`,
+    ogImage: OG_IMAGES.home,
     aiSummary:
       'Inferno-Roll is a U.S. manufacturer of motorized roll shutters engineered for wildfire ember protection, hurricane resistance, and home security.',
     breadcrumbs: [{ name: 'Home', path: '/' }],
@@ -134,6 +142,7 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
     description:
       'Professional roll shutter installation, repair, and maintenance services by Inferno-Roll certified technicians. Commercial and residential coverage nationwide.',
     keywords: `${BASE_KEYWORDS}, shutter installation, repair service, maintenance plans`,
+    ogImage: OG_IMAGES.services,
     aiSummary:
       'Services page covering certified installation, repair, maintenance programs, and commercial roll shutter solutions.',
     breadcrumbs: [
@@ -213,7 +222,7 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
 
 const PRODUCT_SEO_OVERRIDES: Record<
   string,
-  Partial<Pick<PageSeoConfig, 'description' | 'keywords' | 'aiSummary'>>
+  Partial<Pick<PageSeoConfig, 'description' | 'keywords' | 'aiSummary' | 'ogImage'>>
 > = {
   'standard-security': {
     description:
@@ -226,6 +235,7 @@ const PRODUCT_SEO_OVERRIDES: Record<
     description:
       'Hurricane and storm roll shutters engineered for high-wind, impact, and debris protection. Code-ready solutions for coastal and severe weather regions.',
     keywords: `${BASE_KEYWORDS}, hurricane shutter, storm shutter, impact rated`,
+    ogImage: OG_IMAGES.hurricaneStorm,
     aiSummary:
       'Hurricane/storm-rated shutter product page with end-retention slats for severe weather protection.',
   },
@@ -240,6 +250,7 @@ const PRODUCT_SEO_OVERRIDES: Record<
     description:
       'Fire-resistant roll shutters with ASTM-tested radiant heat and flame protection. Engineered for wildfire-prone homes with ember-resistant coating technology.',
     keywords: `${BASE_KEYWORDS}, fire resistant shutter, wildfire shutter, ASTM tested, ember protection`,
+    ogImage: OG_IMAGES.fireResistant,
     aiSummary:
       'Fire-resistant shutter product page with fire-rated slats and proprietary heat-activated protective coating for wildfire defense.',
   },
@@ -261,7 +272,7 @@ export function getPageSeo(pathname: string): PageSeoConfig {
         description: overrides.description ?? product.description,
         keywords: overrides.keywords ?? BASE_KEYWORDS,
         ogType: 'product',
-        ogImage: `${SITE_URL}${product.image}`,
+        ogImage: overrides.ogImage ?? `${SITE_URL}${product.image}`,
         aiSummary: overrides.aiSummary ?? product.description,
         breadcrumbs: [
           { name: 'Home', path: '/' },
@@ -276,11 +287,16 @@ export function getPageSeo(pathname: string): PageSeoConfig {
   if (blogMatch) {
     const article = getBlogArticle(blogMatch[1])
     if (article) {
+      const featuredOg =
+        article.slug === 'why-windows-and-doors-fail-first-in-a-wildfire'
+          ? OG_IMAGES.blogFeatured
+          : undefined
       return {
         title: `${article.title} | ${SITE_NAME_SHORT} Blog`,
         description: article.seoDescription,
         keywords: `${BASE_KEYWORDS}, wildfire blog, ${article.category.toLowerCase()}`,
         ogType: 'article',
+        ogImage: featuredOg,
         aiSummary: article.aiSummary,
         breadcrumbs: [
           { name: 'Home', path: '/' },

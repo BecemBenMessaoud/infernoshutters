@@ -1,4 +1,9 @@
 {
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
+    }
+  },
   "redirects": [
     { "source": "/favicon.ico", "destination": "/favicon.svg", "permanent": true },
     { "source": "/services", "destination": "/service", "permanent": true },

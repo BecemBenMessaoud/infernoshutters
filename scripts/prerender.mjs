@@ -2,13 +2,15 @@
 /**
  * Post-build prerender: saves fully rendered HTML (head + body) for each public route.
  * Run after `vite build`. Skip with PRERENDER_SKIP=1.
+ *
+ * Uses @sparticuz/chromium on Vercel/Linux (no system lib dependencies).
+ * Falls back to bundled Puppeteer on Windows/macOS for local builds.
  */
 
 import { spawn } from 'node:child_process'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import puppeteer from 'puppeteer'
 import { PRERENDER_ROUTES } from './seo-routes.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -55,6 +57,31 @@ async function waitForPreviewServer() {
   throw new Error(`Preview server not reachable at ${BASE}`)
 }
 
+async function launchBrowser() {
+  const useServerlessChromium = Boolean(
+    process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.platform === 'linux',
+  )
+
+  if (useServerlessChromium) {
+    const chromium = (await import('@sparticuz/chromium')).default
+    const puppeteer = (await import('puppeteer-core')).default
+    chromium.setGraphicsMode = false
+
+    return puppeteer.launch({
+      args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+      defaultViewport: { width: 1280, height: 800 },
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless,
+    })
+  }
+
+  const puppeteer = (await import('puppeteer')).default
+  return puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+  })
+}
+
 async function prerenderRoute(page, route) {
   const url = `${BASE}${route}`
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 })
@@ -72,10 +99,7 @@ async function main() {
   console.log(`Prerendering ${PRERENDER_ROUTES.length} routes…`)
   const preview = await startPreview()
   await waitForPreviewServer()
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-  })
+  const browser = await launchBrowser()
 
   try {
     const page = await browser.newPage()
