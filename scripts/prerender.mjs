@@ -9,9 +9,19 @@
 
 import { spawn } from 'node:child_process'
 import { mkdirSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { PRERENDER_ROUTES } from './seo-routes.mjs'
+
+// @sparticuz/chromium reads these at import time to extract al2023 libs (libnss3, etc.).
+if (
+  !process.env.AWS_LAMBDA_JS_RUNTIME &&
+  (process.env.VERCEL || process.platform === 'linux')
+) {
+  const nodeMajor = Number(process.versions.node.split('.')[0])
+  process.env.AWS_LAMBDA_JS_RUNTIME = nodeMajor >= 22 ? 'nodejs22.x' : 'nodejs20.x'
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
@@ -67,11 +77,22 @@ async function launchBrowser() {
     const puppeteer = (await import('puppeteer-core')).default
     chromium.setGraphicsMode = false
 
+    const executablePath = await chromium.executablePath()
+    const execDir = dirname(executablePath)
+    const al2023Lib = join(tmpdir(), 'al2023', 'lib')
+    const libraryPath = [execDir, al2023Lib, process.env.LD_LIBRARY_PATH]
+      .filter(Boolean)
+      .join(':')
+
     return puppeteer.launch({
-      args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+      args: chromium.args,
       defaultViewport: { width: 1280, height: 800 },
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
+      executablePath,
+      headless: true,
+      env: {
+        ...process.env,
+        LD_LIBRARY_PATH: libraryPath,
+      },
     })
   }
 

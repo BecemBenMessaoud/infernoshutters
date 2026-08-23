@@ -1,7 +1,8 @@
 {
   "build": {
     "env": {
-      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
+      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true",
+      "AWS_LAMBDA_JS_RUNTIME": "nodejs22.x"
     }
   },
   "redirects": [
