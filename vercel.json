@@ -20,9 +20,6 @@
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/terms", "destination": "/terms-and-conditions", "permanent": true }
   ],
-  "rewrites": [
-    { "handle": "filesystem" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
