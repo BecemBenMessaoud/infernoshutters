@@ -19,7 +19,7 @@ export function SeoHead() {
   const structuredData = buildStructuredData(pathname, seo)
 
   return (
-    <Helmet>
+    <Helmet key={pathname} prioritizeSeoTags>
       <html lang="en" />
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />

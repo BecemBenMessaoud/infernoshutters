@@ -7,8 +7,9 @@
  * Falls back to bundled Puppeteer on Windows/macOS for local builds.
  */
 
+import { createServer } from 'node:net'
 import { spawn } from 'node:child_process'
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -26,12 +27,16 @@ if (
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const root = join(__dirname, '..')
 const dist = join(root, 'dist')
-const PORT = Number(process.env.PRERENDER_PORT ?? 4173)
-const BASE = `http://127.0.0.1:${PORT}`
+const BASE_HOST = '127.0.0.1'
 
 if (process.env.PRERENDER_SKIP === '1') {
   console.log('Prerender skipped (PRERENDER_SKIP=1)')
   process.exit(0)
+}
+
+if (!existsSync(join(dist, 'index.html'))) {
+  console.error('Prerender failed: dist/index.html not found. Run vite build first.')
+  process.exit(1)
 }
 
 function routeToOutFile(route) {
@@ -39,32 +44,88 @@ function routeToOutFile(route) {
   return join(dist, ...route.replace(/^\//, '').split('/'), 'index.html')
 }
 
-function startPreview() {
+function getAvailablePort(preferred = Number(process.env.PRERENDER_PORT ?? 4173)) {
   return new Promise((resolve, reject) => {
-    const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], {
-      cwd: root,
-      shell: true,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env, NODE_ENV: 'production' },
+    const server = createServer()
+    server.unref()
+    server.on('error', () => {
+      server.close()
+      resolve(getAvailablePort(preferred + 1))
     })
-
-    proc.on('error', reject)
-    resolve(proc)
+    server.listen(preferred, BASE_HOST, () => {
+      const { port } = server.address()
+      server.close((error) => {
+        if (error) {
+          reject(error)
+          return
+        }
+        resolve(port)
+      })
+    })
   })
 }
 
-async function waitForPreviewServer() {
+function startPreview(port) {
+  return new Promise((resolve, reject) => {
+    const proc = spawn(
+      'npx',
+      ['vite', 'preview', '--port', String(port), '--strictPort', '--host', BASE_HOST],
+      {
+        cwd: root,
+        shell: true,
+        stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, NODE_ENV: 'production' },
+      },
+    )
+
+    let settled = false
+    let stderr = ''
+
+    proc.stderr?.on('data', (chunk) => {
+      stderr += chunk.toString()
+    })
+
+    proc.on('error', (error) => {
+      if (!settled) {
+        settled = true
+        reject(error)
+      }
+    })
+
+    proc.on('exit', (code) => {
+      if (!settled && code !== 0) {
+        settled = true
+        reject(new Error(stderr.trim() || `Preview server exited with code ${code}`))
+      }
+    })
+
+    setTimeout(() => {
+      if (!settled) {
+        settled = true
+        resolve({ proc, port })
+      }
+    }, 1500)
+  })
+}
+
+async function waitForPreviewServer(baseUrl) {
+  let lastStatus = 'unreachable'
   const deadline = Date.now() + 60_000
+
   while (Date.now() < deadline) {
     try {
-      const response = await fetch(`${BASE}/`, { redirect: 'follow' })
-      if (response.ok) return
+      const response = await fetch(`${baseUrl}/`, { redirect: 'follow' })
+      lastStatus = String(response.status)
+      if (response.ok) {
+        return
+      }
     } catch {
-      // Server still starting
+      lastStatus = 'unreachable'
     }
     await new Promise((resolve) => setTimeout(resolve, 500))
   }
-  throw new Error(`Preview server not reachable at ${BASE}`)
+
+  throw new Error(`Preview server not reachable at ${baseUrl} (last status: ${lastStatus})`)
 }
 
 async function launchBrowser() {
@@ -103,19 +164,40 @@ async function launchBrowser() {
   })
 }
 
-async function prerenderRoute(page, route) {
-  const url = `${BASE}${route}`
-  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 })
-  await page.waitForSelector('main', { timeout: 15_000 })
-
-  if (route === '/') {
+async function waitForHeroImage(page) {
+  try {
     await page.waitForFunction(
       () => {
         const heroImg = document.querySelector('#home img')
         return heroImg instanceof HTMLImageElement && heroImg.complete && heroImg.naturalWidth > 0
       },
-      { timeout: 20_000 },
+      { timeout: 8_000 },
     )
+  } catch {
+    console.warn('  ⚠ Homepage hero image did not finish loading before prerender snapshot')
+  }
+}
+
+async function waitForRouteSeo(page, route) {
+  try {
+    await page.waitForFunction(
+      () => document.querySelectorAll('link[rel="canonical"]').length === 1,
+      { timeout: 5_000 },
+    )
+  } catch {
+    console.warn(`  ⚠ SEO tags for ${route} did not settle before prerender snapshot`)
+  }
+}
+
+async function prerenderRoute(page, baseUrl, route) {
+  restoreSpaShell()
+  const url = `${baseUrl}${route}`
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 })
+  await page.waitForSelector('main', { timeout: 15_000 })
+  await waitForRouteSeo(page, route)
+
+  if (route === '/') {
+    await waitForHeroImage(page)
   }
 
   await new Promise((resolve) => setTimeout(resolve, 300))
@@ -127,40 +209,95 @@ async function prerenderRoute(page, route) {
   console.log(`  ✓ ${route}`)
 }
 
-async function main() {
-  console.log(`Prerendering ${PRERENDER_ROUTES.length} routes…`)
-  const preview = await startPreview()
-  await waitForPreviewServer()
-  const browser = await launchBrowser()
+function restoreSpaShell() {
+  const spaShell = join(dist, '.spa-shell.html')
+  const indexHtml = join(dist, 'index.html')
 
-  try {
-    const page = await browser.newPage()
-    await page.setViewport({ width: 1280, height: 800 })
-    await page.setRequestInterception(true)
-    page.on('request', (request) => {
-      if (request.resourceType() === 'media') {
-        request.abort()
-        return
-      }
-      request.continue()
-    })
+  if (!existsSync(spaShell)) {
+    throw new Error('Missing dist/.spa-shell.html — run save-spa-shell after vite build')
+  }
 
-    for (const route of [...PRERENDER_ROUTES, ...PRERENDER_ONLY_ROUTES]) {
-      await prerenderRoute(page, route)
+  copyFileSync(spaShell, indexHtml)
+}
+
+function clearStalePrerenderHtml() {
+  for (const route of [...PRERENDER_ROUTES, ...PRERENDER_ONLY_ROUTES]) {
+    if (route === '/') {
+      continue
     }
 
-    // Static 404.html for Vercel (HTTP 404 on unknown URLs)
-    const notFoundUrl = `${BASE}${NOT_FOUND_PRERENDER_PATH}`
-    await page.goto(notFoundUrl, { waitUntil: 'domcontentloaded', timeout: 60_000 })
-    await page.waitForSelector('main', { timeout: 15_000 })
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    writeFileSync(join(dist, '404.html'), await page.content(), 'utf8')
-    console.log('  ✓ 404.html (custom error page)')
+    const outFile = routeToOutFile(route)
+    if (existsSync(outFile)) {
+      rmSync(outFile, { force: true })
+    }
+  }
 
-    console.log('Prerender complete.')
-    writeFileSync(join(dist, '.prerender-complete'), new Date().toISOString(), 'utf8')
+  const notFoundHtml = join(dist, '404.html')
+  if (existsSync(notFoundHtml)) {
+    rmSync(notFoundHtml, { force: true })
+  }
+}
+
+async function main() {
+  console.log(`Prerendering ${PRERENDER_ROUTES.length} routes…`)
+  restoreSpaShell()
+  clearStalePrerenderHtml()
+  const port = await getAvailablePort()
+  const baseUrl = `http://${BASE_HOST}:${port}`
+  const { proc: preview } = await startPreview(port)
+
+  try {
+    await waitForPreviewServer(baseUrl)
+    const browser = await launchBrowser()
+
+    try {
+      const routes = [
+        ...PRERENDER_ROUTES.filter((route) => route !== '/'),
+        ...PRERENDER_ONLY_ROUTES,
+        '/',
+      ]
+
+      for (const route of routes) {
+        const page = await browser.newPage()
+        await page.setViewport({ width: 1280, height: 800 })
+        await page.setRequestInterception(true)
+        page.on('request', (request) => {
+          if (request.resourceType() === 'media') {
+            request.abort()
+            return
+          }
+          request.continue()
+        })
+        await prerenderRoute(page, baseUrl, route)
+        await page.close()
+      }
+
+      const notFoundPage = await browser.newPage()
+      await notFoundPage.setViewport({ width: 1280, height: 800 })
+      await notFoundPage.setRequestInterception(true)
+      notFoundPage.on('request', (request) => {
+        if (request.resourceType() === 'media') {
+          request.abort()
+          return
+        }
+        request.continue()
+      })
+
+      // Static 404.html for Vercel (HTTP 404 on unknown URLs)
+      const notFoundUrl = `${baseUrl}${NOT_FOUND_PRERENDER_PATH}`
+      await notFoundPage.goto(notFoundUrl, { waitUntil: 'domcontentloaded', timeout: 60_000 })
+      await notFoundPage.waitForSelector('main', { timeout: 15_000 })
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      writeFileSync(join(dist, '404.html'), await notFoundPage.content(), 'utf8')
+      await notFoundPage.close()
+      console.log('  ✓ 404.html (custom error page)')
+
+      console.log('Prerender complete.')
+      writeFileSync(join(dist, '.prerender-complete'), new Date().toISOString(), 'utf8')
+    } finally {
+      await browser.close()
+    }
   } finally {
-    await browser.close()
     stopPreview(preview)
   }
 }

@@ -8,6 +8,6 @@ if (existsSync(dist)) {
   try {
     rmSync(dist, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 })
   } catch (error) {
-    console.warn(`Warning: could not fully remove dist/ (${error.message}). Close apps using dist files and retry.`)
+    console.warn(`Warning: could not fully remove dist/ (${error.message}). Retrying vite emptyOutDir…`)
   }
 }
