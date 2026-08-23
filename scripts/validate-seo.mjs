@@ -132,14 +132,21 @@ if (!robots.includes(`Sitemap: ${SITE_URL}/sitemap.xml`)) {
 }
 
 // 6c. vercel.json must redirect apex (non-www) to preferred SITE_URL host
-const vercelJson = read(join(root, 'vercel.json'))
+const vercelConfig = JSON.parse(read(join(root, 'vercel.json')))
 const preferredHost = new URL(SITE_URL).host
 const apexHost = preferredHost.startsWith('www.') ? preferredHost.slice(4) : preferredHost
-if (!vercelJson.includes(`"value": "${apexHost}"`)) {
+const redirects = vercelConfig.redirects ?? []
+const hasApexRedirect = redirects.some((redirect) => {
+  const hostRules = redirect.has ?? []
+  const matchesApexHost = hostRules.some(
+    (rule) => rule.type === 'host' && rule.value === apexHost,
+  )
+  const destination = typeof redirect.destination === 'string' ? redirect.destination : ''
+  return matchesApexHost && destination.startsWith(`https://${preferredHost}`)
+})
+
+if (!hasApexRedirect) {
   errors.push(`vercel.json must redirect ${apexHost} → ${preferredHost}`)
-}
-if (!vercelJson.includes(`https://${preferredHost}/`)) {
-  errors.push(`vercel.json redirect destination must use ${SITE_URL}`)
 }
 
 // 7. Verify structured data file exports key schemas
