@@ -12,7 +12,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { PRERENDER_ROUTES } from './seo-routes.mjs'
+import { PRERENDER_ONLY_ROUTES, PRERENDER_ROUTES, NOT_FOUND_PRERENDER_PATH } from './seo-routes.mjs'
 
 // @sparticuz/chromium reads these at import time to extract al2023 libs (libnss3, etc.).
 if (
@@ -107,7 +107,18 @@ async function prerenderRoute(page, route) {
   const url = `${BASE}${route}`
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 })
   await page.waitForSelector('main', { timeout: 15_000 })
-  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  if (route === '/') {
+    await page.waitForFunction(
+      () => {
+        const heroImg = document.querySelector('#home img')
+        return heroImg instanceof HTMLImageElement && heroImg.complete && heroImg.naturalWidth > 0
+      },
+      { timeout: 20_000 },
+    )
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 300))
 
   const html = await page.content()
   const outFile = routeToOutFile(route)
@@ -134,9 +145,17 @@ async function main() {
       request.continue()
     })
 
-    for (const route of PRERENDER_ROUTES) {
+    for (const route of [...PRERENDER_ROUTES, ...PRERENDER_ONLY_ROUTES]) {
       await prerenderRoute(page, route)
     }
+
+    // Static 404.html for Vercel (HTTP 404 on unknown URLs)
+    const notFoundUrl = `${BASE}${NOT_FOUND_PRERENDER_PATH}`
+    await page.goto(notFoundUrl, { waitUntil: 'domcontentloaded', timeout: 60_000 })
+    await page.waitForSelector('main', { timeout: 15_000 })
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    writeFileSync(join(dist, '404.html'), await page.content(), 'utf8')
+    console.log('  ✓ 404.html (custom error page)')
 
     console.log('Prerender complete.')
     writeFileSync(join(dist, '.prerender-complete'), new Date().toISOString(), 'utf8')

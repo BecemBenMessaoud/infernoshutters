@@ -12,46 +12,44 @@
       name="description"
       content="Inferno-Roll manufactures fire-resistant, hurricane-rated, and security roll shutters for wildfire zones and storm-prone homes. ASTM-tested protection for windows and doors."
     />
-    <meta
-      name="abstract"
-      content="Inferno-Roll is a U.S. manufacturer of motorized roll shutters engineered for wildfire ember protection, hurricane resistance, and home security."
-    />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="googlebot" content="index, follow, max-image-preview:large" />
-    <meta name="author" content="Inferno-Roll" />
-    <meta name="publisher" content="Inferno-Roll Shutters" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="canonical" href="https://www.infernoshutters.com/" />
+    <!-- SEO meta (title, description, canonical, OG, Twitter, JSON-LD) is injected by SeoHead via react-helmet-async -->
 
-    <meta property="og:site_name" content="Inferno-Roll Shutters" />
-    <meta property="og:title" content="Inferno-Roll | Home Defense Meets Wildfire Science" />
-    <meta
-      property="og:description"
-      content="Fire-resistant, hurricane-rated, and security roll shutters engineered for wildfire zones and storm-prone homes across the United States."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.infernoshutters.com/" />
-    <meta property="og:image" content="https://www.infernoshutters.com/images/og/home.jpg" />
-    <meta property="og:image:secure_url" content="https://www.infernoshutters.com/images/og/home.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Inferno-Roll fire-resistant roll shutters protecting a home" />
-    <meta property="og:locale" content="en_US" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Infernoshutters" />
-    <meta name="twitter:title" content="Inferno-Roll | Home Defense Meets Wildfire Science" />
-    <meta
-      name="twitter:description"
-      content="Fire-resistant, hurricane-rated, and security roll shutters for wildfire and storm protection."
-    />
-    <meta name="twitter:image" content="https://www.infernoshutters.com/images/og/home.jpg" />
-    <meta name="twitter:image:alt" content="Inferno-Roll fire-resistant roll shutters protecting a home" />
+    <!-- Minimal critical styles for first paint before the main CSS bundle loads -->
+    <style>
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        background: #fff;
+        color: #111827;
+        font-family: Inter, system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root { min-height: 100svh; }
+      /* Static LCP shell: paints before React hydrates, removed when Hero mounts */
+      #hero-lcp-placeholder {
+        position: relative;
+        height: 580px;
+        overflow: hidden;
+        background: #0b1d3d;
+      }
+      @media (min-width: 640px) { #hero-lcp-placeholder { height: 600px; } }
+      @media (min-width: 1024px) { #hero-lcp-placeholder { height: 640px; } }
+      #hero-lcp-placeholder img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,15 +57,40 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      href="/images/hero/inferno-roll.webp"
+      type="image/webp"
+      fetchpriority="high"
+      imagesrcset="/images/hero/inferno-roll-640w.webp 640w, /images/hero/inferno-roll.webp 944w"
+      imagesizes="100vw"
     />
-    <link rel="preload" as="image" href="/images/inferno-roll.png" fetchpriority="high" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="hero-lcp-placeholder" aria-hidden="true">
+        <img
+          src="/images/hero/inferno-roll.webp"
+          srcset="/images/hero/inferno-roll-640w.webp 640w, /images/hero/inferno-roll.webp 944w"
+          sizes="100vw"
+          alt=""
+          width="944"
+          height="682"
+          decoding="sync"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

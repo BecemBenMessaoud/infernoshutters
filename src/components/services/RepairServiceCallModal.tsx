@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { X } from 'lucide-react'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../recaptcha/RecaptchaCheckbox'
 import {
-  FORMSPREE_SERVICE_CALL_ENDPOINT,
-  FORMSPREE_WHOLESALE_ENDPOINT,
-} from '../../data/quote'
+  RECAPTCHA_VALIDATION_ERROR,
+  submitProtectedForm,
+  type ProtectedFormType,
+} from '../../lib/submitForm'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -38,6 +40,7 @@ const VARIANT_COPY = {
     description: 'Share your details and our repair team will contact you to schedule service.',
     success: 'Thank you. Your service call request has been received.',
     idPrefix: 'repair',
+    formType: 'service-call' as ProtectedFormType,
   },
   commercial: {
     title: 'Talk to Wholesale Team',
@@ -45,6 +48,7 @@ const VARIANT_COPY = {
       'Share your details and our wholesale team will contact you to discuss your project.',
     success: 'Thank you. Your wholesale team request has been received.',
     idPrefix: 'commercial',
+    formType: 'wholesale' as ProtectedFormType,
   },
 } as const
 
@@ -54,11 +58,13 @@ export function RepairServiceCallModal({
   variant = 'service',
 }: RepairServiceCallModalProps) {
   const copy = VARIANT_COPY[variant]
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -83,6 +89,8 @@ export function RepairServiceCallModal({
     setSubmitted(false)
     setIsSubmitting(false)
     setSubmitError(null)
+    setRecaptchaError(null)
+    recaptchaRef.current?.reset()
     onClose()
   }
 
@@ -126,36 +134,34 @@ export function RepairServiceCallModal({
       return
     }
 
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
     setIsSubmitting(true)
+    setRecaptchaError(null)
 
     try {
-      const endpoint =
-        variant === 'commercial'
-          ? FORMSPREE_WHOLESALE_ENDPOINT
-          : FORMSPREE_SERVICE_CALL_ENDPOINT
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      await submitProtectedForm(
+        copy.formType,
+        {
           fullName: form.fullName.trim(),
           address: form.address.trim(),
           email: form.email.trim(),
           phoneNumber: form.phoneNumber.trim(),
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
+        },
+        recaptchaToken,
+      )
 
       setForm(INITIAL_FORM)
+      recaptchaRef.current?.reset()
       setSubmitted(true)
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
       setSubmitted(false)
     } finally {
       setIsSubmitting(false)
@@ -296,9 +302,17 @@ export function RepairServiceCallModal({
             </p>
           ) : null}
 
+          {recaptchaError ? (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+              {recaptchaError}
+            </p>
+          ) : null}
+
           {submitted ? (
             <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800">{copy.success}</p>
           ) : null}
+
+          <RecaptchaCheckbox ref={recaptchaRef} size="compact" />
 
           <button
             type="submit"

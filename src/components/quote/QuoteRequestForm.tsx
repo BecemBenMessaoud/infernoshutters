@@ -1,5 +1,7 @@
 import type { FormEvent } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../recaptcha/RecaptchaCheckbox'
 import { PHONE } from '../../data/site'
 import {
   QUOTE_INSTALLATION_TYPE_OPTIONS,
@@ -7,6 +9,7 @@ import {
   QUOTE_REFERRAL_SOURCE_OPTIONS,
   QUOTE_TYPE_OPTIONS,
 } from '../../data/quote'
+import { RECAPTCHA_VALIDATION_ERROR, formDataToRecord } from '../../lib/submitForm'
 
 const inputClassName =
   'w-full rounded-lg border border-gray-200 border-t-[3px] border-t-inferno-500 px-4 py-3.5 text-sm text-gray-900 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500'
@@ -32,7 +35,10 @@ function FieldLabel({
 
 type QuoteRequestFormProps = {
   idPrefix?: string
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void>
+  onSubmit: (
+    payload: Record<string, string>,
+    recaptchaToken: string,
+  ) => void | Promise<void>
   isSubmitting?: boolean
   submitError?: string | null
 }
@@ -43,6 +49,24 @@ export function QuoteRequestForm({
   isSubmitting = false,
   submitError = null,
 }: QuoteRequestFormProps) {
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
+    setRecaptchaError(null)
+    const payload = formDataToRecord(new FormData(event.currentTarget))
+    await onSubmit(payload, recaptchaToken)
+    recaptchaRef.current?.reset()
+  }
+
   return (
     <>
       <div className="mb-8 text-center">
@@ -60,7 +84,7 @@ export function QuoteRequestForm({
         </p>
       </div>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="grid gap-5 md:grid-cols-2">
           <div>
             <FieldLabel htmlFor={`${idPrefix}-type`} required>
@@ -215,6 +239,12 @@ export function QuoteRequestForm({
           </p>
         ) : null}
 
+        {recaptchaError ? (
+          <p className="mt-4 text-sm font-medium text-red-600" role="alert">
+            {recaptchaError}
+          </p>
+        ) : null}
+
         <div className="mt-8 flex flex-col gap-4 border-t border-gray-100 pt-6 md:flex-row md:items-center md:justify-between">
           <Link
             to="/privacy"
@@ -224,14 +254,7 @@ export function QuoteRequestForm({
           </Link>
 
           <div className="flex w-full flex-col items-stretch gap-4 md:w-auto md:flex-row md:items-center md:gap-6">
-            <div className="flex items-center gap-3 rounded border border-gray-300 bg-[#f9f9f9] px-3 py-2.5">
-              <div className="h-6 w-6 shrink-0 rounded border border-gray-400 bg-white" />
-              <span className="text-xs text-gray-600">I&apos;m not a robot</span>
-              <div className="ml-2 flex flex-col items-center">
-                <div className="h-8 w-8 rounded bg-gray-200" aria-hidden />
-                <span className="mt-0.5 text-[10px] text-gray-400 sm:text-xs">reCAPTCHA</span>
-              </div>
-            </div>
+            <RecaptchaCheckbox ref={recaptchaRef} size="compact" />
 
             <button
               type="submit"

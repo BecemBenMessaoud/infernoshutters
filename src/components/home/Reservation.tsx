@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
   Banknote,
@@ -10,7 +10,12 @@ import {
   Wrench,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { FORMSPREE_RESERVATION_ENDPOINT } from '../../data/quote'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../recaptcha/RecaptchaCheckbox'
+import {
+  RECAPTCHA_VALIDATION_ERROR,
+  formDataToRecord,
+  submitProtectedForm,
+} from '../../lib/submitForm'
 
 const RESERVE_NOW_URL =
   'https://connect.intuit.com/portal/app/CommerceNetwork/view/scs-v1-d34d119939b54de3adbaeaf41cf8dbf50b9f7be4320f42188783224ae1debcce6e0a64e5a52d4008a4ef67bc73612842?locale=EN_US&cta=saveandcopylink'
@@ -53,8 +58,10 @@ const inputClassName =
 
 export function Reservation() {
   const navigate = useNavigate()
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -63,28 +70,27 @@ export function Reservation() {
       return
     }
 
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
+    setRecaptchaError(null)
 
     const form = event.currentTarget
-    const formData = new FormData(form)
+    const payload = formDataToRecord(new FormData(form))
 
     try {
-      const response = await fetch(FORMSPREE_RESERVATION_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
+      await submitProtectedForm('reservation', payload, recaptchaToken)
+      recaptchaRef.current?.reset()
       navigate('/quote/received')
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -248,6 +254,14 @@ export function Reservation() {
                   {submitError}
                 </p>
               ) : null}
+
+              {recaptchaError ? (
+                <p className="text-sm font-medium text-red-600" role="alert">
+                  {recaptchaError}
+                </p>
+              ) : null}
+
+              <RecaptchaCheckbox ref={recaptchaRef} size="compact" />
 
               <button
                 type="submit"

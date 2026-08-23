@@ -5,7 +5,7 @@ import {
   SITE_NAME,
   SITE_NAME_SHORT,
   TWITTER_HANDLE,
-  absoluteUrl,
+  canonicalUrl,
   getPageSeo,
 } from '../../data/seo'
 import { buildStructuredData } from './structuredData'
@@ -13,7 +13,7 @@ import { buildStructuredData } from './structuredData'
 export function SeoHead() {
   const { pathname } = useLocation()
   const seo = getPageSeo(pathname)
-  const canonical = absoluteUrl(pathname)
+  const canonical = canonicalUrl(pathname)
   const ogImage = seo.ogImage ?? DEFAULT_OG_IMAGE
   const robots = seo.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
   const structuredData = buildStructuredData(pathname, seo)

@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { X } from 'lucide-react'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../recaptcha/RecaptchaCheckbox'
 import {
-  FORMSPREE_CUSTOM_ASSESSMENT_ENDPOINT,
-  FORMSPREE_SITE_ASSESSMENT_ENDPOINT,
-} from '../../data/quote'
+  RECAPTCHA_VALIDATION_ERROR,
+  submitProtectedForm,
+  type ProtectedFormType,
+} from '../../lib/submitForm'
 
 const INSTALLATION_TYPE_OPTIONS = [
   'Self Install',
@@ -29,7 +31,7 @@ const VARIANT_COPY = {
       'Tell us about your project and our team will follow up to schedule your assessment.',
     success: 'Thank you. Your installation assessment request has been received.',
     idPrefix: 'site-assessment',
-    endpoint: FORMSPREE_SITE_ASSESSMENT_ENDPOINT,
+    formType: 'site-assessment' as ProtectedFormType,
   },
   custom: {
     title: 'Request Custom Assessment',
@@ -37,7 +39,7 @@ const VARIANT_COPY = {
       'Tell us about your custom fabrication or retrofit project and our team will follow up.',
     success: 'Thank you. Your custom assessment request has been received.',
     idPrefix: 'custom-assessment',
-    endpoint: FORMSPREE_CUSTOM_ASSESSMENT_ENDPOINT,
+    formType: 'custom-assessment' as ProtectedFormType,
   },
 } as const
 
@@ -63,11 +65,13 @@ export function InstallationAssessmentModal({
   variant = 'site',
 }: InstallationAssessmentModalProps) {
   const copy = VARIANT_COPY[variant]
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
   const [form, setForm] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isOpen) {
@@ -92,6 +96,8 @@ export function InstallationAssessmentModal({
     setSubmitted(false)
     setIsSubmitting(false)
     setSubmitError(null)
+    setRecaptchaError(null)
+    recaptchaRef.current?.reset()
     onClose()
   }
 
@@ -135,31 +141,34 @@ export function InstallationAssessmentModal({
       return
     }
 
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
     setIsSubmitting(true)
+    setRecaptchaError(null)
 
     try {
-      const response = await fetch(copy.endpoint, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      await submitProtectedForm(
+        copy.formType,
+        {
           fullName: form.fullName.trim(),
           address: form.address.trim(),
           email: form.email.trim(),
           installationType: form.installationType,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
+        },
+        recaptchaToken,
+      )
 
       setForm(INITIAL_FORM)
+      recaptchaRef.current?.reset()
       setSubmitted(true)
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
       setSubmitted(false)
     } finally {
       setIsSubmitting(false)
@@ -308,9 +317,17 @@ export function InstallationAssessmentModal({
             </p>
           ) : null}
 
+          {recaptchaError ? (
+            <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+              {recaptchaError}
+            </p>
+          ) : null}
+
           {submitted ? (
             <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-800">{copy.success}</p>
           ) : null}
+
+          <RecaptchaCheckbox ref={recaptchaRef} size="compact" />
 
           <button
             type="submit"

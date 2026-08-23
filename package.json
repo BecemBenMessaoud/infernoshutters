@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-sitemap.mjs && node scripts/generate-og-images.mjs && node scripts/clean-dist.mjs && tsc -b && vite build && node scripts/prerender.mjs && node scripts/validate-seo.mjs",
-    "build:no-prerender": "node scripts/generate-sitemap.mjs && node scripts/generate-og-images.mjs && tsc -b && vite build && node scripts/validate-seo.mjs",
+    "build": "node scripts/generate-sitemap.mjs && node scripts/generate-og-images.mjs && node scripts/optimize-hero-images.mjs && node scripts/clean-dist.mjs && tsc -b && vite build && node scripts/prerender.mjs && node scripts/validate-seo.mjs",
+    "build:no-prerender": "node scripts/generate-sitemap.mjs && node scripts/generate-og-images.mjs && node scripts/optimize-hero-images.mjs && tsc -b && vite build && node scripts/validate-seo.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "og-images": "node scripts/generate-og-images.mjs",
     "prerender": "node scripts/prerender.mjs",

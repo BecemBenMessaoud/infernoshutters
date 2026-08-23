@@ -9,6 +9,7 @@ export function BecomeADealerHero() {
         width={1200}
         height={1600}
         fetchPriority="high"
+        loading="eager"
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-[42%_38%] sm:object-[48%_42%] lg:object-[32%_40%] xl:object-[28%_40%]"
       />

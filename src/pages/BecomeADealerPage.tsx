@@ -1,7 +1,12 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { BecomeADealerHero } from '../components/dealer/BecomeADealerHero'
-import { FORMSPREE_DEALER_ENDPOINT } from '../data/quote'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../components/recaptcha/RecaptchaCheckbox'
+import {
+  RECAPTCHA_VALIDATION_ERROR,
+  formDataToRecord,
+  submitProtectedForm,
+} from '../lib/submitForm'
 
 const inputClass =
   'w-full border border-transparent bg-[#f3f3f3] px-3 py-2.5 text-sm text-gray-900 outline-none transition focus:border-gray-900'
@@ -64,8 +69,10 @@ function SectionLegend({ children }: { children: React.ReactNode }) {
 }
 
 export function BecomeADealerPage() {
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -75,29 +82,28 @@ export function BecomeADealerPage() {
       return
     }
 
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
+    setRecaptchaError(null)
 
     const form = event.currentTarget
-    const formData = new FormData(form)
+    const payload = formDataToRecord(new FormData(form))
 
     try {
-      const response = await fetch(FORMSPREE_DEALER_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
+      await submitProtectedForm('dealer', payload, recaptchaToken)
       form.reset()
+      recaptchaRef.current?.reset()
       setIsSubmitted(true)
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -351,6 +357,14 @@ export function BecomeADealerPage() {
                 {submitError}
               </p>
             ) : null}
+
+            {recaptchaError ? (
+              <p className="mt-4 text-sm font-medium text-red-600" role="alert">
+                {recaptchaError}
+              </p>
+            ) : null}
+
+            <RecaptchaCheckbox ref={recaptchaRef} size="compact" className="mt-6" />
 
             <button
               type="submit"

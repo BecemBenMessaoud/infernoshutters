@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
 import { Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { QuoteRequestForm } from '../components/quote/QuoteRequestForm'
-import { FORMSPREE_QUOTE_ENDPOINT } from '../data/quote'
+import { submitProtectedForm } from '../lib/submitForm'
 
 export function QuotePage() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
+  const handleSubmit = async (
+    payload: Record<string, string>,
+    recaptchaToken: string,
+  ) => {
     if (isSubmitting) {
       return
     }
@@ -20,25 +20,13 @@ export function QuotePage() {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const form = event.currentTarget
-    const formData = new FormData(form)
-
     try {
-      const response = await fetch(FORMSPREE_QUOTE_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
+      await submitProtectedForm('quote', payload, recaptchaToken)
       navigate('/quote/received')
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
     } finally {
       setIsSubmitting(false)
     }

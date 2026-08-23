@@ -308,16 +308,27 @@ export function getPageSeo(pathname: string): PageSeoConfig {
   }
 
   return {
-    title: `Page Not Found | ${SITE_NAME_SHORT}`,
+    title: 'Page Not Found | Inferno Shutters',
     description: `The page you requested could not be found. Browse ${SITE_NAME_SHORT} roll shutter products, services, and wildfire protection resources.`,
     noindex: true,
     breadcrumbs: [{ name: 'Home', path: '/' }],
   }
 }
 
+export function normalizePathname(pathname: string): string {
+  if (!pathname || pathname === '/') return '/'
+  return pathname.replace(/\/+$/, '')
+}
+
 export function absoluteUrl(path: string): string {
   if (path.startsWith('http')) return path
   return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
+}
+
+/** Self-referencing canonical URL for a route (no query params, consistent trailing slash). */
+export function canonicalUrl(pathname: string): string {
+  const path = normalizePathname(pathname)
+  return path === '/' ? `${SITE_URL}/` : absoluteUrl(path)
 }
 
 export const SITEMAP_PATHS = [

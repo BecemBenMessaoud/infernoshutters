@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import type { FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { FORMSPREE_QUOTE_ENDPOINT } from '../../data/quote'
 import { QuoteRequestForm } from './QuoteRequestForm'
+import { submitProtectedForm } from '../../lib/submitForm'
 
 type QuoteRequestModalProps = {
   isOpen: boolean
@@ -40,9 +39,10 @@ export function QuoteRequestModal({ isOpen, onClose }: QuoteRequestModalProps) {
     return null
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
+  const handleSubmit = async (
+    payload: Record<string, string>,
+    recaptchaToken: string,
+  ) => {
     if (isSubmitting) {
       return
     }
@@ -50,26 +50,14 @@ export function QuoteRequestModal({ isOpen, onClose }: QuoteRequestModalProps) {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const form = event.currentTarget
-    const formData = new FormData(form)
-
     try {
-      const response = await fetch(FORMSPREE_QUOTE_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
+      await submitProtectedForm('quote', payload, recaptchaToken)
       onClose()
       navigate('/quote/received')
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
     } finally {
       setIsSubmitting(false)
     }

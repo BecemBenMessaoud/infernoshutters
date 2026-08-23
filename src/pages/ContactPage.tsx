@@ -1,15 +1,18 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Headphones } from 'lucide-react'
 import { CustomFabricationSection } from '../components/services/CustomFabricationSection'
-import { FORMSPREE_CONTACT_ENDPOINT } from '../data/quote'
+import { RecaptchaCheckbox, type RecaptchaHandle } from '../components/recaptcha/RecaptchaCheckbox'
+import { RECAPTCHA_VALIDATION_ERROR, formDataToRecord, submitProtectedForm } from '../lib/submitForm'
 
 const inputClassName =
   'w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none focus:border-inferno-500 focus:ring-1 focus:ring-inferno-500'
 
 export function ContactPage() {
+  const recaptchaRef = useRef<RecaptchaHandle>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -19,29 +22,28 @@ export function ContactPage() {
       return
     }
 
+    const recaptchaToken = recaptchaRef.current?.getToken()
+    if (!recaptchaToken) {
+      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
+    setRecaptchaError(null)
 
     const form = event.currentTarget
-    const formData = new FormData(form)
+    const payload = formDataToRecord(new FormData(form))
 
     try {
-      const response = await fetch(FORMSPREE_CONTACT_ENDPOINT, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Form submission failed')
-      }
-
+      await submitProtectedForm('contact', payload, recaptchaToken)
       form.reset()
+      recaptchaRef.current?.reset()
       setIsSubmitted(true)
-    } catch {
-      setSubmitError('Something went wrong. Please try again or call us.')
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : 'Something went wrong. Please try again or call us.',
+      )
       setIsSubmitted(false)
     } finally {
       setIsSubmitting(false)
@@ -146,6 +148,14 @@ export function ContactPage() {
                   {submitError}
                 </p>
               ) : null}
+
+              {recaptchaError ? (
+                <p className="mt-4 text-sm font-medium text-red-600" role="alert">
+                  {recaptchaError}
+                </p>
+              ) : null}
+
+              <RecaptchaCheckbox ref={recaptchaRef} size="compact" className="mt-6" />
 
               <button
                 type="submit"

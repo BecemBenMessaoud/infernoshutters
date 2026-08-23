@@ -46,3 +46,9 @@ export const SITEMAP_ENTRIES = [
 ]
 
 export const PRERENDER_ROUTES = SITEMAP_ENTRIES.map((entry) => entry.loc)
+
+/** App routes prerendered for SPA fallback but excluded from sitemap (e.g. noindex). */
+export const PRERENDER_ONLY_ROUTES = ['/quote/received']
+
+/** Path visited during prerender to capture the custom 404 page HTML. */
+export const NOT_FOUND_PRERENDER_PATH = '/__404__'

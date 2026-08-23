@@ -106,6 +106,7 @@ export function WildfireZones({ selected, onSelect }: WildfireZonesProps) {
               alt={WILDFIRE_ZONES_IMAGE.alt}
               width={640}
               height={480}
+              loading="lazy"
               decoding="async"
               className="h-[280px] w-full object-cover object-center sm:h-[340px] lg:h-[420px]"
             />

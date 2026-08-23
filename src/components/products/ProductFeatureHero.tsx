@@ -48,7 +48,8 @@ export function ProductFeatureHero({
             width={1024}
             height={682}
             className="h-full w-full object-cover object-center"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
             decoding="async"
           />
         </div>

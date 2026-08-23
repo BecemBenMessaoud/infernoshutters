@@ -12,6 +12,7 @@ import {
   SITE_NAME_SHORT,
   SITE_URL,
   absoluteUrl,
+  canonicalUrl,
   type PageSeoConfig,
 } from '../../data/seo'
 
@@ -31,11 +32,12 @@ function breadcrumbList(breadcrumbs: PageSeoConfig['breadcrumbs']): JsonLd {
 }
 
 function webPage(pathname: string, seo: PageSeoConfig): JsonLd {
+  const pageUrl = canonicalUrl(pathname)
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': `${absoluteUrl(pathname)}#webpage`,
-    url: absoluteUrl(pathname),
+    '@id': `${pageUrl}#webpage`,
+    url: pageUrl,
     name: seo.title,
     description: seo.description,
     isPartOf: { '@id': `${SITE_URL}/#website` },
@@ -227,8 +229,8 @@ function blogArticleSchema(pathname: string, seo: PageSeoConfig): JsonLd | null 
     description: article.seoDescription,
     author: { '@id': `${SITE_URL}/#organization` },
     publisher: { '@id': `${SITE_URL}/#organization` },
-    mainEntityOfPage: absoluteUrl(pathname),
-    url: absoluteUrl(pathname),
+    mainEntityOfPage: canonicalUrl(pathname),
+    url: canonicalUrl(pathname),
     image: article.featured ? OG_IMAGES.blogFeatured : DEFAULT_OG_IMAGE,
     inLanguage: 'en-US',
     datePublished: article.publishedDate,

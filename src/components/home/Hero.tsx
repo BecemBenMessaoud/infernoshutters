@@ -1,32 +1,63 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Phone } from 'lucide-react'
+import { HERO_SLIDES } from '../../data/heroImages'
 import { PHONE } from '../../data/site'
-import { QuoteRequestModal } from '../quote/QuoteRequestModal'
 
-const HERO_IMAGES = [  {
-    src: '/images/inferno-roll.png',
-    alt: 'Inferno-Roll shutters protecting a home from wildfire',
-  },
-  {
-    src: '/images/az.png',
-    alt: 'Inferno-Roll shutters on an Arizona desert home',
-    objectPosition: '38% center',
-  },
-  {
-    src: '/images/inferno-roll-winter.png',
-    alt: 'Inferno-Roll shutters on a snow-covered mountain home',
-  },
-] as const
+const QuoteRequestModal = lazy(() =>
+  import('../quote/QuoteRequestModal').then((module) => ({
+    default: module.QuoteRequestModal,
+  })),
+)
 
 const SLIDE_INTERVAL_MS = 5000
 const SWIPE_THRESHOLD_PX = 50
 const MOBILE_MEDIA_QUERY = '(max-width: 639px)'
 
+function HeroSlidePicture({
+  slide,
+  isActive,
+  isLcp,
+}: {
+  slide: (typeof HERO_SLIDES)[number]
+  isActive: boolean
+  isLcp: boolean
+}) {
+  return (
+    <picture
+      className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${
+        isActive ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      <source
+        type="image/webp"
+        srcSet={`${slide.webpSmall} 640w, ${slide.webp} ${slide.width}w`}
+        sizes="100vw"
+      />
+      <img
+        src={slide.png}
+        alt={slide.alt}
+        width={slide.width}
+        height={slide.height}
+        decoding={isLcp ? 'sync' : 'async'}
+        fetchPriority={isLcp ? 'high' : 'auto'}
+        loading={isLcp ? 'eager' : 'lazy'}
+        style={slide.objectPosition ? { objectPosition: slide.objectPosition } : undefined}
+        className="h-full w-full object-cover object-center"
+      />
+    </picture>
+  )
+}
+
 export function Hero() {
   const [current, setCurrent] = useState(0)
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [loadedSlides, setLoadedSlides] = useState(() => new Set([0]))
   const touchStart = useRef<{ x: number; y: number } | null>(null)
+
+  useEffect(() => {
+    document.getElementById('hero-lcp-placeholder')?.remove()
+  }, [])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
@@ -40,18 +71,31 @@ export function Hero() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_IMAGES.length)
+      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length)
     }, SLIDE_INTERVAL_MS)
 
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    const nextIndex = (current + 1) % HERO_SLIDES.length
+    setLoadedSlides((previous) => {
+      if (previous.has(current) && previous.has(nextIndex)) {
+        return previous
+      }
+      const updated = new Set(previous)
+      updated.add(current)
+      updated.add(nextIndex)
+      return updated
+    })
+  }, [current])
+
   const goToNextSlide = () => {
-    setCurrent((prev) => (prev + 1) % HERO_IMAGES.length)
+    setCurrent((prev) => (prev + 1) % HERO_SLIDES.length)
   }
 
   const goToPreviousSlide = () => {
-    setCurrent((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)
+    setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
   }
 
   const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
@@ -85,6 +129,18 @@ export function Hero() {
     goToPreviousSlide()
   }
 
+  const handleSlideSelect = (index: number) => {
+    setCurrent(index)
+    setLoadedSlides((previous) => {
+      if (previous.has(index)) {
+        return previous
+      }
+      const updated = new Set(previous)
+      updated.add(index)
+      return updated
+    })
+  }
+
   return (
     <section
       id="home"
@@ -92,26 +148,16 @@ export function Hero() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {HERO_IMAGES.map((image, index) => (
-        <img
-          key={image.src}
-          src={image.src}
-          alt={image.alt}
-          width={1920}
-          height={1080}
-          decoding="async"
-          fetchPriority={index === 0 ? 'high' : 'auto'}
-          loading={index === 0 ? 'eager' : 'lazy'}
-          style={
-            'objectPosition' in image
-              ? { objectPosition: image.objectPosition }
-              : undefined
-          }
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
-            index === current ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
-      ))}
+      {HERO_SLIDES.map((slide, index) =>
+        loadedSlides.has(index) ? (
+          <HeroSlidePicture
+            key={slide.webp}
+            slide={slide}
+            isActive={index === current}
+            isLcp={index === 0}
+          />
+        ) : null,
+      )}
 
       <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
 
@@ -140,17 +186,21 @@ export function Hero() {
         </div>
       </button>
 
-      <QuoteRequestModal
-        isOpen={isQuoteModalOpen}
-        onClose={() => setIsQuoteModalOpen(false)}
-      />
+      {isQuoteModalOpen ? (
+        <Suspense fallback={null}>
+          <QuoteRequestModal
+            isOpen={isQuoteModalOpen}
+            onClose={() => setIsQuoteModalOpen(false)}
+          />
+        </Suspense>
+      ) : null}
 
       <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-6">
-        {HERO_IMAGES.map((_, index) => (
+        {HERO_SLIDES.map((_, index) => (
           <button
             key={index}
             type="button"
-            onClick={() => setCurrent(index)}
+            onClick={() => handleSlideSelect(index)}
             aria-label={`Go to slide ${index + 1}`}
             className="relative flex h-11 w-11 items-center justify-center"
           >

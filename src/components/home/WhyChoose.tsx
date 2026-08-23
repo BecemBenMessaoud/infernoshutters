@@ -38,7 +38,7 @@ export function WhyChoose() {
               className="aspect-video w-full max-h-[50vh] object-cover object-center"
               controls
               playsInline
-              preload="metadata"
+              preload="none"
               poster={WHY_CHOOSE_VIDEO.poster}
             >
               <source src={WHY_CHOOSE_VIDEO.src} type="video/mp4" />

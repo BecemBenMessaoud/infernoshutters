@@ -106,13 +106,40 @@ for (const file of tsxFiles) {
   }
 }
 
-// 6. Verify index.html has essential meta tags
+// 6. Verify index.html — no hard-coded canonical (SeoHead owns per-route canonicals)
 const indexHtml = read(join(root, 'index.html'))
-const requiredMeta = ['description', 'canonical', 'og:title', 'twitter:card']
+if (/<link[^>]+rel=["']canonical["']/i.test(indexHtml)) {
+  errors.push('index.html must not contain a hard-coded canonical link (use SeoHead instead)')
+}
+if (/property=["']og:url["']/i.test(indexHtml)) {
+  errors.push('index.html must not contain a hard-coded og:url (use SeoHead instead)')
+}
+const requiredMeta = ['description']
 for (const meta of requiredMeta) {
   if (!indexHtml.includes(meta)) {
     errors.push(`index.html missing ${meta}`)
   }
+}
+
+// 6b. Sitemap and robots.txt must use the same SITE_URL domain
+for (const url of sitemapUrls) {
+  if (!url.startsWith(SITE_URL)) {
+    errors.push(`Sitemap URL uses wrong domain: ${url} (expected ${SITE_URL})`)
+  }
+}
+if (!robots.includes(`Sitemap: ${SITE_URL}/sitemap.xml`)) {
+  errors.push(`robots.txt Sitemap must be ${SITE_URL}/sitemap.xml`)
+}
+
+// 6c. vercel.json must redirect apex (non-www) to preferred SITE_URL host
+const vercelJson = read(join(root, 'vercel.json'))
+const preferredHost = new URL(SITE_URL).host
+const apexHost = preferredHost.startsWith('www.') ? preferredHost.slice(4) : preferredHost
+if (!vercelJson.includes(`"value": "${apexHost}"`)) {
+  errors.push(`vercel.json must redirect ${apexHost} → ${preferredHost}`)
+}
+if (!vercelJson.includes(`https://${preferredHost}/`)) {
+  errors.push(`vercel.json redirect destination must use ${SITE_URL}`)
 }
 
 // 7. Verify structured data file exports key schemas
@@ -185,8 +212,30 @@ if (existsSync(distDir) && prerenderComplete) {
     if (!html.includes('application/ld+json')) {
       warnings.push(`Prerendered ${route} missing JSON-LD scripts`)
     }
-    if (!html.includes('rel="canonical"')) {
+
+    const expectedCanonical = route === '/' ? `${SITE_URL}/` : `${SITE_URL}${route}`
+    const canonicalMatches = [...html.matchAll(/<link[^>]+rel=["']canonical["'][^>]*>/gi)]
+    if (canonicalMatches.length === 0) {
       errors.push(`Prerendered ${route} missing canonical link`)
+    } else if (canonicalMatches.length > 1) {
+      errors.push(`Prerendered ${route} has ${canonicalMatches.length} canonical links (expected 1)`)
+    } else {
+      const hrefMatch = canonicalMatches[0][0].match(/href=["']([^"']+)["']/i)
+      const href = hrefMatch?.[1]
+      if (href !== expectedCanonical) {
+        errors.push(
+          `Prerendered ${route} canonical is "${href}" (expected "${expectedCanonical}")`,
+        )
+      }
+    }
+
+    const ogUrlMatches = [...html.matchAll(/property=["']og:url["'][^>]*content=["']([^"']+)["']/gi)]
+    if (ogUrlMatches.length > 1) {
+      errors.push(`Prerendered ${route} has ${ogUrlMatches.length} og:url tags (expected 1)`)
+    } else if (ogUrlMatches.length === 1 && ogUrlMatches[0][1] !== expectedCanonical) {
+      errors.push(
+        `Prerendered ${route} og:url is "${ogUrlMatches[0][1]}" (expected "${expectedCanonical}")`,
+      )
     }
 
     const titleMatch = html.match(/<title>([^<]+)<\/title>/)
@@ -208,6 +257,22 @@ if (existsSync(distDir) && prerenderComplete) {
     warnings.push(
       `Only ${prerenderedCount}/${PRERENDER_ROUTES.length} prerender routes have static HTML`,
     )
+  }
+
+  const notFoundHtml = join(distDir, '404.html')
+  if (!existsSync(notFoundHtml)) {
+    errors.push('Missing dist/404.html — run prerender to generate the custom error page')
+  } else {
+    const html = read(notFoundHtml)
+    if (!html.includes('404 — Page Not Found')) {
+      errors.push('dist/404.html missing expected "404 — Page Not Found" heading')
+    }
+    if (!html.includes('noindex')) {
+      errors.push('dist/404.html must include noindex robots directive')
+    }
+    if (!html.includes('<title>Page Not Found | Inferno Shutters</title>')) {
+      warnings.push('dist/404.html may be missing the expected page title')
+    }
   }
 }
 
