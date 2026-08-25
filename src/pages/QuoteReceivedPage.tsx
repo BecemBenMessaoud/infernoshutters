@@ -34,18 +34,9 @@ export function QuoteReceivedPage() {
             Thank you! Our team will review your request and contact you within 1 business day.
           </p>
 
-          <button
-            type="button"
-            className="mt-8 rounded-lg bg-inferno-500 px-10 py-3.5 text-sm font-bold text-white transition hover:bg-inferno-600"
-          >
-            Schedule Immediately
-          </button>
-
-          <p className="mt-6 text-xs font-medium uppercase tracking-wider text-gray-500">OR</p>
-
           <Link
             to="/"
-            className="mt-4 inline-block text-sm font-semibold text-navy-900 underline-offset-2 hover:underline"
+            className="mt-8 inline-block text-sm font-semibold text-navy-900 underline-offset-2 hover:underline"
           >
             Return to homepage
           </Link>
