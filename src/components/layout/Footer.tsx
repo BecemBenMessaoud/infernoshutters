@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import type { FormEvent } from 'react'
 
@@ -6,12 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { ArrowRight, ChevronRight } from 'lucide-react'
 
-import { RecaptchaCheckbox, type RecaptchaHandle } from '../recaptcha/RecaptchaCheckbox'
-import {
-  RECAPTCHA_VALIDATION_ERROR,
-  formDataToRecord,
-  submitProtectedForm,
-} from '../../lib/submitForm'
+import { FORMSPREE_NEWSLETTER_ENDPOINT } from '../../data/quote'
 
 import {
 
@@ -103,13 +98,9 @@ function FooterLinkList({
 
 export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
-  const recaptchaRef = useRef<RecaptchaHandle>(null)
-
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [submitError, setSubmitError] = useState<string | null>(null)
-
-  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
 
   const [isSubmitted, setIsSubmitted] = useState(false)
 
@@ -129,39 +120,45 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
 
 
-    const recaptchaToken = recaptchaRef.current?.getToken()
-
-    if (!recaptchaToken) {
-
-      setRecaptchaError(RECAPTCHA_VALIDATION_ERROR)
-
-      return
-
-    }
-
-
-
     setIsSubmitting(true)
 
     setSubmitError(null)
-
-    setRecaptchaError(null)
 
 
 
     const form = event.currentTarget
 
-    const payload = formDataToRecord(new FormData(form))
-
 
 
     try {
 
-      await submitProtectedForm('newsletter', payload, recaptchaToken)
+      const response = await fetch(FORMSPREE_NEWSLETTER_ENDPOINT, {
+
+        method: 'POST',
+
+        headers: {
+
+          Accept: 'application/json',
+
+          'Content-Type': 'application/json',
+
+        },
+
+        body: JSON.stringify({ email: new FormData(form).get('email') }),
+
+      })
+
+
+
+      if (!response.ok) {
+
+        throw new Error('Something went wrong. Please try again.')
+
+      }
+
+
 
       form.reset()
-
-      recaptchaRef.current?.reset()
 
       setIsSubmitted(true)
 
@@ -314,18 +311,6 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
               </button>
 
             </form>
-
-            <RecaptchaCheckbox ref={recaptchaRef} size="compact" className="mt-3 origin-left scale-90" />
-
-            {recaptchaError ? (
-
-              <p className="mt-2 text-xs font-medium text-red-600" role="alert">
-
-                {recaptchaError}
-
-              </p>
-
-            ) : null}
 
             {submitError ? (
 
