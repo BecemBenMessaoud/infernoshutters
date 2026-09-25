@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SeoHead } from './components/seo/SeoHead'
 import { ScrollToTop } from './components/layout/ScrollToTop'
+import { HubSpotTracking } from './components/monitoring/HubSpotTracking'
 import { Layout } from './components/layout/Layout'
 import { HomePage } from './pages/HomePage'
 
@@ -54,6 +55,7 @@ function App() {
     <BrowserRouter>
       <SeoHead />
       <ScrollToTop />
+      <HubSpotTracking />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route element={<Layout />}>

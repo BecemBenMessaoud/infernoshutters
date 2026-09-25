@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { ArrowRight, ChevronRight } from 'lucide-react'
 
-import { FORMSPREE_NEWSLETTER_ENDPOINT } from '../../data/quote'
+import { submitNewsletterForm } from '../../lib/submitForm'
 
 import {
 
@@ -132,31 +132,12 @@ export function Footer({ withOverlapSpacing = false }: FooterProps) {
 
     try {
 
-      const response = await fetch(FORMSPREE_NEWSLETTER_ENDPOINT, {
-
-        method: 'POST',
-
-        headers: {
-
-          Accept: 'application/json',
-
-          'Content-Type': 'application/json',
-
-        },
-
-        body: JSON.stringify({ email: new FormData(form).get('email') }),
-
-      })
-
-
-
-      if (!response.ok) {
-
-        throw new Error('Something went wrong. Please try again.')
-
+      const email = new FormData(form).get('email')
+      if (typeof email !== 'string' || !email.trim()) {
+        throw new Error('Please enter a valid email address.')
       }
 
-
+      await submitNewsletterForm(email.trim())
 
       form.reset()
 

@@ -48,3 +48,31 @@ export async function submitProtectedForm(
 }
 
 export const RECAPTCHA_VALIDATION_ERROR = 'Please complete the reCAPTCHA check.'
+
+export async function submitNewsletterForm(email: string): Promise<void> {
+  const response = await fetch('/api/submit-form', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      form: 'newsletter',
+      payload: { email },
+      recaptchaToken: '',
+    }),
+  })
+
+  if (!response.ok) {
+    let message = 'Newsletter signup failed'
+    try {
+      const body = (await response.json()) as { error?: string }
+      if (body.error) {
+        message = body.error
+      }
+    } catch {
+      // Ignore JSON parse errors
+    }
+    throw new Error(message)
+  }
+}
