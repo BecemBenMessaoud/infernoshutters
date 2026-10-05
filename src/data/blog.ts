@@ -2,18 +2,67 @@ export type BlogTextSegment =
   | { type: 'text'; value: string }
   | { type: 'link'; text: string; href: string }
 
+export type BlogCardItem = {
+  icon: 'shield' | 'link' | 'anchor' | 'lock' | 'waves' | 'flame' | 'snowflake' | 'wind' | 'tree' | 'volume'
+  title: string
+  text: string
+}
+
+export type BlogFeatureItem = {
+  title: string
+  text: string
+}
+
+export type BlogSpecItem = {
+  value: string
+  label: string
+}
+
+export type BlogBenefitItem = {
+  icon: BlogCardItem['icon']
+  label: string
+}
+
 export type BlogBlock =
   | { type: 'paragraph'; text: string; emphasis?: boolean }
   | { type: 'rich-paragraph'; segments: BlogTextSegment[] }
   | { type: 'list'; items: string[] }
   | { type: 'subheading'; text: string }
-  | { type: 'callout'; text: string }
+  | { type: 'callout'; text: string; label?: string }
   | { type: 'plainbox'; title: string; items: string[] }
+  | { type: 'hero-banner'; eyebrow: string; headline: string; theme?: 'slats' | 'waves' }
+  | { type: 'stat'; value: string; label: string }
+  | { type: 'card-grid'; cards: BlogCardItem[] }
+  | { type: 'feature-list'; items: BlogFeatureItem[] }
+  | { type: 'pull-quote'; text: string }
+  | { type: 'spec-grid'; items: BlogSpecItem[] }
+  | { type: 'benefit-grid'; items: BlogBenefitItem[] }
+  | { type: 'quote-box'; title: string; text: string }
+  | {
+      type: 'case-study'
+      label: string
+      title: string
+      location: string
+      paragraphs: Array<{ text: string; lead?: string }>
+    }
+  | {
+      type: 'cta'
+      title: string
+      text: string
+      primary: { label: string; href: string }
+      secondary?: { label: string; href: string }
+    }
 
 export type BlogSection = {
   id: string
   title: string
+  hideTitle?: boolean
   blocks: BlogBlock[]
+}
+
+export type BlogRelatedLink = {
+  name: string
+  path: string
 }
 
 export type BlogArticle = {
@@ -28,6 +77,8 @@ export type BlogArticle = {
   publishedDate: string
   modifiedDate: string
   featured?: boolean
+  layout?: 'accordion' | 'prose'
+  relatedLinks?: BlogRelatedLink[]
   cardAccent: 'ember' | 'navy' | 'slate'
   cardGlyph: string
   seoDescription: string
@@ -496,19 +547,505 @@ const INSURANCE_HARDENING_ARTICLE: BlogArticle = {
   ],
 }
 
-export const BLOG_COMING_SOON_CARD: BlogComingSoonCard = {
-  category: 'Storm & Security',
-  title: 'Storm Defense & Home Security',
+const SECURITY_BREAK_IN_ARTICLE: BlogArticle = {
+  slug: 'what-actually-stops-a-break-in',
+  title: 'What Actually Stops a Break-In',
   excerpt:
-    'The same shutter that blocks fire also stands up to hurricane-force wind, flying debris, and break-ins. Full guides are on the way.',
+    'A standard window and a pry bar is a few seconds of delay. Extruded aluminum security shutters with end retention are what sits between someone wanting in and someone getting in.',
+  category: 'Security Protection',
+  categoryDetail: 'Home & business security',
+  readTime: '6 min read',
+  publishedDate: '2026-10-05',
+  modifiedDate: '2026-10-05',
+  layout: 'prose',
   cardAccent: 'slate',
-  cardGlyph: '🌪️',
+  cardGlyph: '🔒',
+  seoDescription:
+    'Standard windows and doors fail in under a minute. Our extruded aluminum security shutters with end retention are sledgehammer-rated and built to stop intruders, protect inventory, and lower insurance claims.',
+  aiSummary:
+    'Explains why ordinary glass fails in a break-in, how extruded aluminum slats and end retention resist a sledgehammer and pry-out, where security shutters matter most, and how they also cover storm, fire, and energy savings.',
+  relatedLinks: [
+    { name: 'Our Shutter Products', path: '/products/overview' },
+    { name: 'When the Pacific Comes for Your Home', path: '/blog/when-the-pacific-comes-for-your-home' },
+    {
+      name: 'Where Wildfires Actually Get In',
+      path: '/blog/why-windows-and-doors-fail-first-in-a-wildfire',
+    },
+    { name: 'Frequently Asked Questions', path: '/faq' },
+    { name: 'Request a Free Quote', path: '/quote' },
+    { name: 'All Blog Articles', path: '/blog' },
+  ],
+  intro: [
+    {
+      type: 'hero-banner',
+      eyebrow: 'Hardened for Humans',
+      headline:
+        'Sledgehammer-rated extruded aluminum shutters with end retention. Built to not give in.',
+    },
+    {
+      type: 'paragraph',
+      text: 'The question is not whether a determined person could try your window. The question is what happens when they do. A standard window and a pry bar is not a security system — it is a few seconds of delay. Our extruded aluminum security shutters are what sits between someone wanting in and someone actually getting in.',
+    },
+    {
+      type: 'stat',
+      value: 'Under 60 sec',
+      label:
+        'Average time an experienced intruder needs to get through a standard window or sliding glass door. A locked door barely counts.',
+    },
+  ],
+  sections: [
+    {
+      id: 'easy-target',
+      title: 'Why standard windows and doors are the easy target',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Residential and commercial glass is designed for weather and visibility, not for impact. A hardware store sledgehammer, a tire iron, even a landscaping rock will put a hole through standard window or sliding-door glass in one swing. Deadbolts and alarm stickers are deterrents — not barriers. If someone decides they want in, glass is the obvious way.',
+        },
+        {
+          type: 'paragraph',
+          text: 'The real security question is not "does my door lock," it is "what happens in the ten seconds after someone starts hitting my window." For most homes and most storefronts, the answer is: they are inside.',
+        },
+      ],
+    },
+    {
+      id: 'hard-to-breach',
+      title: 'What makes a security shutter actually hard to breach',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'There are two specifications that separate a real security shutter from a decorative one. Everything else is marketing.',
+        },
+        {
+          type: 'card-grid',
+          cards: [
+            {
+              icon: 'shield',
+              title: 'Extruded aluminum slats',
+              text: 'Solid, heavy-gauge aluminum pushed through a die as a single piece — not thin sheet rolled into a hollow shell with foam filler. Sledgehammer-rated.',
+            },
+            {
+              icon: 'link',
+              title: 'End retention system',
+              text: 'Each slat is mechanically locked into the side tracks. You cannot peel the shutter open or pry a slat out of the guide.',
+            },
+            {
+              icon: 'anchor',
+              title: 'Reinforced side tracks',
+              text: 'Heavy-gauge extruded tracks anchored into the structure, not screwed into drywall. The whole system is only as strong as the weakest connection.',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'sledgehammer-test',
+      title: 'The sledgehammer test, in plain English',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'A thin, foam-filled roll shutter — the kind most residential shutter companies sell for sun and privacy — will dent, buckle, and eventually break open under a sledgehammer. A couple of good swings and a determined person is through.',
+        },
+        {
+          type: 'paragraph',
+          text: 'A proper extruded aluminum security shutter does not. The slats are solid. The hammer bounces off, leaves a scuff, and the slat keeps its shape. Even if the attacker gets through the shutter slats, the end-retention system means they cannot peel the curtain back from the window — the slats stay physically locked into the guide rails on both sides. There is no "pop one corner and lift" shortcut.',
+        },
+        {
+          type: 'callout',
+          label: 'The honest version',
+          text: 'Given enough time, tools, and lack of witnesses, a determined professional can get through anything. Our security shutters are not a bank vault. What they are is enough of a barrier that no opportunistic break-in is getting through, and no smash-and-grab is going to risk the time it takes to try.',
+        },
+      ],
+    },
+    {
+      id: 'end-retention',
+      title: 'End retention — why it matters more than most people realize',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Here is the quiet failure mode of cheap roll shutters: an attacker does not have to break through the slats at all. They can pry one slat sideways and pull the whole curtain out of the track. Once the curtain is out of the guide, the shutter folds away like a window shade, and the glass behind it is unprotected.',
+        },
+        {
+          type: 'paragraph',
+          text: 'End retention stops that. Every slat has a mechanical lock — a steel pin, interlocking end cap, or captive feature — that physically holds it inside the side track. You cannot pull it out. You cannot push it out. To breach the shutter, you have to actually destroy the slats themselves, which, with extruded aluminum, you are not going to do with a crowbar on a Tuesday night.',
+        },
+      ],
+    },
+    {
+      id: 'where-it-matters',
+      title: 'Where this matters most',
+      blocks: [
+        {
+          type: 'feature-list',
+          items: [
+            {
+              title: 'Retail storefronts',
+              text: 'Downtown jewelry, electronics, dispensaries, boutiques — any business that stocks high-value, portable inventory. Close the shutters at close, open them at open. Smash-and-grabs do not get past the window.',
+            },
+            {
+              title: 'Vacation and second homes',
+              text: 'Homes that sit empty for weeks or months are the top target for professional burglars. Shutters down the whole time you are away = no visible glass to break, no entry path to try.',
+            },
+            {
+              title: 'Garages, workshops, and storage',
+              text: 'Tools, bikes, equipment, inventory — the stuff thieves know is in a garage. A security shutter over the opening makes the whole space a hardened enclosure.',
+            },
+            {
+              title: 'Ground-floor apartments and condos',
+              text: 'First-floor units are statistically far more likely to be targeted. A security shutter on the sliding patio door takes the easiest entry point off the table.',
+            },
+            {
+              title: 'Home offices and gun safes',
+              text: 'Private offices with equipment, medical practices, firearms stored legally at home — any room where what is inside justifies more than a locked door.',
+            },
+            {
+              title: 'Short-term rentals',
+              text: "Vacation rental owners deal with a different threat profile — unknown guests, inconsistent occupancy, periods of vacancy between bookings. Shutters give you remote control over the building's security.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'insurance',
+      title: 'The insurance side nobody talks about',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'A single break-in claim raises your premium. Multiple claims can get your policy non-renewed, especially on commercial property. The security shutter is not just about the first incident — it is about preventing the pattern that insurance companies start pulling coverage over.',
+        },
+        {
+          type: 'paragraph',
+          text: 'And when you do have to file a claim, insurance covers the replacement cost of what was taken. It does not give back the heirloom. It does not give back the data. It does not give back the week you lost dealing with the fallout. Prevention is dramatically cheaper than any payout, and the shutters pay for themselves the first time they stop something.',
+        },
+        {
+          type: 'pull-quote',
+          text: '"Insurance pays for what you lost. It does not give it back."',
+        },
+      ],
+    },
+    {
+      id: 'once-you-have-them',
+      title: 'The thing you only understand once you have them',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Our installed customers tell us the same thing: the real benefit is not any single feature. It is that they stop thinking about it. Vacation without wondering if the house is OK. Close the store at night without the mental checklist of what is on display. Sleep through the sound of someone trying a car door in the alley. The shutters are closed. Nothing is getting through. That is the actual product — peace of mind that is not based on hoping, it is based on knowing.',
+        },
+        {
+          type: 'spec-grid',
+          items: [
+            { value: 'Extruded', label: 'Solid aluminum slat, not foam-filled' },
+            { value: 'Locked', label: 'End retention — slats cannot be pulled from tracks' },
+            { value: 'Seconds', label: 'To deploy before leaving, closing up, or going to bed' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'one-shutter-many-jobs',
+      title: 'One shutter, many jobs',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Security is one of several things these shutters do. Few products on the market protect a property against this many threats in a single system:',
+        },
+        {
+          type: 'benefit-grid',
+          items: [
+            { icon: 'lock', label: 'Intruder & break-in protection' },
+            { icon: 'waves', label: 'Storm & wave protection' },
+            { icon: 'flame', label: 'Fire & ember defense' },
+            { icon: 'snowflake', label: 'Heating & cooling savings' },
+          ],
+        },
+        {
+          type: 'paragraph',
+          text: 'One install, four jobs. That is the Inferno-Roll package.',
+        },
+        {
+          type: 'quote-box',
+          title: 'Want a preliminary quote?',
+          text: 'Send us photos of your home or business along with your window and door sizes, and we can give you preliminary pricing for both shutters and installation. Security applications typically call for our extruded aluminum product line with end retention — we will spec it to the opening and the use case. Start the process by sending us those details, and give us a call.',
+        },
+      ],
+    },
+    {
+      id: 'peace-of-mind',
+      title: 'Peace of mind that is not based on hoping',
+      hideTitle: true,
+      blocks: [
+        {
+          type: 'cta',
+          title: 'Peace of mind that is not based on hoping',
+          text: 'Inferno-Roll makes custom security, fire, and storm shutters, designed and manufactured in California and professionally installed. Book a free property assessment and we will walk your site with you — openings, threats, use case, the works.',
+          primary: { label: 'Request a Free Estimate', href: '/quote' },
+          secondary: { label: '(888) 999-8809', href: 'tel:8889998809' },
+        },
+      ],
+    },
+  ],
+}
+
+const PACIFIC_STORM_ARTICLE: BlogArticle = {
+  slug: 'when-the-pacific-comes-for-your-home',
+  title: 'When the Pacific Comes for Your Home',
+  excerpt:
+    'King tides, atmospheric rivers, and winter storms are hitting West Coast properties harder. Hurricane-rated shutters stop a 2x4 at 120 MPH and use stainless hardware for coastal salt.',
+  category: 'Storm & Impact Protection',
+  categoryDetail: 'West Coast storm protection',
+  readTime: '6 min read',
+  publishedDate: '2026-10-05',
+  modifiedDate: '2026-10-05',
+  layout: 'prose',
+  cardAccent: 'slate',
+  cardGlyph: '🌊',
+  seoDescription:
+    'King tides, atmospheric rivers, winter storms. Inferno-Roll shutters are hurricane-rated, 2x4-at-120MPH debris tested, and built with stainless hardware for coastal salt. See how we protect Zelda\'s Restaurant on the beach in Capitola.',
+  aiSummary:
+    'Explains why West Coast storms threaten windows and doors, the 2x4-at-120-MPH debris test, the Zelda\'s Restaurant Capitola installation, stainless coastal hardware, and why hurricane ratings apply to Pacific storms.',
+  relatedLinks: [
+    { name: 'Fire-Resistant Roller Shutters', path: '/products/fire-resistant' },
+    {
+      name: 'Where Wildfires Actually Get In',
+      path: '/blog/why-windows-and-doors-fail-first-in-a-wildfire',
+    },
+    { name: 'What Actually Stops a Break-In', path: '/blog/what-actually-stops-a-break-in' },
+    { name: 'Frequently Asked Questions', path: '/faq' },
+    { name: 'Request a Free Quote', path: '/quote' },
+    { name: 'All Blog Articles', path: '/blog' },
+  ],
+  intro: [
+    {
+      type: 'hero-banner',
+      theme: 'waves',
+      eyebrow: 'Built for the Coast',
+      headline:
+        'Hurricane-rated shutters, built for Pacific storm surge, flying debris, and salt corrosion.',
+    },
+    {
+      type: 'paragraph',
+      text: 'If you live on the West Coast, the Pacific is not the quiet ocean it used to be. King tides are higher. Atmospheric rivers are stronger. Winter storms are stacking up back-to-back and throwing waves at coastal properties that used to sit a safe distance from the water. If you are between the Pacific and your front door, you need something built for that fight — and we have a restaurant sitting on the sand in Capitola to prove it.',
+    },
+    {
+      type: 'stat',
+      value: '120 MPH',
+      label:
+        'The speed we rate our shutters to stop a flying 2x4 — the toughest debris-impact standard in the shutter industry.',
+    },
+  ],
+  sections: [
+    {
+      id: 'different-animal',
+      title: 'Why West Coast storms are a different animal now',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'The East Coast gets hurricanes. The Gulf gets hurricanes. The West Coast gets atmospheric rivers, Pineapple Expresses, and bomb cyclones — and the damage they are doing to coastal properties has gotten dramatically worse in the last decade. The ocean comes at you three different ways at once, and your windows and doors are what take the hit.',
+        },
+        {
+          type: 'card-grid',
+          cards: [
+            {
+              icon: 'waves',
+              title: 'Wave crash & storm surge',
+              text: 'King tides push waves farther up the shoreline than before. Water hits glass that was never designed to be hit.',
+            },
+            {
+              icon: 'wind',
+              title: 'Hurricane-force winds',
+              text: 'Winter storms deliver sustained 60–90 MPH winds along the coast, with gusts well into hurricane territory.',
+            },
+            {
+              icon: 'tree',
+              title: 'Flying debris',
+              text: 'Driftwood, cobbles, patio furniture, even restaurant signage become projectiles once the wind picks up.',
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          text: 'Standard windows and sliding glass doors are not built for any of this. The glass breaks on impact, the water pours in, and from there it is a race against the next wave.',
+        },
+      ],
+    },
+    {
+      id: 'debris-test',
+      title: 'The debris test that matters',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Inferno-Roll shutters are engineered to the same impact standards used in Florida\'s hurricane codes. The headline test — the one anyone in the shutter industry has to pass before they can claim "impact-rated" — is simple and brutal: a 2x4 piece of lumber fired at over 120 MPH, straight at the shutter. If the shutter stops it without the opening behind it being breached, it passes.',
+        },
+        {
+          type: 'paragraph',
+          text: 'Our shutters pass. Whether your threat is a Florida hurricane or a California winter storm throwing a chunk of driftwood sideways through your dining room window, the engineering is the same. If a 2x4 at 120 MPH cannot get through, neither can anything the Pacific is likely to throw.',
+        },
+        {
+          type: 'callout',
+          label: 'What this means for you',
+          text: 'Once the shutter is down and locked into its tracks, the opening behind it is sealed. Wind cannot press through. Water cannot force its way in. Debris bounces off instead of through. That is the whole job.',
+        },
+      ],
+    },
+    {
+      id: 'zeldas',
+      title: "Proof on the sand: Zelda's Restaurant, Capitola",
+      blocks: [
+        {
+          type: 'case-study',
+          label: 'Case Study',
+          title: "Zelda's on the Beach",
+          location: 'Capitola Village, California',
+          paragraphs: [
+            {
+              text: "Zelda's on the Beach is as literal as a restaurant name gets. It sits directly on the sand in Capitola Village, in the path of every winter storm the Pacific throws at the Central Coast. During the January 2023 atmospheric river events, the Capitola Esplanade took millions of dollars in damage. Zelda's was right in that path.",
+            },
+            {
+              lead: "We installed Inferno-Roll shutters at Zelda's.",
+              text: 'Since then, the restaurant closes the shutters before every major storm and king tide event. The waves hit the facade. The surge pushes debris up the beach. The shutters take the hits — and the glass behind them stays whole.',
+            },
+            {
+              text: 'That is not a sales pitch. That is a working restaurant in one of the most exposed spots on the California coast, and the shutters are doing exactly what we built them to do.',
+            },
+          ],
+        },
+        {
+          type: 'pull-quote',
+          text: '"The shutters take the hits. The glass behind them stays whole."',
+        },
+      ],
+    },
+    {
+      id: 'stainless-hardware',
+      title: 'The part most shutter companies cut corners on: stainless hardware',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Here is where a lot of shutters that look great on day one fail quietly over a few winters. If you live within a few miles of the ocean, salt air is going to eat anything that is not built to resist it. Regular steel hardware rusts. Zinc-plated fasteners corrode. Cheap tracks seize up with crusted salt and stop rolling smoothly.',
+        },
+        {
+          type: 'paragraph',
+          text: 'Every Inferno-Roll shutter we install in a coastal environment uses stainless steel hardware — fasteners, hinges, brackets, mounting points. Stainless costs more, but it is the difference between a shutter that still rolls smoothly ten years from now and one that is seized with rust after three winters on the beach.',
+        },
+        {
+          type: 'paragraph',
+          text: 'This is not an upgrade line item we try to upsell. It is the standard build for anything we install near salt water. If your shutter is going to live through storms, it has to live through the salt first.',
+        },
+      ],
+    },
+    {
+      id: 'what-coastal-shutters-do',
+      title: 'What our coastal shutters do',
+      blocks: [
+        {
+          type: 'feature-list',
+          items: [
+            {
+              title: 'Hurricane-force wind resistance',
+              text: 'Shutter curtain anchored into reinforced side tracks that hold the load when sustained wind presses against the opening.',
+            },
+            {
+              title: '2x4-at-120MPH debris impact rating',
+              text: 'Engineered to the Miami-Dade / Florida Building Code large missile impact standard — the toughest debris test in the shutter industry.',
+            },
+            {
+              title: 'Sealed water barrier',
+              text: 'Once closed, the shutter and track system keeps wave crash, blown spray, and storm surge on the outside of your home.',
+            },
+            {
+              title: 'Stainless steel coastal hardware',
+              text: 'Standard build for every ocean-exposed install. Resists salt corrosion so the shutter keeps working year after year.',
+            },
+            {
+              title: 'Deploy in seconds, not hours',
+              text: 'Motorized shutters close with the push of a button, from a remote, wall switch, phone app, or voice command — no plywood, no screws, no scrambling before the storm hits.',
+            },
+            {
+              title: 'Always ready, year-round',
+              text: 'Unlike panel systems that live in the garage waiting for an emergency, roll shutters stay mounted and ready. Storm hits overnight? You are already protected.',
+            },
+          ],
+        },
+        {
+          type: 'spec-grid',
+          items: [
+            { value: '120+ MPH', label: '2x4 debris impact rating' },
+            { value: 'Stainless', label: 'Hardware standard on coastal installs' },
+            { value: 'Seconds', label: 'To close before a storm hits' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'hurricane-rated',
+      title: 'About the words "hurricane-rated" on a West Coast page',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'A lot of West Coast homeowners hear "hurricane shutter" and assume it does not apply to them. Hurricanes do not make landfall on the California coast. True.',
+        },
+        {
+          type: 'paragraph',
+          text: 'But the engineering standards developed for hurricanes — Miami-Dade protocols, Florida Building Code impact ratings — are the only universally accepted testing standards for shutters that have to deal with sustained high wind, flying debris, and water intrusion. When we tell you our shutters are hurricane-rated, that is the engineering vocabulary. The threat on the West Coast has a different name (atmospheric river instead of Category 3), but the problem your opening has to solve is the same: keep the wind, water, and debris outside your building.',
+        },
+        {
+          type: 'paragraph',
+          text: 'If the shutter can handle a 2x4 at 120 MPH, it can handle whatever a Pacific winter wants to throw at it.',
+        },
+      ],
+    },
+    {
+      id: 'one-shutter-many-jobs',
+      title: 'One shutter, many jobs',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Storm protection is a big one, but it is not the only thing these shutters do. Few products on the market protect a home against this many threats in a single system:',
+        },
+        {
+          type: 'benefit-grid',
+          items: [
+            { icon: 'waves', label: 'Storm & wave protection' },
+            { icon: 'flame', label: 'Fire & ember defense' },
+            { icon: 'snowflake', label: 'Heating & cooling savings' },
+            { icon: 'volume', label: 'Noise reduction & privacy' },
+          ],
+        },
+        {
+          type: 'paragraph',
+          text: 'One system, year-round value. That is the Inferno-Roll package.',
+        },
+        {
+          type: 'quote-box',
+          title: 'Want a preliminary quote?',
+          text: 'Send us photos of your home or business along with your window and door sizes, and we can give you preliminary pricing for both shutters and installation. Coastal installs include stainless hardware and motorized controls as standard. Start the process by sending us those details, and give us a call.',
+        },
+      ],
+    },
+    {
+      id: 'protect-the-pacific',
+      title: 'Protect what the Pacific is coming for',
+      hideTitle: true,
+      blocks: [
+        {
+          type: 'cta',
+          title: 'Protect what the Pacific is coming for',
+          text: 'Inferno-Roll makes custom storm, fire, and security shutters, designed and manufactured in California and professionally installed. Book a free property assessment and we will walk your site with you — exposure, debris paths, salt conditions, the works.',
+          primary: { label: 'Request a Free Estimate', href: '/quote' },
+          secondary: { label: '(888) 999-8809', href: 'tel:8889998809' },
+        },
+      ],
+    },
+  ],
 }
 
 export const BLOG_ARTICLES: BlogArticle[] = [
   WINDOWS_DOORS_ARTICLE,
   INSURANCE_HARDENING_ARTICLE,
   DEFENSIBLE_SPACE_ARTICLE,
+  SECURITY_BREAK_IN_ARTICLE,
+  PACIFIC_STORM_ARTICLE,
 ]
 
 export const BLOG_ARTICLE = DEFENSIBLE_SPACE_ARTICLE
@@ -522,7 +1059,12 @@ export function getFeaturedBlogArticle(): BlogArticle {
 }
 
 export function getBlogLatestGridArticles(): BlogArticle[] {
-  return [WINDOWS_DOORS_ARTICLE, INSURANCE_HARDENING_ARTICLE]
+  return [
+    WINDOWS_DOORS_ARTICLE,
+    INSURANCE_HARDENING_ARTICLE,
+    SECURITY_BREAK_IN_ARTICLE,
+    PACIFIC_STORM_ARTICLE,
+  ]
 }
 
 export const BLOG_ARTICLE_SLUGS = BLOG_ARTICLES.map((article) => article.slug)

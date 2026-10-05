@@ -31,6 +31,16 @@ export const SITEMAP_ENTRIES = [
     changefreq: 'monthly',
     priority: '0.7',
   },
+  {
+    loc: '/blog/what-actually-stops-a-break-in',
+    changefreq: 'monthly',
+    priority: '0.7',
+  },
+  {
+    loc: '/blog/when-the-pacific-comes-for-your-home',
+    changefreq: 'monthly',
+    priority: '0.7',
+  },
   { loc: '/resources', changefreq: 'monthly', priority: '0.7' },
   { loc: '/investor-info', changefreq: 'monthly', priority: '0.6' },
   { loc: '/service', changefreq: 'monthly', priority: '0.8' },

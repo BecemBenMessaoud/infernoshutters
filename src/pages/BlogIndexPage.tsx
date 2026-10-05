@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Newspaper } from 'lucide-react'
-import { getBlogLatestGridArticles, getFeaturedBlogArticle, BLOG_COMING_SOON_CARD } from '../data/blog'
-import { BlogCard, BlogComingSoonCard } from '../components/blog/BlogCard'
+import { getBlogLatestGridArticles, getFeaturedBlogArticle } from '../data/blog'
+import { BlogCard } from '../components/blog/BlogCard'
 import { BlogSectionLabel } from '../components/blog/BlogSectionLabel'
 import { FireTestProofSection } from '../components/blog/FireTestProofSection'
 import { FeaturedArticleArt } from '../components/blog/FeaturedArticleArt'
@@ -70,7 +70,6 @@ export function BlogIndexPage() {
             {latestArticles.map((article) => (
               <BlogCard key={article.slug} article={article} />
             ))}
-            <BlogComingSoonCard card={BLOG_COMING_SOON_CARD} />
           </div>
 
           <aside className="mt-12 rounded-2xl bg-navy-900 p-6 text-white sm:p-8">
