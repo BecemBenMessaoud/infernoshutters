@@ -314,6 +314,14 @@ export function BlogContentBlocks({
                     {block.secondary.label}
                   </ActionLink>
                 ) : null}
+                {block.tertiary ? (
+                  <ActionLink
+                    href={block.tertiary.href}
+                    className="inline-flex rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
+                  >
+                    {block.tertiary.label}
+                  </ActionLink>
+                ) : null}
               </div>
             </div>
           )

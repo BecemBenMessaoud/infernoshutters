@@ -33,7 +33,9 @@ export function GuideAccordionItem({
         />
       </button>
 
-      {isOpen ? <div className="bg-[#e6eef5]">{children}</div> : null}
+      <div hidden={!isOpen} className="bg-[#e6eef5]">
+        {children}
+      </div>
     </div>
   )
 }
@@ -204,7 +206,9 @@ export function ResourcesHero() {
           <BookOpen className="h-4 w-4" />
           <span>Resources</span>
         </div>
-        <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">Resources</h1>
+        <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+          Wildfire &amp; Shutter Guides
+        </h1>
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">
           Expert guides to help you maintain your shutters and protect your home against wildfires — from
           our team to yours.

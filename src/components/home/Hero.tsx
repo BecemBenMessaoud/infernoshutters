@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Phone } from 'lucide-react'
 import { HERO_SLIDES } from '../../data/heroImages'
 import { PHONE } from '../../data/site'
@@ -169,6 +170,12 @@ export function Hero() {
           <h1 className="text-balance text-[1.35rem] font-bold leading-snug text-white sm:text-4xl sm:leading-tight lg:text-5xl">
             Home Defense Meets Wildfire Science.
           </h1>
+          <Link
+            to="/quote"
+            className="mt-4 inline-flex rounded-lg bg-inferno-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-inferno-600"
+          >
+            Request a Quote
+          </Link>
         </div>
       </div>
 

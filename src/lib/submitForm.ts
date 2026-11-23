@@ -1,3 +1,5 @@
+import { trackQuoteSubmission } from './analytics'
+
 export type ProtectedFormType =
   | 'quote'
   | 'contact'
@@ -44,6 +46,10 @@ export async function submitProtectedForm(
       // Ignore JSON parse errors
     }
     throw new Error(message)
+  }
+
+  if (form === 'quote') {
+    trackQuoteSubmission()
   }
 }
 

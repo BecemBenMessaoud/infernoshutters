@@ -1,4 +1,5 @@
 import { getBlogArticle } from '../../data/blog'
+import { EL_NINO_FAQ } from '../../data/el-nino'
 import { CONTACT_FAQ_ITEMS, EMAIL, PHONE, SOCIAL_LINKS, BUSINESS_ADDRESS, LEGAL_ENTITY_NAME } from '../../data/site'
 import { CURTAIN_SERIES_ARTICLES } from '../../data/curtain-series'
 import { PRODUCT_DETAIL_CONTENT } from '../../data/product-details'
@@ -135,6 +136,21 @@ export function faqPageSchema(): JsonLd {
   }
 }
 
+export function elNinoFaqSchema(): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: EL_NINO_FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  }
+}
+
 export function servicePageSchema(): JsonLd {
   return {
     '@context': 'https://schema.org',
@@ -250,6 +266,10 @@ export function buildStructuredData(pathname: string, seo: PageSeoConfig): JsonL
 
   if (pathname === '/faq') {
     schemas.push(faqPageSchema())
+  }
+
+  if (pathname === '/el-nino-storm-preparation') {
+    schemas.push(elNinoFaqSchema())
   }
 
   if (pathname === '/service') {

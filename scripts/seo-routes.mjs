@@ -42,6 +42,7 @@ export const SITEMAP_ENTRIES = [
     priority: '0.7',
   },
   { loc: '/resources', changefreq: 'monthly', priority: '0.7' },
+  { loc: '/el-nino-storm-preparation', changefreq: 'monthly', priority: '0.8' },
   { loc: '/investor-info', changefreq: 'monthly', priority: '0.6' },
   { loc: '/service', changefreq: 'monthly', priority: '0.8' },
   { loc: '/products/overview', changefreq: 'weekly', priority: '0.9' },

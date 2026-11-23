@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 const FEATURES = [
   {
     icon: '/images/first-icon.png',
@@ -32,26 +30,7 @@ const WILDFIRE_ZONES_IMAGE = {
   alt: 'Modern home with Inferno-Roll shutters protected during a wildfire',
 } as const
 
-export type WildfireFeatureTitle = (typeof FEATURES)[number]['title']
-
-type WildfireZonesProps = {
-  selected?: WildfireFeatureTitle
-  onSelect?: (title: WildfireFeatureTitle) => void
-}
-
-export function WildfireZones({ selected, onSelect }: WildfireZonesProps) {
-  const [internalSelected, setInternalSelected] = useState<WildfireFeatureTitle>('Fire')
-  const activeTitle = selected ?? internalSelected
-
-  const handleSelect = (title: WildfireFeatureTitle) => {
-    if (onSelect) {
-      onSelect(title)
-      return
-    }
-
-    setInternalSelected(title)
-  }
-
+export function WildfireZones() {
   return (
     <section className="bg-navy-900 py-16 lg:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -62,42 +41,32 @@ export function WildfireZones({ selected, onSelect }: WildfireZonesProps) {
 
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="space-y-4">
-            {FEATURES.map((feature) => {
-              const isSelected = activeTitle === feature.title
-
-              return (
-                <button
-                  key={feature.title}
-                  type="button"
-                  onClick={() => handleSelect(feature.title)}
-                  className={`flex w-full items-start gap-4 rounded-xl p-4 text-left transition ${
-                    isSelected
-                      ? 'bg-gradient-to-r from-blue-900/60 to-navy-800/40 ring-1 ring-blue-500/30'
-                      : 'hover:bg-white/5'
-                  }`}
-                >
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center">
-                    <img
-                      src={feature.icon}
-                      alt={`${feature.title} protection icon`}
-                      width={56}
-                      height={56}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-14 w-14 object-contain"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-inferno-400">
-                      {feature.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-gray-300">
-                      {feature.description}
-                    </p>
-                  </div>
-                </button>
-              )
-            })}
+            {FEATURES.map((feature) => (
+              <div
+                key={feature.title}
+                className="flex w-full items-start gap-4 rounded-xl p-4 text-left"
+              >
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center">
+                  <img
+                    src={feature.icon}
+                    alt={`${feature.title} protection icon`}
+                    width={56}
+                    height={56}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-14 w-14 object-contain"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-inferno-400">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-300">
+                    {feature.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="relative w-full overflow-hidden rounded-xl shadow-2xl">

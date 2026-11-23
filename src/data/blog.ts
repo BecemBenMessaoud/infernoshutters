@@ -51,6 +51,7 @@ export type BlogBlock =
       text: string
       primary: { label: string; href: string }
       secondary?: { label: string; href: string }
+      tertiary?: { label: string; href: string }
     }
 
 export type BlogSection = {
@@ -108,7 +109,21 @@ const DEFENSIBLE_SPACE_ARTICLE: BlogArticle = {
   cardAccent: 'slate',
   cardGlyph: '🛡️',
   seoDescription:
-    'Expert insights on wildfire home hardening, defensible space limits, and why roll shutters are essential for protecting windows and doors in fire-prone areas.',
+    'Inferno-Roll on why defensible space is not enough in a wildfire zone, and how roll shutters protect windows and doors in fire-prone areas.',
+  relatedLinks: [
+    { name: 'Fire-Resistant Roll Shutters', path: '/products/fire-resistant' },
+    {
+      name: 'Why Windows and Doors Fail First in a Wildfire',
+      path: '/blog/why-windows-and-doors-fail-first-in-a-wildfire',
+    },
+    {
+      name: 'Wildfire Insurance Is Getting Harder to Keep',
+      path: '/blog/wildfire-insurance-home-hardening',
+    },
+    { name: 'Frequently Asked Questions', path: '/faq' },
+    { name: 'Request a Free Quote', path: '/quote' },
+    { name: 'All Blog Articles', path: '/blog' },
+  ],
   aiSummary:
     'Editorial content on wildfire risk, the limits of defensible space alone, and how roll shutters protect critical building openings.',
   intro: [
@@ -316,6 +331,20 @@ const WINDOWS_DOORS_ARTICLE: BlogArticle = {
     'When a wildfire reaches a home, windows and doors fail first. Learn why embers and radiant heat beat ordinary glass—and how fire-tested roll shutters protect your openings.',
   aiSummary:
     'Guide explaining why windows and doors are the first failure point in wildfires, how embers and radiant heat breach openings, and how Inferno-Roll fire-tested shutters protect them.',
+  relatedLinks: [
+    { name: 'Fire-Resistant Roll Shutters', path: '/products/fire-resistant' },
+    {
+      name: 'Why Every Home in a Wildfire Zone Needs More Than Defensible Space',
+      path: '/blog/why-every-home-in-a-wildfire-zone-needs-more-than-defensible-space',
+    },
+    {
+      name: 'Wildfire Insurance Is Getting Harder to Keep',
+      path: '/blog/wildfire-insurance-home-hardening',
+    },
+    { name: 'Frequently Asked Questions', path: '/faq' },
+    { name: 'Request a Free Quote', path: '/quote' },
+    { name: 'All Blog Articles', path: '/blog' },
+  ],
   intro: [
     {
       type: 'paragraph',
@@ -456,6 +485,20 @@ const INSURANCE_HARDENING_ARTICLE: BlogArticle = {
     'Wildfire insurance is getting harder to keep in California and the West. Learn how home hardening—especially fire-rated window and door protection—can help you stay insured.',
   aiSummary:
     'Article on rising wildfire insurance costs, non-renewals, and how home hardening credits—including fire-tested shutters on windows and doors—can help homeowners stay insurable.',
+  relatedLinks: [
+    { name: 'Fire-Resistant Roll Shutters', path: '/products/fire-resistant' },
+    {
+      name: 'Why Windows and Doors Fail First in a Wildfire',
+      path: '/blog/why-windows-and-doors-fail-first-in-a-wildfire',
+    },
+    {
+      name: 'Why Every Home in a Wildfire Zone Needs More Than Defensible Space',
+      path: '/blog/why-every-home-in-a-wildfire-zone-needs-more-than-defensible-space',
+    },
+    { name: 'Frequently Asked Questions', path: '/faq' },
+    { name: 'Request a Free Quote', path: '/quote' },
+    { name: 'All Blog Articles', path: '/blog' },
+  ],
   intro: [
     {
       type: 'paragraph',
@@ -565,6 +608,8 @@ const SECURITY_BREAK_IN_ARTICLE: BlogArticle = {
   aiSummary:
     'Explains why ordinary glass fails in a break-in, how extruded aluminum slats and end retention resist a sledgehammer and pry-out, where security shutters matter most, and how they also cover storm, fire, and energy savings.',
   relatedLinks: [
+    { name: 'Heavy-Duty Security Shutters', path: '/products/heavy-duty' },
+    { name: 'Standard Security Shutters', path: '/products/standard-security' },
     { name: 'Our Shutter Products', path: '/products/overview' },
     { name: 'When the Pacific Comes for Your Home', path: '/blog/when-the-pacific-comes-for-your-home' },
     {
@@ -805,6 +850,7 @@ const PACIFIC_STORM_ARTICLE: BlogArticle = {
   aiSummary:
     'Explains why West Coast storms threaten windows and doors, the 2x4-at-120-MPH debris test, the Zelda\'s Restaurant Capitola installation, stainless coastal hardware, and why hurricane ratings apply to Pacific storms.',
   relatedLinks: [
+    { name: 'Hurricane & Storm Shutters', path: '/products/hurricane-storm' },
     { name: 'Fire-Resistant Roller Shutters', path: '/products/fire-resistant' },
     {
       name: 'Where Wildfires Actually Get In',
@@ -1034,6 +1080,7 @@ const PACIFIC_STORM_ARTICLE: BlogArticle = {
           text: 'Inferno-Roll makes custom storm, fire, and security shutters, designed and manufactured in California and professionally installed. Book a free property assessment and we will walk your site with you — exposure, debris paths, salt conditions, the works.',
           primary: { label: 'Request a Free Estimate', href: '/quote' },
           secondary: { label: '(888) 999-8809', href: 'tel:8889998809' },
+          tertiary: { label: 'Read the El Niño Guide', href: '/el-nino-storm-preparation' },
         },
       ],
     },

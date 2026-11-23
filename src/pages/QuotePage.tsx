@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { QuoteRequestForm } from '../components/quote/QuoteRequestForm'
 import { submitProtectedForm } from '../lib/submitForm'
 
@@ -43,6 +43,17 @@ export function QuotePage() {
           </h1>
           <p className="mt-3 text-base text-white/90 sm:text-lg">
             Secure Your Home Before the Next Threat.
+          </p>
+          <p className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold">
+            <Link to="/products/fire-resistant" className="text-white underline hover:text-inferno-400">
+              Fire-resistant shutters
+            </Link>
+            <Link to="/products/hurricane-storm" className="text-white underline hover:text-inferno-400">
+              Hurricane and storm shutters
+            </Link>
+            <Link to="/products/heavy-duty" className="text-white underline hover:text-inferno-400">
+              Security shutters
+            </Link>
           </p>
 
           <div className="mx-auto mt-8 flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full bg-navy-900 px-4 py-2.5 sm:gap-3 sm:px-6">

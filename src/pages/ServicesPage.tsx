@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { CommercialSolutionsSection } from '../components/services/CommercialSolutionsSection'
 import { InstallationProofSection } from '../components/services/InstallationProofSection'
 import { InstallationServiceSection } from '../components/services/InstallationServiceSection'
@@ -15,6 +16,20 @@ export function ServicesPage() {
             Inferno-Roll provides certified installation, emergency repair, scheduled maintenance,
             and commercial roll shutter solutions to keep your property protected year-round.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              to="/quote"
+              className="inline-flex rounded-lg bg-inferno-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-inferno-600"
+            >
+              Request a Quote
+            </Link>
+            <Link
+              to="/products/overview"
+              className="inline-flex rounded-lg border border-white/30 px-5 py-3 text-sm font-semibold text-white transition hover:border-white"
+            >
+              View shutter systems
+            </Link>
+          </div>
         </div>
       </section>
       <InstallationServiceSection />

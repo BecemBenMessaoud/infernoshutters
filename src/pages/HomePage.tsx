@@ -1,19 +1,12 @@
-import { useState } from 'react'
 import { Hero } from '../components/home/Hero'
 import { LazySection } from '../components/ui/LazyWhenVisible'
-import {
-  WildfireZones,
-  type WildfireFeatureTitle,
-} from '../components/home/WildfireZones'
+import { WildfireZones } from '../components/home/WildfireZones'
 
 export function HomePage() {
-  const [selectedFeature, setSelectedFeature] =
-    useState<WildfireFeatureTitle>('Fire')
-
   return (
     <main>
       <Hero />
-      <WildfireZones selected={selectedFeature} onSelect={setSelectedFeature} />
+      <WildfireZones />
       <LazySection
         loader={() => import('../components/home/WhyChoose').then((m) => ({ default: m.WhyChoose }))}
         minHeight="24rem"

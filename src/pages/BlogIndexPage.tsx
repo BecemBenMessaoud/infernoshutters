@@ -65,6 +65,27 @@ export function BlogIndexPage() {
 
           <FireTestProofSection />
 
+          <div className="mb-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+            <Link to="/products/fire-resistant" className="text-inferno-600 hover:text-inferno-700">
+              Fire-resistant shutters
+            </Link>
+            <Link to="/products/hurricane-storm" className="text-inferno-600 hover:text-inferno-700">
+              Hurricane and storm shutters
+            </Link>
+            <Link to="/products/standard-security" className="text-inferno-600 hover:text-inferno-700">
+              Standard security shutters
+            </Link>
+            <Link to="/products/heavy-duty" className="text-inferno-600 hover:text-inferno-700">
+              Heavy-duty security shutters
+            </Link>
+            <Link to="/service" className="text-navy-900 hover:text-inferno-600">
+              Installation services
+            </Link>
+            <Link to="/el-nino-storm-preparation" className="text-navy-900 hover:text-inferno-600">
+              El Niño storm preparation
+            </Link>
+          </div>
+
           <BlogSectionLabel>Latest Articles</BlogSectionLabel>
           <div className="grid gap-[26px] sm:grid-cols-2 lg:grid-cols-3">
             {latestArticles.map((article) => (

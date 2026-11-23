@@ -21,7 +21,7 @@ export function ProductsOverviewPage() {
         <div className="relative z-10 mx-auto flex h-full min-h-[420px] max-w-7xl items-center px-4 py-16 sm:min-h-[480px] sm:px-6 lg:min-h-[540px] lg:px-8">
           <div className="max-w-2xl">
             <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
-              Explore Our Roll Shutter Systems
+              Fire, Storm &amp; Security Roll Shutters
             </h1>
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-gray-200 sm:text-base lg:text-lg">
               Inferno-Roll shutters are engineered to protect your home and business from
@@ -142,6 +142,38 @@ export function ProductsOverviewPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 py-12 lg:py-16">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <h2 className="text-2xl font-bold text-navy-900">From the blog</h2>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>
+              <Link
+                to="/blog/why-windows-and-doors-fail-first-in-a-wildfire"
+                className="font-semibold text-inferno-600 hover:text-inferno-700"
+              >
+                Why Windows and Doors Fail First in a Wildfire
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/blog/when-the-pacific-comes-for-your-home"
+                className="font-semibold text-inferno-600 hover:text-inferno-700"
+              >
+                When the Pacific Comes for Your Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/blog/what-actually-stops-a-break-in"
+                className="font-semibold text-inferno-600 hover:text-inferno-700"
+              >
+                What Actually Stops a Break-In
+              </Link>
+            </li>
+          </ul>
         </div>
       </section>
 

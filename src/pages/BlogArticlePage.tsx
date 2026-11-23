@@ -156,11 +156,9 @@ export function BlogArticlePage() {
                           </button>
                         </h2>
 
-                        {isOpen ? (
-                          <div className="bg-[#e6eef5] px-5 py-5">
-                            <BlogContentBlocks blocks={section.blocks} />
-                          </div>
-                        ) : null}
+                        <div hidden={!isOpen} className="bg-[#e6eef5] px-5 py-5">
+                          <BlogContentBlocks blocks={section.blocks} />
+                        </div>
                       </section>
                     )
                   })}

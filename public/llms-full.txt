@@ -50,6 +50,7 @@ The /products/details page lists technical slat specification sheets including:
 /products/details
 /products/standard-security
 /products/hurricane-storm
+/el-nino-storm-preparation
 /products/heavy-duty
 /products/fire-resistant
 /privacy

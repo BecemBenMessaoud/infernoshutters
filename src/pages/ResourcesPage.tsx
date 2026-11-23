@@ -30,6 +30,11 @@ export function ResourcesPage() {
 
       <section className="bg-white py-12 lg:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-8 text-sm font-semibold sm:text-base">
+            <Link to="/el-nino-storm-preparation" className="text-inferno-600 hover:text-inferno-700">
+              El Niño storm preparation
+            </Link>
+          </p>
           <div className="space-y-3">
           <GuideAccordionItem
             title="Seasonal Maintenance Guide for your shutters:"

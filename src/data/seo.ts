@@ -125,6 +125,19 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
       { name: 'Resources', path: '/resources' },
     ],
   },
+  '/el-nino-storm-preparation': {
+    title: 'El Niño Storm Preparation and Shutters | Inferno-Roll',
+    description:
+      'Prepare windows and doors for El Niño storm conditions with Inferno-Roll roll shutters. Review openings, shutter operation, and installation, then request a free quote.',
+    keywords: `${BASE_KEYWORDS}, El Niño storm preparation, storm shutters, hurricane shutters`,
+    ogImage: OG_IMAGES.hurricaneStorm,
+    aiSummary:
+      'Prepare windows and doors for El Niño storm conditions with Inferno-Roll roll shutters. Review openings, shutter operation, and installation, then request a free quote.',
+    breadcrumbs: [
+      { name: 'Home', path: '/' },
+      { name: 'El Niño Storm Preparation', path: '/el-nino-storm-preparation' },
+    ],
+  },
   '/investor-info': {
     title: `Investor Information | ${SITE_NAME_SHORT}`,
     description:
@@ -200,7 +213,7 @@ export const PAGE_SEO: Record<string, PageSeoConfig> = {
   '/quote': {
     title: `Request a Quote | ${SITE_NAME_SHORT}`,
     description:
-      'Request a free roll shutter quote from Inferno-Roll. Provide window and door measurements for a detailed estimate on fire-resistant and security shutter systems.',
+      'Request a free roll shutter quote from Inferno-Roll. Provide window and door measurements for a detailed estimate on fire-resistant, hurricane and storm, and security shutter systems.',
     keywords: `${BASE_KEYWORDS}, free quote, shutter pricing, estimate`,
     aiSummary:
       'Quote request form for homeowners and businesses to receive customized roll shutter pricing.',
@@ -340,6 +353,7 @@ export const SITEMAP_PATHS = [
   '/blog',
   ...BLOG_ARTICLES.map((article) => `/blog/${article.slug}`),
   '/resources',
+  '/el-nino-storm-preparation',
   '/investor-info',
   '/service',
   '/products/overview',

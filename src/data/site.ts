@@ -15,6 +15,9 @@ export const FOOTER_LINKS_PRIMARY = [
   { label: 'Products Overview', href: '/products/overview' },
   { label: 'Product Specifications', href: '/products/details' },
   { label: 'Fire-Resistant Shutters', href: '/products/fire-resistant' },
+  { label: 'Hurricane & Storm Shutters', href: '/products/hurricane-storm' },
+  { label: 'Standard Security Shutters', href: '/products/standard-security' },
+  { label: 'Heavy-Duty Security Shutters', href: '/products/heavy-duty' },
   { label: 'Services', href: '/service' },
   { label: 'About Us', href: '/about' },
 ] as const

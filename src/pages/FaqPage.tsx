@@ -50,13 +50,11 @@ export function FaqPage() {
                     </button>
                   </h2>
 
-                  {isOpen ? (
-                    <div className="bg-[#e6eef5] px-5 py-4">
-                      <p className="whitespace-pre-line text-sm leading-relaxed text-navy-900 sm:text-base">
-                        {item.answer}
-                      </p>
-                    </div>
-                  ) : null}
+                  <div hidden={!isOpen} className="bg-[#e6eef5] px-5 py-4">
+                    <p className="whitespace-pre-line text-sm leading-relaxed text-navy-900 sm:text-base">
+                      {item.answer}
+                    </p>
+                  </div>
                 </article>
               )
             })}

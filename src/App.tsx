@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { SeoHead } from './components/seo/SeoHead'
 import { ScrollToTop } from './components/layout/ScrollToTop'
+import { GoogleAnalytics } from './components/monitoring/GoogleAnalytics'
 import { HubSpotTracking } from './components/monitoring/HubSpotTracking'
 import { Layout } from './components/layout/Layout'
 import { HomePage } from './pages/HomePage'
@@ -17,6 +18,9 @@ const BecomeADealerPage = lazy(() =>
   import('./pages/BecomeADealerPage').then((m) => ({ default: m.BecomeADealerPage })),
 )
 const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })))
+const ElNinoStormPage = lazy(() =>
+  import('./pages/ElNinoStormPage').then((m) => ({ default: m.ElNinoStormPage })),
+)
 const FaqPage = lazy(() => import('./pages/FaqPage').then((m) => ({ default: m.FaqPage })))
 const InvestorInfoPage = lazy(() =>
   import('./pages/InvestorInfoPage').then((m) => ({ default: m.InvestorInfoPage })),
@@ -56,6 +60,7 @@ function App() {
       <SeoHead />
       <ScrollToTop />
       <HubSpotTracking />
+      <GoogleAnalytics />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route element={<Layout />}>
@@ -64,6 +69,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/becomeadealer" element={<BecomeADealerPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/el-nino-storm-preparation" element={<ElNinoStormPage />} />
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/blog" element={<BlogIndexPage />} />
             <Route path="/blog/:slug" element={<BlogArticlePage />} />
